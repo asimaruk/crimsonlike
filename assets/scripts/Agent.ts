@@ -6,6 +6,8 @@ export class Agent extends Component {
 
     @property
     speed: number = 10;
+    @property
+    health: number = 100
 
     start() {
 

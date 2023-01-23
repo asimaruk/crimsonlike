@@ -1,4 +1,5 @@
-import { _decorator, Component, Node, input, Input, EventKeyboard, KeyCode } from 'cc';
+import { _decorator, Component, Node, input, Input, EventKeyboard, KeyCode, Prefab, director } from 'cc';
+import { EnemyAI } from './EnemyAI';
 import { PlayerController } from './PlayerController';
 const { ccclass, property } = _decorator;
 
@@ -6,19 +7,29 @@ const { ccclass, property } = _decorator;
 export class GameManager extends Component {
 
     @property({
-        type: PlayerController
+        type: Node
     })
-    playerController: PlayerController;
+    player: Node;
     @property({
         type: Node
     })
     menu: Node;
+    @property({
+        type: Prefab
+    })
+    enemyPrefab: Prefab
 
+    private playerController: PlayerController;
     private isGameStarted = false;
     private isGameRunning = false;
 
     onLoad() {
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
+        this.playerController = this.player.getComponent(PlayerController);
+        director.getScene().getComponentsInChildren(EnemyAI).forEach((ai: EnemyAI) => {
+            ai.setFinalDestination(this.player)
+        });
+        director.pause();
     }
 
     start() {
@@ -45,6 +56,7 @@ export class GameManager extends Component {
         this.isGameRunning = true;
         this.playerController.enabled = true;
         this.menu.active = false;
+        director.resume();
     }
 
     pause() {
@@ -52,6 +64,7 @@ export class GameManager extends Component {
             this.playerController.enabled = false;
             this.menu.active = true;
             this.isGameRunning = false;
+            director.pause();
         }
     }
 }
