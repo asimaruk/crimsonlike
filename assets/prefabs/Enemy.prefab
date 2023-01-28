@@ -95,7 +95,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "a8xhcq1etEeo1C83HNDkxj"
+    "fileId": "23RR0s4rFDaoblIbGs+xHN"
   },
   {
     "__type__": "cc.Graphics",
@@ -179,7 +179,7 @@
     "__prefab": {
       "__id__": 9
     },
-    "speed": 4,
+    "speed": 70,
     "health": 100,
     "_id": ""
   },

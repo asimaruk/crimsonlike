@@ -27,7 +27,7 @@ export class GameManager extends Component {
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         this.playerController = this.player.getComponent(PlayerController);
         director.getScene().getComponentsInChildren(EnemyAI).forEach((ai: EnemyAI) => {
-            ai.setFinalDestination(this.player)
+            ai.setDestination(this.player)
         });
         director.pause();
     }
