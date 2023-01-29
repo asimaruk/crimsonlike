@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, input, Input, EventMouse, Vec2, v2, EventKeyboard, KeyCode, v3, UITransform, director, Canvas, Camera } from 'cc';
+import { _decorator, Component, Node, input, Input, EventMouse, Vec2, v2, EventKeyboard, KeyCode, v3, UITransform, director, Canvas, Camera, Prefab, instantiate, Sprite, random } from 'cc';
 import { Agent } from './Agent';
 const { ccclass, property, requireComponent } = _decorator;
 
@@ -10,6 +10,14 @@ export class PlayerController extends Component {
         type: UITransform
     })
     groundUITransform: UITransform;
+    @property({
+        type: Prefab
+    })
+    gunfire: Prefab;
+    @property({
+        type: Node
+    })
+    gunfirePlace: Node;
 
     private agent: Agent;
     private camera: Node;
@@ -47,6 +55,7 @@ export class PlayerController extends Component {
         input.on(Input.EventType.MOUSE_MOVE, this.onMouseMove, this);
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
+        input.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
     }
 
     update(deltaTime: number) {
@@ -68,11 +77,23 @@ export class PlayerController extends Component {
         input.off(Input.EventType.MOUSE_MOVE, this.onMouseMove, this);
         input.off(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         input.off(Input.EventType.KEY_UP, this.onKeyUp, this);
+        input.off(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
     }
 
     private onMouseMove(event: EventMouse) {
         event.getUILocation(this.mousePosition);
         this.faceMousePosition(this.mousePosition);
+    }
+
+    private onMouseDown(event: EventMouse) {
+        let fire = instantiate(this.gunfire);
+        let sprite = fire.getComponent(Sprite);
+        let frames = sprite.spriteAtlas.getSpriteFrames();
+        sprite.spriteFrame = frames[Math.floor(frames.length * random())];
+        this.schedule(() => {
+            fire.destroy();
+        }, 0.1);
+        this.gunfirePlace.addChild(fire);
     }
 
     private onKeyDown(event: EventKeyboard) {
