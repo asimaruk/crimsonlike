@@ -1,10 +1,32 @@
-import { _decorator, Component, Node, input, Input, EventMouse, Vec2, v2, EventKeyboard, KeyCode, v3, UITransform, director, Canvas, Camera, Prefab, instantiate, Sprite, random } from 'cc';
+import { 
+    _decorator, 
+    Component, 
+    Node, 
+    input, 
+    Input, 
+    EventMouse, 
+    Vec2, 
+    v2, 
+    EventKeyboard, 
+    KeyCode, 
+    v3, 
+    UITransform, 
+    director, 
+    Canvas, 
+    Camera, 
+    Prefab, 
+    instantiate, 
+    Sprite, 
+    random,
+} from 'cc';
 import { Agent } from './Agent';
 const { ccclass, property, requireComponent } = _decorator;
 
 @ccclass('PlayerController')
 @requireComponent(Agent)
 export class PlayerController extends Component {
+
+    static readonly FIRE: string = 'fire'
 
     @property({
         type: UITransform
@@ -90,10 +112,12 @@ export class PlayerController extends Component {
         let sprite = fire.getComponent(Sprite);
         let frames = sprite.spriteAtlas.getSpriteFrames();
         sprite.spriteFrame = frames[Math.floor(frames.length * random())];
-        this.schedule(() => {
+        this.scheduleOnce(() => {
             fire.destroy();
         }, 0.1);
         this.gunfirePlace.addChild(fire);
+
+        this.node.emit(PlayerController.FIRE, this.gunfirePlace.worldPosition);
     }
 
     private onKeyDown(event: EventKeyboard) {
