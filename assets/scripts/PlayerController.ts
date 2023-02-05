@@ -28,14 +28,6 @@ export class PlayerController extends Component {
         type: UITransform
     })
     groundUITransform: UITransform;
-    @property({
-        type: Prefab
-    })
-    gunfire: Prefab;
-    @property({
-        type: Node
-    })
-    gunfirePlace: Node;
 
     private agent: Agent;
     private camera: Node;

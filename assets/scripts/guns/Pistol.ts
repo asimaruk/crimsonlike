@@ -1,23 +1,24 @@
 import { 
     _decorator, 
-    Node, 
     Prefab, 
     instantiate, 
     Sprite, 
     random, 
-    director, 
     v3, 
     Graphics, 
     Vec3, 
-    UITransform, 
-    CCInteger, 
+    CCInteger,
+    PolygonCollider2D,
+    Collider2D,
+    IPhysics2DContact,
+    Contact2DType, 
 } from 'cc';
-import { EnemySpawner } from '../EnemySpawner';
 import { Gun } from './Gun';
-const { ccclass, property, menu } = _decorator;
+const { ccclass, property, menu, requireComponent } = _decorator;
 
 @ccclass('Pistol')
 @menu('Guns/Pistol')
+@requireComponent(PolygonCollider2D)
 export class Pistol extends Gun {
 
     @property({
@@ -30,18 +31,22 @@ export class Pistol extends Gun {
     })
     range = 1000
 
-    private enemies: Node;
     private debugGraphics: Graphics;
-    private uiTransform: UITransform;
     private fireDirection0 = v3();
     private fireDirection = v3();
+    private collider: PolygonCollider2D;
 
     onLoad() {
-        let scene = director.getScene();
-        this.enemies = scene.getComponentInChildren(EnemySpawner).node;
         this.debugGraphics = this.addComponent(Graphics);
         this.debugGraphics.onLoad();
-        this.uiTransform = this.getComponent(UITransform);
+        this.collider = this.getComponent(PolygonCollider2D);
+        this.collider.points[1].x = this.range;
+
+        this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+    }
+
+    onDestroy() {
+        this.collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
     }
 
     fire() {
@@ -60,6 +65,15 @@ export class Pistol extends Gun {
         // this.debugGraphics.moveTo(this.fireDirection0.x, this.fireDirection0.y);
         // this.debugGraphics.lineTo(this.fireDirection.x, this.fireDirection.y);
         // this.debugGraphics.stroke();
+
+        // this.collider.enabled = true;
+        // this.scheduleOnce(() => {
+        //     this.collider.enabled = false;
+        // });
+    }
+
+    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        console.log("Gun contact!")
     }
 }
 

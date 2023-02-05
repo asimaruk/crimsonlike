@@ -10,5 +10,23 @@
     "legacyFbxImporter": {
       "visible": true
     }
-  }
+  },
+  "physics": {
+    "collisionGroups": [
+      {
+        "index": 1,
+        "name": "Player"
+      },
+      {
+        "index": 2,
+        "name": "Enemy"
+      }
+    ],
+    "collisionMatrix": {
+      "0": 1,
+      "1": 4,
+      "2": 2
+    }
+  },
+  "custom_joint_texture_layouts": []
 }

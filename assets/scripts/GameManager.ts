@@ -6,11 +6,13 @@ import {
     Input, 
     EventKeyboard, 
     KeyCode, 
-    Prefab, 
     director,
     PhysicsSystem2D,
-    Graphics,
-    UITransform,
+    EPhysics2DDrawFlags,
+    v2,
+    Collider2D,
+    IPhysics2DContact,
+    Contact2DType,
 } from 'cc';
 import { EnemyAI } from './EnemyAI';
 import { PlayerController } from './PlayerController';
@@ -27,22 +29,22 @@ export class GameManager extends Component {
         type: Node
     })
     menu: Node;
-    @property({
-        type: Prefab
-    })
-    enemyPrefab: Prefab;
-    @property({
-        type: Graphics
-    })
-    debugGraphics: Graphics;
 
     private playerController: PlayerController;
     private isGameStarted = false;
     private isGameRunning = false;
-    private debugUITransform: UITransform;
 
     onLoad() {
         PhysicsSystem2D.instance.enable = true;
+        PhysicsSystem2D.instance.gravity = v2();
+
+        PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Aabb |
+            EPhysics2DDrawFlags.Pair |
+            EPhysics2DDrawFlags.CenterOfMass |
+            EPhysics2DDrawFlags.Joint |
+            EPhysics2DDrawFlags.Shape;
+
+        PhysicsSystem2D.instance.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
 
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         this.playerController = this.player.getComponent(PlayerController);
@@ -50,7 +52,6 @@ export class GameManager extends Component {
             ai.setDestination(this.player)
         });
         director.pause();
-        this.debugUITransform = this.debugGraphics.getComponent(UITransform);
     }
 
     onDestroy() {
@@ -84,6 +85,10 @@ export class GameManager extends Component {
             this.isGameRunning = false;
             director.pause();
         }
+    }
+
+    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        console.log(`Contact ${selfCollider.node.name} with ${otherCollider.node.name}!`);
     }
 }
 
