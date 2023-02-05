@@ -14,19 +14,15 @@ import {
     director, 
     Canvas, 
     Camera, 
-    Prefab, 
-    instantiate, 
-    Sprite, 
-    random,
+    Prefab,
 } from 'cc';
 import { Agent } from './Agent';
+import { Gun } from './guns/Gun';
 const { ccclass, property, requireComponent } = _decorator;
 
 @ccclass('PlayerController')
 @requireComponent(Agent)
 export class PlayerController extends Component {
-
-    static readonly FIRE: string = 'fire'
 
     @property({
         type: UITransform
@@ -54,6 +50,7 @@ export class PlayerController extends Component {
     private cameraMaxX = 0;
     private cameraMinY = 0;
     private cameraMaxY = 0;
+    private gun: Gun;
 
     onLoad() {
         this.agent = this.getComponent(Agent);
@@ -67,10 +64,7 @@ export class PlayerController extends Component {
         this.cameraMaxX = this.groundUITransform.contentSize.width / 2 - canvasWidthHalf;
         this.cameraMinY = - this.groundUITransform.contentSize.height / 2 + canvasHeightHalf;
         this.cameraMaxY = this.groundUITransform.contentSize.height / 2 - canvasHeightHalf;
-    }
-
-    start() {
-
+        this.gun = this.getComponentInChildren(Gun);
     }
 
     onEnable() {
@@ -108,16 +102,7 @@ export class PlayerController extends Component {
     }
 
     private onMouseDown(event: EventMouse) {
-        let fire = instantiate(this.gunfire);
-        let sprite = fire.getComponent(Sprite);
-        let frames = sprite.spriteAtlas.getSpriteFrames();
-        sprite.spriteFrame = frames[Math.floor(frames.length * random())];
-        this.scheduleOnce(() => {
-            fire.destroy();
-        }, 0.1);
-        this.gunfirePlace.addChild(fire);
-
-        this.node.emit(PlayerController.FIRE, this.gunfirePlace.worldPosition);
+        this.gun.fire();
     }
 
     private onKeyDown(event: EventKeyboard) {
