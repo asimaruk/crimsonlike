@@ -17,7 +17,7 @@ export class EnemyAI extends Component {
     }
 
     update(deltaTime: number) {
-        if (this.destination) {
+        if (this.destination && this.agent.isAlive) {
             this.move.set(this.destination.getWorldPosition(this.destinationWorld));
             this.move.subtract(this.node.getWorldPosition(this.selfWorld));
             this.move.normalize();

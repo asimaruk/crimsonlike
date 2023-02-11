@@ -88,7 +88,7 @@ export class GameManager extends Component {
     }
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        console.log(`Contact ${selfCollider.node.name} with ${otherCollider.node.name}!`);
+        console.log(`Contact ${selfCollider.node.name} with ${otherCollider.node.name}! contact=${contact}`);
     }
 }
 

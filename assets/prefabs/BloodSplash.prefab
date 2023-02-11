@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "Pistol",
+    "_name": "BloodSplash",
     "_objFlags": 0,
     "_native": "",
     "data": {
@@ -12,7 +12,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Pistol",
+    "_name": "BloodSplash",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -77,22 +77,22 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
+      "width": 102.41900000000001,
+      "height": 144.45664925373137
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
+      "x": 0.5163022388059701,
+      "y": 0.649537037037037
     },
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "21M+YJ8fZHQY5GJSHYRBRO"
+    "fileId": "fcmBRsBs1FdYNgymimidjt"
   },
   {
-    "__type__": "176a3qSHPBPRJNDNFaFw5SI",
+    "__type__": "cc.Sprite",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -102,68 +102,71 @@
     "__prefab": {
       "__id__": 5
     },
-    "gunfire": {
-      "__uuid__": "e0cdaee7-eb42-4817-b7bd-28252ce280f8",
-      "__expectedType__": "cc.Prefab"
+    "_customMaterial": null,
+    "_srcBlendFactor": 2,
+    "_dstBlendFactor": 4,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
     },
-    "range": 1000,
-    "damage": 20,
+    "_spriteFrame": {
+      "__uuid__": "d1fbbf27-11ae-4a16-95ec-472d97c3e9f3@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "_type": 0,
+    "_fillType": 0,
+    "_sizeMode": 0,
+    "_fillCenter": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_fillStart": 0,
+    "_fillRange": 0,
+    "_isTrimmedMode": true,
+    "_useGrayscale": false,
+    "_atlas": null,
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "67x8BY6+dHJ6tOG/pUZ4xe"
+    "fileId": "fbQZUNchdEhJLLU3WF208E"
   },
   {
-    "__type__": "cc.PolygonCollider2D",
+    "__type__": "cc.Animation",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
-    "_enabled": false,
+    "_enabled": true,
     "__prefab": {
       "__id__": 7
     },
-    "tag": 0,
-    "_group": 2,
-    "_density": 1,
-    "_sensor": true,
-    "_friction": 0.2,
-    "_restitution": 0,
-    "_offset": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_points": [
+    "playOnLoad": true,
+    "_clips": [
       {
-        "__type__": "cc.Vec2",
-        "x": 0,
-        "y": 5
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": 100,
-        "y": 0
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": 0,
-        "y": -5
+        "__uuid__": "1d1815f5-c1a8-4783-97ff-c5a4ea2ed389",
+        "__expectedType__": "cc.AnimationClip"
       }
     ],
+    "_defaultClip": {
+      "__uuid__": "1d1815f5-c1a8-4783-97ff-c5a4ea2ed389",
+      "__expectedType__": "cc.AnimationClip"
+    },
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "e7PT273kFH85ip6537kcMm"
+    "fileId": "0ahxadaElPT7OZZ/S/aE2X"
   },
   {
-    "__type__": "cc.RigidBody2D",
+    "__type__": "93be4vwzZ9PApeRZ17zpjGn",
     "_name": "",
     "_objFlags": 0,
-    "__editorExtras__": {},
     "node": {
       "__id__": 1
     },
@@ -171,27 +174,11 @@
     "__prefab": {
       "__id__": 9
     },
-    "enabledContactListener": true,
-    "bullet": false,
-    "awakeOnLoad": true,
-    "_group": 2,
-    "_type": 0,
-    "_allowSleep": false,
-    "_gravityScale": 1,
-    "_linearDamping": 0,
-    "_angularDamping": 0,
-    "_linearVelocity": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_angularVelocity": 0,
-    "_fixedRotation": true,
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "66wZTzjq9COpCzPK2VEeUE"
+    "fileId": "9aL4uzoVpMvLrMTaFsO3kk"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -201,7 +188,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "b2spykImRJgYfhEtc4QG9w",
+    "fileId": "55m/HIBkhEhI0KEUBt29Um",
     "instance": null,
     "targetOverrides": null
   }

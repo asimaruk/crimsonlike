@@ -11,8 +11,9 @@ import {
     PolygonCollider2D,
     Collider2D,
     IPhysics2DContact,
-    Contact2DType, 
+    Contact2DType,
 } from 'cc';
+import { Agent } from '../Agent';
 import { Gun } from './Gun';
 const { ccclass, property, menu, requireComponent } = _decorator;
 
@@ -30,6 +31,11 @@ export class Pistol extends Gun {
         min: 0
     })
     range = 1000
+    @property({
+        type: CCInteger,
+        min: 0
+    })
+    damage = 20
 
     private debugGraphics: Graphics;
     private fireDirection0 = v3();
@@ -62,18 +68,17 @@ export class Pistol extends Gun {
         this.fireDirection0.set(Vec3.ZERO);
         this.fireDirection.set(Vec3.UNIT_X).multiplyScalar(this.range);
 
-        // this.debugGraphics.moveTo(this.fireDirection0.x, this.fireDirection0.y);
-        // this.debugGraphics.lineTo(this.fireDirection.x, this.fireDirection.y);
-        // this.debugGraphics.stroke();
-
-        // this.collider.enabled = true;
-        // this.scheduleOnce(() => {
-        //     this.collider.enabled = false;
-        // });
+        this.collider.enabled = true;
+        this.scheduleOnce(() => this.collider.enabled = false);
     }
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        console.log("Gun contact!")
+        console.log(`Gun contact begin! ${contact}`);
+        let agent = otherCollider.getComponent(Agent);
+        if (agent) {
+            // let contactPoint = contact?.getWorldManifold().points[0];
+            agent.takeBullet(this.damage, 0, 0);
+        }
     }
 }
 
