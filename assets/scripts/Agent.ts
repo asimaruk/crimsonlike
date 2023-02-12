@@ -1,9 +1,8 @@
-import { _decorator, Component, CircleCollider2D, Prefab, instantiate, UITransform } from 'cc';
+import { _decorator, Component, CircleCollider2D, Prefab, instantiate, random, v3 } from 'cc';
 const { ccclass, property, requireComponent } = _decorator;
 
 @ccclass('Agent')
 @requireComponent(CircleCollider2D)
-@requireComponent(UITransform)
 export class Agent extends Component {
 
     @property
@@ -15,14 +14,11 @@ export class Agent extends Component {
     })
     bloodSplash: Prefab;
 
-    private uiTransform: UITransform;
-
     collider: CircleCollider2D;
     isAlive = true
 
     onLoad() {
         this.collider = this.getComponent(CircleCollider2D);
-        this.uiTransform = this.getComponent(UITransform);
     }
 
     takeDamage(damage: number) {
@@ -32,10 +28,17 @@ export class Agent extends Component {
         }
     }
 
-    takeBullet(damage: number, x: number, y: number) {
+    private bloodPosition = v3();
+
+    takeBullet(damage: number) {
         this.takeDamage(damage);
         let blood = instantiate(this.bloodSplash);
-        this.node.addChild(blood);
+        this.bloodPosition.set(this.node.position);
+        let bloodX = this.collider.radius * (random() - 0.5);
+        let bloodY = this.collider.radius * (random() - 0.5);
+        this.bloodPosition.add3f(bloodX, bloodY, 0);
+        blood.setPosition(this.bloodPosition);
+        this.node.parent.addChild(blood);
     }
 
     die() {

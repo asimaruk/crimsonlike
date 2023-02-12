@@ -1,17 +1,26 @@
-import { _decorator, Component, Node, Animation } from 'cc';
+import { _decorator, Component, tween, v3, random, UIOpacity } from 'cc';
 const { ccclass, property, requireComponent } = _decorator;
 
 @ccclass('BloodSplash')
-@requireComponent(Animation)
+@requireComponent(UIOpacity)
 export class BloodSplash extends Component {
 
-    private animation: Animation;
+    private uiOpacity: UIOpacity;
 
     onLoad() {
-        this.animation = this.getComponent(Animation);
-        this.animation.on(Animation.EventType.FINISHED, () => {
-            this.node.destroy();
-        }, this);
+        this.uiOpacity = this.getComponent(UIOpacity);
+        this.node.setScale(0, 0, 0);
+        this.node.setRotationFromEuler(v3(0, 0, 360 * random()));
+        
+        tween(this.node)
+            .to(0.3, { scale: v3(1, 1, 0) }, { easing: 'quadIn' })
+            .start();
+
+        tween(this.uiOpacity)
+            .delay(10)
+            .to(0.5, { opacity: 0 })
+            .call(() => this.node.destroy())
+            .start();
     }
 }
 

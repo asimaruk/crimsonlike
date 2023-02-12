@@ -8,10 +8,7 @@ import {
     KeyCode, 
     director,
     PhysicsSystem2D,
-    EPhysics2DDrawFlags,
-    v2,
     Collider2D,
-    IPhysics2DContact,
     Contact2DType,
 } from 'cc';
 import { EnemyAI } from './EnemyAI';
@@ -36,14 +33,6 @@ export class GameManager extends Component {
 
     onLoad() {
         PhysicsSystem2D.instance.enable = true;
-        PhysicsSystem2D.instance.gravity = v2();
-
-        PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Aabb |
-            EPhysics2DDrawFlags.Pair |
-            EPhysics2DDrawFlags.CenterOfMass |
-            EPhysics2DDrawFlags.Joint |
-            EPhysics2DDrawFlags.Shape;
-
         PhysicsSystem2D.instance.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
 
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
@@ -87,8 +76,8 @@ export class GameManager extends Component {
         }
     }
 
-    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        console.log(`Contact ${selfCollider.node.name} with ${otherCollider.node.name}! contact=${contact}`);
+    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D) {
+        console.log(`Contact ${selfCollider.node.name} with ${otherCollider.node.name}!`);
     }
 }
 

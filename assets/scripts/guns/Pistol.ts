@@ -72,12 +72,10 @@ export class Pistol extends Gun {
         this.scheduleOnce(() => this.collider.enabled = false);
     }
 
-    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        console.log(`Gun contact begin! ${contact}`);
+    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D) {
         let agent = otherCollider.getComponent(Agent);
         if (agent) {
-            // let contactPoint = contact?.getWorldManifold().points[0];
-            agent.takeBullet(this.damage, 0, 0);
+            agent.takeBullet(this.damage);
         }
     }
 }
