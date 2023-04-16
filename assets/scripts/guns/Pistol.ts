@@ -10,7 +10,6 @@ import {
     CCInteger,
     PolygonCollider2D,
     Collider2D,
-    IPhysics2DContact,
     Contact2DType,
 } from 'cc';
 import { Agent } from '../Agent';
@@ -55,7 +54,7 @@ export class Pistol extends Gun {
         this.collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
     }
 
-    fire() {
+    fireShot() {
         let fire = instantiate(this.gunfire);
         let sprite = fire.getComponent(Sprite);
         let frames = sprite.spriteAtlas.getSpriteFrames();

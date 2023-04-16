@@ -99,6 +99,7 @@
     "__prefab": {
       "__id__": 5
     },
+    "frequency": 0.2,
     "gunfire": {
       "__uuid__": "e0cdaee7-eb42-4817-b7bd-28252ce280f8",
       "__expectedType__": "cc.Prefab"
