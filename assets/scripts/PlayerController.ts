@@ -14,7 +14,6 @@ import {
     director, 
     Canvas, 
     Camera,
-    Touch,
 } from 'cc';
 import { Agent } from './Agent';
 import { Gun } from './guns/Gun';
@@ -45,7 +44,7 @@ export class PlayerController extends Component {
     private cameraMaxY = 0;
     private gun: Gun;
     private fireTouchId: number;
-    private gunFireCallback: () => void;
+    private gunFireCallback = () => this.gun.fire();
 
     onLoad() {
         this.agent = this.getComponent(Agent);
@@ -60,10 +59,6 @@ export class PlayerController extends Component {
         this.cameraMinY = - this.groundUITransform.contentSize.height / 2 + canvasHeightHalf;
         this.cameraMaxY = this.groundUITransform.contentSize.height / 2 - canvasHeightHalf;
         this.gun = this.getComponentInChildren(Gun);
-        this.gunFireCallback = () => {
-            this.faceMousePosition(this.uiFacingPosition);
-            this.gun.fire();
-        }
     }
 
     onEnable() {
@@ -116,7 +111,6 @@ export class PlayerController extends Component {
             return touch.getID() == this.fireTouchId;
         });
         if (fireTouch) {
-            this.fireTouch = fireTouch;
             this.uiFacingPosition = fireTouch.getUILocation();
             this.faceMousePosition(this.uiFacingPosition);
         }
