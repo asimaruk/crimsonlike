@@ -46,7 +46,6 @@ export class PlayerController extends Component {
     private gun: Gun;
     private fireTouchId: number;
     private gunFireCallback: () => void;
-    private fireTouch: Touch;
 
     onLoad() {
         this.agent = this.getComponent(Agent);
