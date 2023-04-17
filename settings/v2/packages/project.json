@@ -1,10 +1,5 @@
 {
-  "layer": [
-    {
-      "name": "UI_MENU",
-      "value": 1
-    }
-  ],
+  "layer": [],
   "__version__": "1.0.4",
   "fbx": {
     "legacyFbxImporter": {
