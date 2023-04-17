@@ -13,11 +13,12 @@ import {
     UITransform, 
     director, 
     Canvas, 
-    Camera, 
-    Prefab,
+    Camera,
+    Touch,
 } from 'cc';
 import { Agent } from './Agent';
 import { Gun } from './guns/Gun';
+import { EventTouch } from 'cc';
 const { ccclass, property, requireComponent } = _decorator;
 
 @ccclass('PlayerController')
@@ -34,7 +35,7 @@ export class PlayerController extends Component {
     private canvas: Node;
     private canvasUITransform: UITransform;
     private cameraPosition = v3();
-    private mousePosition = v2();
+    private uiFacingPosition = v2();
     private selfPosition = v3();
     private facing = v2();
     private moveDirection = v2();
@@ -43,6 +44,9 @@ export class PlayerController extends Component {
     private cameraMinY = 0;
     private cameraMaxY = 0;
     private gun: Gun;
+    private fireTouchId: number;
+    private gunFireCallback: () => void;
+    private fireTouch: Touch;
 
     onLoad() {
         this.agent = this.getComponent(Agent);
@@ -57,6 +61,10 @@ export class PlayerController extends Component {
         this.cameraMinY = - this.groundUITransform.contentSize.height / 2 + canvasHeightHalf;
         this.cameraMaxY = this.groundUITransform.contentSize.height / 2 - canvasHeightHalf;
         this.gun = this.getComponentInChildren(Gun);
+        this.gunFireCallback = () => {
+            this.faceMousePosition(this.uiFacingPosition);
+            this.gun.fire();
+        }
     }
 
     onEnable() {
@@ -64,12 +72,15 @@ export class PlayerController extends Component {
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
         input.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
+        input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+        input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
+        input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
     }
 
     update(deltaTime: number) {
         if (this.moveDirection.x != 0 || this.moveDirection.y != 0) {
             this.move(this.moveDirection, this.agent.speed * deltaTime);
-            this.faceMousePosition(this.mousePosition);
+            this.faceMousePosition(this.uiFacingPosition);
         }
     }
 
@@ -86,11 +97,46 @@ export class PlayerController extends Component {
         input.off(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         input.off(Input.EventType.KEY_UP, this.onKeyUp, this);
         input.off(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
+        input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
+        input.off(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
+        input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
+    }
+
+    private onTouchStart(event: EventTouch) {
+        let touch = event.getTouches()[0];
+        this.fireTouchId = touch.getID();
+        console.log(`Fire tousch start id: ${this.fireTouchId}`);
+        this.faceMousePosition(touch.getUILocation());
+        this.uiFacingPosition = touch.getUILocation();
+        this.schedule(this.gunFireCallback, this.gun.frequency);
+    }
+
+    private onTouchMove(event: EventTouch) {
+        let fireTouch = event.getTouches().find((touch) => {
+            console.log(`Fire tousch move id: ${touch.getID()}`);
+            return touch.getID() == this.fireTouchId;
+        });
+        if (fireTouch) {
+            this.fireTouch = fireTouch;
+            this.uiFacingPosition = fireTouch.getUILocation();
+            this.faceMousePosition(this.uiFacingPosition);
+        }
+    }
+
+    private onTouchEnd(event: EventTouch) {
+        let fireTouch = event.getTouches().find((touch) => {
+            console.log(`Fire tousch end id: ${touch.getID()}`);
+            return touch.getID() == this.fireTouchId;
+        });
+        console
+        if (fireTouch) {
+            this.unschedule(this.gunFireCallback);
+        }
     }
 
     private onMouseMove(event: EventMouse) {
-        event.getUILocation(this.mousePosition);
-        this.faceMousePosition(this.mousePosition);
+        event.getUILocation(this.uiFacingPosition);
+        this.faceMousePosition(this.uiFacingPosition);
     }
 
     private onMouseDown(event: EventMouse) {
