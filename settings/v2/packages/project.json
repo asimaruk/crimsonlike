@@ -23,5 +23,11 @@
       "2": 2
     }
   },
-  "custom_joint_texture_layouts": []
+  "custom_joint_texture_layouts": [],
+  "general": {
+    "designResolution": {
+      "fitHeight": false,
+      "fitWidth": true
+    }
+  }
 }
