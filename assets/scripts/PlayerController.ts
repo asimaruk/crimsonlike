@@ -18,6 +18,7 @@ import {
 import { Agent } from './Agent';
 import { Gun } from './guns/Gun';
 import { EventTouch } from 'cc';
+import { UIManager } from './UIManager';
 const { ccclass, property, requireComponent } = _decorator;
 
 @ccclass('PlayerController')
@@ -49,7 +50,8 @@ export class PlayerController extends Component {
     onLoad() {
         this.agent = this.getComponent(Agent);
         let scene = director.getScene();
-        this.camera = scene.getComponentInChildren(Camera).node;
+        // camera in fact is camera carriage with camera and UI, so getting by UIManager
+        this.camera = scene.getComponentInChildren(UIManager).node;
         this.canvas = scene.getComponentInChildren(Canvas).node;
         this.canvasUITransform = this.canvas.getComponent(UITransform);
         let canvasWidthHalf = this.canvasUITransform.contentSize.width / 2;

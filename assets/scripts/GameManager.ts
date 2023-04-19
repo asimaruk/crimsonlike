@@ -13,6 +13,7 @@ import {
 } from 'cc';
 import { EnemyAI } from './EnemyAI';
 import { PlayerController } from './PlayerController';
+import { UIManager } from './UIManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameManager')
@@ -23,9 +24,9 @@ export class GameManager extends Component {
     })
     player: Node;
     @property({
-        type: Node
+        type: UIManager
     })
-    menu: Node;
+    uiManager: UIManager;
 
     private playerController: PlayerController;
     private isGameStarted = false;
@@ -63,14 +64,16 @@ export class GameManager extends Component {
         this.isGameStarted = true;
         this.isGameRunning = true;
         this.playerController.enabled = true;
-        this.menu.active = false;
+        this.uiManager.setMenuUIVisible(false);
+        this.uiManager.setGameUIVisible(true);
         director.resume();
     }
 
     pause() {
         if (this.isGameStarted && this.isGameRunning) {
             this.playerController.enabled = false;
-            this.menu.active = true;
+            this.uiManager.setMenuUIVisible(true);
+            this.uiManager.setGameUIVisible(false);
             this.isGameRunning = false;
             director.pause();
         }

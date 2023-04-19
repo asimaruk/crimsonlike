@@ -1,9 +1,10 @@
 import { _decorator, Color, Component, Graphics, Node } from 'cc';
-const { ccclass, property, executeInEditMode, requireComponent } = _decorator;
+const { ccclass, property, executeInEditMode, requireComponent, menu } = _decorator;
 
 @ccclass('Circle')
 @executeInEditMode(true)
 @requireComponent(Graphics)
+@menu('Shapes/Circle')
 export class Circle extends Component {
 
     @property({
