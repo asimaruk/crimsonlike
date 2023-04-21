@@ -15,11 +15,13 @@ import {
     Canvas, 
     Camera,
     macro,
+    Vec3,
 } from 'cc';
 import { Agent } from './Agent';
 import { Gun } from './guns/Gun';
 import { EventTouch } from 'cc';
 import { UIManager } from './ui/UIManager';
+import { Joystick } from './ui/Joystick';
 const { ccclass, property, requireComponent } = _decorator;
 
 @ccclass('PlayerController')
@@ -30,6 +32,11 @@ export class PlayerController extends Component {
         type: UITransform
     })
     groundUITransform: UITransform;
+
+    @property({
+        type: Joystick
+    })
+    joystick: Joystick;
 
     private agent: Agent;
     private camera: Node;
@@ -75,6 +82,11 @@ export class PlayerController extends Component {
     }
 
     update(deltaTime: number) {
+        let joystickDirection = this.joystick.getDirection();
+        if (joystickDirection.x != 0 || joystickDirection.y != 0) {
+            this.move(joystickDirection, this.agent.speed * deltaTime);
+        }
+
         if (this.moveDirection.x != 0 || this.moveDirection.y != 0) {
             this.move(this.moveDirection, this.agent.speed * deltaTime);
             this.faceMousePosition(this.uiFacingPosition);
@@ -205,7 +217,7 @@ export class PlayerController extends Component {
         this.node.setRotationFromEuler(0, 0, angle);
     }
 
-    private move(direction: Vec2, speed: number) {
+    private move(direction: Vec2 | Vec3, speed: number) {
         let step = direction.normalize().multiplyScalar(speed);
         this.node.setPosition(
             this.node.position.x + step.x,
