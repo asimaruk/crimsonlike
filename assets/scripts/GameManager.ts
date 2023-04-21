@@ -13,7 +13,7 @@ import {
 } from 'cc';
 import { EnemyAI } from './EnemyAI';
 import { PlayerController } from './PlayerController';
-import { UIManager } from './UIManager';
+import { UIManager } from './ui/UIManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameManager')

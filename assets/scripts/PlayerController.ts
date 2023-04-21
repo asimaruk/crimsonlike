@@ -14,11 +14,12 @@ import {
     director, 
     Canvas, 
     Camera,
+    macro,
 } from 'cc';
 import { Agent } from './Agent';
 import { Gun } from './guns/Gun';
 import { EventTouch } from 'cc';
-import { UIManager } from './UIManager';
+import { UIManager } from './ui/UIManager';
 const { ccclass, property, requireComponent } = _decorator;
 
 @ccclass('PlayerController')
@@ -104,7 +105,9 @@ export class PlayerController extends Component {
         console.log(`Fire tousch start id: ${this.fireTouchId}`);
         this.faceMousePosition(touch.getUILocation());
         this.uiFacingPosition = touch.getUILocation();
-        this.schedule(this.gunFireCallback, this.gun.frequency);
+        this.faceMousePosition(this.uiFacingPosition);
+        this.gun.fire();
+        this.schedule(this.gunFireCallback, this.gun.frequency, macro.REPEAT_FOREVER, this.gun.frequency);
     }
 
     private onTouchMove(event: EventTouch) {
