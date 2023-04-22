@@ -19,15 +19,15 @@ export class Joystick extends Component {
     private uiTransform: UITransform;
     private stickLocation = v2();
     private stickCanvasCoordinates = v3();
-    private canvas: Node;
+    private ui: Node;
     private stickNodeCoordinates = v3();
     private stickWorldCoordinates = v3();
     private canvasUITransform: UITransform;
 
     onLoad() {
-        this.canvas = director.getScene().getComponentInChildren(UIManager).node;
+        this.ui = director.getScene().getComponentInChildren(UIManager).node;
         this.uiTransform = this.getComponent(UITransform);
-        this.canvasUITransform = this.canvas.getComponent(UITransform);
+        this.canvasUITransform = this.ui.getComponent(UITransform);
         this.base.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
         this.base.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
         this.base.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
