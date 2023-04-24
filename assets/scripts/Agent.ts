@@ -1,4 +1,4 @@
-import { _decorator, Component, CircleCollider2D, Prefab, instantiate, random, v3, NodePool, director } from 'cc';
+import { _decorator, Component, CircleCollider2D, Prefab, instantiate, random, v3, NodePool, director, Animation } from 'cc';
 import { BloodSplash } from './BloodSplash';
 import { BloodSplashManager } from './BloodSplashManager';
 const { ccclass, property, requireComponent } = _decorator;
@@ -9,8 +9,15 @@ export class Agent extends Component {
 
     @property
     speed: number = 10;
+
     @property
-    health: number = 100
+    health: number = 100;
+
+    @property({
+        type: Animation
+    })
+    animation: Animation;
+
     @property({
         type: Prefab
     })
@@ -53,6 +60,18 @@ export class Agent extends Component {
 
     onDie() {
         this.node.destroy();
+    }
+
+    walk() {
+        if (this.animation.getState('walk').isPlaying) {
+            return;
+        }
+        this.animation.play('walk');
+    }
+
+    stopWalk() {
+        let walkState = this.animation.getState('walk');
+        walkState.setTime(0);
     }
 }
 

@@ -12,8 +12,7 @@ import {
     v3, 
     UITransform, 
     director, 
-    Canvas, 
-    Camera,
+    Canvas,
     macro,
     Vec3,
 } from 'cc';
@@ -34,6 +33,11 @@ export class PlayerController extends Component {
     groundUITransform: UITransform;
 
     @property({
+        type: Node
+    })
+    gunSlot: Node;
+
+    @property({
         type: Joystick
     })
     joystick: Joystick;
@@ -42,9 +46,9 @@ export class PlayerController extends Component {
     private camera: Node;
     private canvas: Node;
     private canvasUITransform: UITransform;
-    private cameraPosition = v3();
+    private cameraWorldPosition = v3();
     private uiFacingPosition = v2();
-    private selfPosition = v3();
+    private gunWorldPosition = v3();
     private facing = v2();
     private moveDirection = v2();
     private cameraMinX = 0;
@@ -88,8 +92,11 @@ export class PlayerController extends Component {
         }
 
         if (this.moveDirection.x != 0 || this.moveDirection.y != 0) {
+            this.agent.walk();
             this.move(this.moveDirection, this.agent.speed * deltaTime);
             this.faceMousePosition(this.uiFacingPosition);
+        } else {
+            this.agent.stopWalk();
         }
     }
 
@@ -204,17 +211,17 @@ export class PlayerController extends Component {
     }
 
     private faceMousePosition(position: Vec2) {
-        this.node.getWorldPosition(this.selfPosition);
-        this.camera.getWorldPosition(this.cameraPosition);
+        this.gunSlot.getWorldPosition(this.gunWorldPosition);
+        this.camera.getWorldPosition(this.cameraWorldPosition);
 
-        this.facing.set(position.x - this.selfPosition.x, position.y - this.selfPosition.y)
+        this.facing.set(position.x - this.gunWorldPosition.x, position.y - this.gunWorldPosition.y)
             .subtract2f(
                 this.canvasUITransform.width * this.canvasUITransform.anchorX,
                 this.canvasUITransform.height * this.canvasUITransform.anchorY
             )
-            .add2f(this.cameraPosition.x, this.cameraPosition.y);
+            .add2f(this.cameraWorldPosition.x, this.cameraWorldPosition.y);
         let angle = Math.atan2(this.facing.y, this.facing.x) * 180 / Math.PI;
-        this.node.setRotationFromEuler(0, 0, angle);
+        this.gunSlot.setRotationFromEuler(0, 0, angle);
     }
 
     private move(direction: Vec2 | Vec3, speed: number) {
