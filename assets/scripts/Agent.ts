@@ -1,5 +1,4 @@
-import { _decorator, Component, CircleCollider2D, Prefab, instantiate, random, v3, NodePool, director, Animation } from 'cc';
-import { BloodSplash } from './BloodSplash';
+import { _decorator, Component, CircleCollider2D, Prefab, random, v3, director, Animation } from 'cc';
 import { BloodSplashManager } from './BloodSplashManager';
 const { ccclass, property, requireComponent } = _decorator;
 
