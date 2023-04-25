@@ -1,9 +1,22 @@
-import { _decorator, Component, CircleCollider2D, Prefab, random, v3, director, Animation } from 'cc';
+import {
+    _decorator,
+    Component,
+    CircleCollider2D,
+    Prefab,
+    random,
+    v3,
+    director,
+    Animation,
+    Collider2D,
+    PolygonCollider2D,
+    Vec3,
+    AnimationClip
+} from 'cc';
 import { BloodSplashManager } from './BloodSplashManager';
-const { ccclass, property, requireComponent } = _decorator;
+import { BoxCollider2D } from 'cc';
+const { ccclass, property } = _decorator;
 
 @ccclass('Agent')
-@requireComponent(CircleCollider2D)
 export class Agent extends Component {
 
     @property
@@ -18,42 +31,47 @@ export class Agent extends Component {
     animation: Animation;
 
     @property({
+        type: AnimationClip
+    })
+    walkClip: AnimationClip;
+
+    @property({
         type: Prefab
     })
     bloodSplash: Prefab;
+    
 
-    collider: CircleCollider2D;
     isAlive = true;
 
     private bloodManager: BloodSplashManager;
+    private bloodPosition = v3();
+    private collider: Collider2D;
 
     onLoad() {
-        this.collider = this.getComponent(CircleCollider2D);
         this.bloodManager = director.getScene().getComponentInChildren(BloodSplashManager);
+        this.collider = this.getComponent(Collider2D);
     }
 
     takeDamage(damage: number) {
         this.health -= damage;
-        if (this.health <= 0) {
+        if (this.health <= 0 && this.isAlive) {
             this.die();
         }
     }
 
-    private bloodPosition = v3();
-
     takeBullet(damage: number) {
         this.takeDamage(damage);
         let blood = this.bloodManager.get();
-        this.bloodPosition.set(this.node.position);
-        let bloodX = this.collider.radius * (random() - 0.5);
-        let bloodY = this.collider.radius * (random() - 0.5);
-        this.bloodPosition.add3f(bloodX, bloodY, 0);
+        this.getBloodPosition(this.bloodPosition);
+        this.bloodPosition.add(this.node.position);
         blood.setPosition(this.bloodPosition);
         this.node.parent.addChild(blood);
+        blood.setSiblingIndex(this.node.getSiblingIndex())
     }
 
     die() {
         this.isAlive = false;
+        this.stopWalk();
         this.scheduleOnce(this.onDie, 3);
     }
 
@@ -62,15 +80,47 @@ export class Agent extends Component {
     }
 
     walk() {
-        if (this.animation.getState('walk').isPlaying) {
+        if (this.animation.getState(this.walkClip.name).isPlaying) {
             return;
         }
-        this.animation.play('walk');
+        this.animation.play(this.walkClip.name);
     }
 
     stopWalk() {
-        let walkState = this.animation.getState('walk');
+        let walkState = this.animation.getState(this.walkClip.name);
         walkState.setTime(0);
+        this.scheduleOnce(() => walkState.stop());
+    }
+
+    private getBloodPosition(out: Vec3 = null) {
+        let position = out || v3();
+        if (this.collider instanceof CircleCollider2D) {
+            position.set(
+                this.collider.offset.x + this.collider.radius * (random() - 0.5),
+                this.collider.offset.y + this.collider.radius * (random() - 0.5)
+            );
+        } else if (this.collider instanceof BoxCollider2D) {
+            position.set(
+                this.collider.offset.x + this.collider.size.width * (random() - 0.5),
+                this.collider.offset.y + this.collider.size.height * (random() - 0.5)
+            );
+        } else if (this.collider instanceof PolygonCollider2D) {
+            let points = this.collider.points;
+            let xs = points.map((point) => point.x);
+            let ys = points.map((point) => point.y);
+            let width = Math.max(...xs) - Math.min(...xs);
+            let height = Math.max(...ys) - Math.min(...ys);
+
+            position.set(
+                this.collider.offset.x + width * (random() - 0.5),
+                this.collider.offset.y + height * (random() - 0.5)
+            );
+        } else {
+            position.set(
+                this.collider.offset.x,
+                this.collider.offset.y
+            );
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 import { _decorator, Component, Node, Prefab, CCInteger, UITransform, instantiate, random } from 'cc';
 import { EnemyAI } from './EnemyAI';
+import { Agent } from './Agent';
 const { ccclass, property } = _decorator;
 
 @ccclass('EnemySpawner')
@@ -56,6 +57,7 @@ export class EnemySpawner extends Component {
         }
         newEnemy.setPosition(startX, startY);
         this.node.addChild(newEnemy);
+        newEnemy.getComponent(Agent).walk();
     }
 }
 

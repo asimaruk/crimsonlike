@@ -51,7 +51,7 @@ export class Pistol extends Gun {
     onLoad() {
         this.debugGraphics = this.addComponent(Graphics);
         this.debugGraphics.onLoad();
-        this.collider = this.fireSlot.getComponent(PolygonCollider2D);
+        this.collider = this.getComponent(PolygonCollider2D);
         this.collider.points[1].x = this.range;
 
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);

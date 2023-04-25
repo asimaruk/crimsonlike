@@ -2,12 +2,12 @@
   "ver": "2.0.3",
   "importer": "animation-clip",
   "imported": true,
-  "uuid": "7afd5913-e4ae-4908-909d-441067014ade",
+  "uuid": "3b3da08e-1444-4b05-b5df-9662abe3db78",
   "files": [
     ".cconb"
   ],
   "subMetas": {},
   "userData": {
-    "name": "walk"
+    "name": "monster_walk"
   }
 }

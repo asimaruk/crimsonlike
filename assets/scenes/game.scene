@@ -2037,6 +2037,10 @@
     "animation": {
       "__id__": 51
     },
+    "walkClip": {
+      "__uuid__": "7afd5913-e4ae-4908-909d-441067014ade",
+      "__expectedType__": "cc.AnimationClip"
+    },
     "bloodSplash": null,
     "_id": "c1EkIP+sxMXYXcBqjSh418"
   },
