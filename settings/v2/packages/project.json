@@ -27,7 +27,9 @@
   "general": {
     "designResolution": {
       "fitHeight": false,
-      "fitWidth": true
+      "fitWidth": true,
+      "width": 1920,
+      "height": 1080
     }
   }
 }

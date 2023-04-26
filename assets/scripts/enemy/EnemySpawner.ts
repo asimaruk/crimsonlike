@@ -1,9 +1,10 @@
-import { _decorator, Component, Node, Prefab, CCInteger, UITransform, instantiate, random } from 'cc';
+import { _decorator, Component, Node, Prefab, CCInteger, UITransform, instantiate, random, NodePool } from 'cc';
 import { EnemyAI } from './EnemyAI';
-import { Agent } from './Agent';
-const { ccclass, property } = _decorator;
+import { Agent } from '../Agent';
+const { ccclass, property, menu } = _decorator;
 
 @ccclass('EnemySpawner')
+@menu('Enemies/EnemySpawner')
 export class EnemySpawner extends Component {
 
     @property({
@@ -13,7 +14,7 @@ export class EnemySpawner extends Component {
     @property({
         type: Prefab
     })
-    enemyPrefab: Prefab;
+    enemyPrefabs: Prefab[] = [];
     @property({
         type: CCInteger
     })
@@ -24,6 +25,7 @@ export class EnemySpawner extends Component {
     ground: Node;
 
     private groundUITransform: UITransform;
+    private enemyPools: NodePool[];
 
     onLoad() {
         this.groundUITransform = this.ground.getComponent(UITransform);
@@ -43,7 +45,7 @@ export class EnemySpawner extends Component {
     }
 
     private spawn() {
-        let newEnemy = instantiate(this.enemyPrefab);
+        let newEnemy = this.getEnemyFromPool(Math.floor(random() * this.enemyPrefabs.length));
         newEnemy.getComponent(EnemyAI).setDestination(this.player);
         let randomSide = random();
         let startX = 0;
@@ -58,6 +60,20 @@ export class EnemySpawner extends Component {
         newEnemy.setPosition(startX, startY);
         this.node.addChild(newEnemy);
         newEnemy.getComponent(Agent).walk();
+    }
+
+    private getEnemyFromPool(index: number): Node {
+        if (!this.enemyPools) {
+            this.enemyPools = Array<NodePool>(this.enemyPrefabs.length).fill(new NodePool('Enemy'));
+        }
+        let enemyPool = this.enemyPools[index];
+        if (enemyPool.size() <= 0) {
+            let enemy = instantiate(this.enemyPrefabs[index]);
+            console.log(`Create new enemy ${enemy.name}`);
+            enemyPool.put(enemy);
+        }
+
+        return enemyPool.get(enemyPool);
     }
 }
 

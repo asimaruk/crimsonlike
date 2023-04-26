@@ -15,7 +15,6 @@ export class Gun extends Component {
 
     fire() {
         if (this.isCoolingDown) {
-            console.log('Can\'t fire cooling down in progress');
             return;
         }
 

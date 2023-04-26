@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "MonsterBlue",
+    "_name": "MonsterFireMan",
     "_objFlags": 0,
     "_native": "",
     "data": {
@@ -12,7 +12,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "MonsterBlue",
+    "_name": "MonsterFireMan",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -136,13 +136,13 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 337,
-      "height": 295
+      "width": 390,
+      "height": 328
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": 0.45208902077151336,
-      "y": 0.13056271186440682
+      "x": 0.6593044053868979,
+      "y": 0.15719990698635805
     },
     "_id": ""
   },
@@ -172,7 +172,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "fafaf545-7ace-433c-b0d7-6cb433b97b13@fb2bc",
+      "__uuid__": "fafaf545-7ace-433c-b0d7-6cb433b97b13@1aa06",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -248,9 +248,9 @@
     "__prefab": {
       "__id__": 11
     },
-    "speed": 45,
-    "fullHealth": 200,
-    "health": 200,
+    "speed": 70,
+    "fullHealth": 100,
+    "health": 100,
     "animation": {
       "__id__": 12
     },
@@ -315,10 +315,10 @@
     "_restitution": 0,
     "_offset": {
       "__type__": "cc.Vec2",
-      "x": -4.901,
-      "y": 90.603
+      "x": -2.7009999999999996,
+      "y": 88.40299999999999
     },
-    "_radius": 107,
+    "_radius": 100.4,
     "_id": ""
   },
   {
@@ -340,7 +340,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "b8ByjDDPtPeKXoHonWEYTZ"
+    "fileId": "bdKwSf8ypL8I7JX2DUCv/d"
   },
   {
     "__type__": "7a378Hn9cxGkrXa0yV6YRa6",
@@ -357,7 +357,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "f6S3xD2klEQrmUVNPnh3C2"
+    "fileId": "ca29JvKVBK7ZZJ209QVHxX"
   },
   {
     "__type__": "cc.PrefabInfo",

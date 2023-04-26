@@ -19,11 +19,15 @@ const { ccclass, property } = _decorator;
 @ccclass('Agent')
 export class Agent extends Component {
 
+    static readonly DIE = 'die';
+
     @property
     speed: number = 10;
 
-    @property
-    health: number = 100;
+    @property({
+        formerlySerializedAs: 'health'
+    })
+    fullHealth: number = 100;
 
     @property({
         type: Animation
@@ -41,28 +45,32 @@ export class Agent extends Component {
     bloodSplash: Prefab;
     
 
-    isAlive = true;
+    isAlive: boolean = true;
+    currentHealth: number;
 
     private bloodManager: BloodSplashManager;
     private bloodPosition = v3();
-    private collider: Collider2D;
+    private colliders: Collider2D[];
 
     onLoad() {
         this.bloodManager = director.getScene().getComponentInChildren(BloodSplashManager);
-        this.collider = this.getComponent(Collider2D);
+        this.colliders = this.getComponents(Collider2D);
+        this.reset();
     }
 
     takeDamage(damage: number) {
-        this.health -= damage;
-        if (this.health <= 0 && this.isAlive) {
+        this.currentHealth -= damage;
+        if (this.currentHealth <= 0 && this.isAlive) {
             this.die();
         }
     }
 
-    takeBullet(damage: number) {
+    takeBullet(collider: Collider2D, damage: number) {
+        if (this.colliders.indexOf(collider) == -1) return;
+
         this.takeDamage(damage);
         let blood = this.bloodManager.get();
-        this.getBloodPosition(this.bloodPosition);
+        this.getBloodPosition(collider, this.bloodPosition);
         this.bloodPosition.add(this.node.position);
         blood.setPosition(this.bloodPosition);
         this.node.parent.addChild(blood);
@@ -76,7 +84,7 @@ export class Agent extends Component {
     }
 
     onDie() {
-        this.node.destroy();
+        this.node.emit(Agent.DIE);
     }
 
     walk() {
@@ -92,35 +100,41 @@ export class Agent extends Component {
         this.scheduleOnce(() => walkState.stop());
     }
 
-    private getBloodPosition(out: Vec3 = null) {
+    private getBloodPosition(collider: Collider2D, out: Vec3 = null) {
         let position = out || v3();
-        if (this.collider instanceof CircleCollider2D) {
+        if (collider instanceof CircleCollider2D) {
             position.set(
-                this.collider.offset.x + this.collider.radius * (random() - 0.5),
-                this.collider.offset.y + this.collider.radius * (random() - 0.5)
+                collider.offset.x + collider.radius * (random() - 0.5),
+                collider.offset.y + collider.radius * (random() - 0.5)
             );
-        } else if (this.collider instanceof BoxCollider2D) {
+        } else if (collider instanceof BoxCollider2D) {
             position.set(
-                this.collider.offset.x + this.collider.size.width * (random() - 0.5),
-                this.collider.offset.y + this.collider.size.height * (random() - 0.5)
+                collider.offset.x + collider.size.width * (random() - 0.5),
+                collider.offset.y + collider.size.height * (random() - 0.5)
             );
-        } else if (this.collider instanceof PolygonCollider2D) {
-            let points = this.collider.points;
+        } else if (collider instanceof PolygonCollider2D) {
+            let points = collider.points;
             let xs = points.map((point) => point.x);
             let ys = points.map((point) => point.y);
             let width = Math.max(...xs) - Math.min(...xs);
             let height = Math.max(...ys) - Math.min(...ys);
 
             position.set(
-                this.collider.offset.x + width * (random() - 0.5),
-                this.collider.offset.y + height * (random() - 0.5)
+                collider.offset.x + width * (random() - 0.5),
+                collider.offset.y + height * (random() - 0.5)
             );
         } else {
             position.set(
-                this.collider.offset.x,
-                this.collider.offset.y
+                collider.offset.x,
+                collider.offset.y
             );
         }
+    }
+
+    reset() {
+        this.isAlive = true;
+        this.currentHealth = this.fullHealth;
+        this.animation.stop();
     }
 }
 

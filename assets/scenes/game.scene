@@ -219,8 +219,8 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 480.00000000000006,
-      "y": 320.00000000000006,
+      "x": 960,
+      "y": 540,
       "z": 0
     },
     "_lrot": {
@@ -408,10 +408,32 @@
     "player": {
       "__id__": 4
     },
-    "enemyPrefab": {
-      "__uuid__": "94783b01-83e7-4b23-b312-bb15bd1dd3d0",
-      "__expectedType__": "cc.Prefab"
-    },
+    "enemyPrefabs": [
+      {
+        "__uuid__": "94783b01-83e7-4b23-b312-bb15bd1dd3d0",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "6ba1325e-1c17-4658-9644-177b1cbb8506",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "f57c60a6-2a98-48bd-b2a9-9dd97d1320ed",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "c7007861-78a5-41d7-bfd9-dbd1998541fa",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "d9ff278a-eef6-453c-b908-d94939f5a6ec",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "e573a556-f2ba-4f4f-a419-dd0eaf7e4ab3",
+        "__expectedType__": "cc.Prefab"
+      }
+    ],
     "spawnIntervalSec": 10,
     "ground": {
       "__id__": 6
@@ -839,8 +861,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 960,
-      "height": 640
+      "width": 1920,
+      "height": 1080
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -993,8 +1015,8 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -380,
-      "y": -220,
+      "x": -860,
+      "y": -440,
       "z": 0
     },
     "_lrot": {
@@ -1358,8 +1380,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 960,
-      "height": 640
+      "width": 1920,
+      "height": 1080
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1485,7 +1507,7 @@
     "_priority": 1073741824,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 370.36211699164346,
+    "_orthoHeight": 512,
     "_near": 0,
     "_far": 2000,
     "_color": {
@@ -1526,8 +1548,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 960,
-      "height": 640
+      "width": 1920,
+      "height": 1080
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1593,8 +1615,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 960,
-      "height": 640
+      "width": 1920,
+      "height": 1080
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

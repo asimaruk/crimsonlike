@@ -121,7 +121,6 @@ export class PlayerController extends Component {
     private onTouchStart(event: EventTouch) {
         let touch = event.getTouches()[0];
         this.fireTouchId = touch.getID();
-        console.log(`Fire tousch start id: ${this.fireTouchId}`);
         this.faceMousePosition(touch.getUILocation());
         this.uiFacingPosition = touch.getUILocation();
         this.faceMousePosition(this.uiFacingPosition);
@@ -131,7 +130,6 @@ export class PlayerController extends Component {
 
     private onTouchMove(event: EventTouch) {
         let fireTouch = event.getTouches().find((touch) => {
-            console.log(`Fire tousch move id: ${touch.getID()}`);
             return touch.getID() == this.fireTouchId;
         });
         if (fireTouch) {
@@ -142,7 +140,6 @@ export class PlayerController extends Component {
 
     private onTouchEnd(event: EventTouch) {
         let fireTouch = event.getTouches().find((touch) => {
-            console.log(`Fire tousch end id: ${touch.getID()}`);
             return touch.getID() == this.fireTouchId;
         });
         console

@@ -77,7 +77,7 @@ export class Pistol extends Gun {
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D) {
         let agent = otherCollider.getComponent(Agent);
         if (agent) {
-            agent.takeBullet(this.damage);
+            agent.takeBullet(otherCollider, this.damage);
         }
     }
 }

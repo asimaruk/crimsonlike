@@ -11,7 +11,7 @@ import {
     Collider2D,
     Contact2DType,
 } from 'cc';
-import { EnemyAI } from './EnemyAI';
+import { EnemyAI } from './enemy/EnemyAI';
 import { PlayerController } from './PlayerController';
 import { UIManager } from './ui/UIManager';
 const { ccclass, property } = _decorator;

@@ -1,9 +1,10 @@
-import { _decorator, Component, Node, v3, Vec3 } from 'cc';
-import { Agent } from './Agent';
-const { ccclass, property, requireComponent } = _decorator;
+import { _decorator, Component, Node, v3 } from 'cc';
+import { Agent } from '../Agent';
+const { ccclass, property, requireComponent, menu } = _decorator;
 
 @ccclass('EnemyAI')
 @requireComponent(Agent)
+@menu('Enemies/EnemyUI')
 export class EnemyAI extends Component {
 
     private destination: Node;
