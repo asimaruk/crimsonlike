@@ -1,6 +1,5 @@
-[ ] Spites for player and enemy
-[ ] Character animations
-[ ] Dash(Jump) move
+[x] Spites for player and enemy
+[x] Character animations
+[ ] Kill effects and animations
 [ ] Terrain
-[ ] Kill effects
 [ ] Score counter
