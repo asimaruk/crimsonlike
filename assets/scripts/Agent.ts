@@ -2,7 +2,6 @@ import {
     _decorator,
     Component,
     CircleCollider2D,
-    Prefab,
     random,
     v3,
     director,
@@ -10,9 +9,12 @@ import {
     Collider2D,
     PolygonCollider2D,
     Vec3,
-    AnimationClip
+    AnimationClip,
+    Node,
+    Sprite,
+    Color
 } from 'cc';
-import { BloodSplashManager } from './BloodSplashManager';
+import { EffectsManager } from './effects/EffectsManager';
 import { BoxCollider2D } from 'cc';
 const { ccclass, property } = _decorator;
 
@@ -30,6 +32,11 @@ export class Agent extends Component {
     fullHealth: number = 100;
 
     @property({
+        type: Node
+    })
+    skin: Node;
+
+    @property({
         type: Animation
     })
     animation: Animation;
@@ -40,21 +47,22 @@ export class Agent extends Component {
     walkClip: AnimationClip;
 
     @property({
-        type: Prefab
+        type: AnimationClip
     })
-    bloodSplash: Prefab;
-    
+    dieClip: AnimationClip | null;
 
     isAlive: boolean = true;
     currentHealth: number;
 
-    private bloodManager: BloodSplashManager;
+    private effectsManager: EffectsManager;
     private bloodPosition = v3();
     private colliders: Collider2D[];
+    private skinSpite: Sprite;
 
     onLoad() {
-        this.bloodManager = director.getScene().getComponentInChildren(BloodSplashManager);
+        this.effectsManager = director.getScene().getComponentInChildren(EffectsManager);
         this.colliders = this.getComponents(Collider2D);
+        this.skinSpite = this.skin.getComponent(Sprite);
         this.reset();
     }
 
@@ -69,18 +77,27 @@ export class Agent extends Component {
         if (this.colliders.indexOf(collider) == -1) return;
 
         this.takeDamage(damage);
-        let blood = this.bloodManager.get();
+        let blood = this.effectsManager.getBloodSplash();
         this.getBloodPosition(collider, this.bloodPosition);
         this.bloodPosition.add(this.node.position);
         blood.setPosition(this.bloodPosition);
         this.node.parent.addChild(blood);
-        blood.setSiblingIndex(this.node.getSiblingIndex())
+        blood.setSiblingIndex(this.node.getSiblingIndex());
     }
 
     die() {
         this.isAlive = false;
         this.stopWalk();
-        this.scheduleOnce(this.onDie, 3);
+        if (this.dieClip) {
+            this.scheduleOnce(this.onDie, this.dieClip.duration);
+            this.animation.play(this.dieClip.name);
+        } else {
+            this.scheduleOnce(this.onDie, 0.3);
+        }
+        
+        let dieLights = this.effectsManager.getDieLights();
+        dieLights.setPosition(this.node.position);
+        this.node.parent.addChild(dieLights);   
     }
 
     onDie() {
@@ -135,6 +152,8 @@ export class Agent extends Component {
         this.isAlive = true;
         this.currentHealth = this.fullHealth;
         this.animation.stop();
+        this.skin.setScale(1, 1, 1);
+        this.skinSpite.color = Color.WHITE.clone();
     }
 }
 

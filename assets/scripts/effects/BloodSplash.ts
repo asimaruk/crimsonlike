@@ -1,8 +1,9 @@
 import { _decorator, Component, tween, v3, random, UIOpacity, NodePool } from 'cc';
-const { ccclass, property, requireComponent } = _decorator;
+const { ccclass, property, requireComponent, menu } = _decorator;
 
 @ccclass('BloodSplash')
 @requireComponent(UIOpacity)
+@menu('Effects/BloodSplash')
 export class BloodSplash extends Component {
 
     private uiOpacity: UIOpacity;

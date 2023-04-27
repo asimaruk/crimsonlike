@@ -1507,7 +1507,7 @@
     "_priority": 1073741824,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 512,
+    "_orthoHeight": 552.200557103064,
     "_near": 0,
     "_far": 2000,
     "_color": {
@@ -2055,7 +2055,11 @@
     "_enabled": true,
     "__prefab": null,
     "speed": 100,
+    "fullHealth": 100,
     "health": 100,
+    "skin": {
+      "__id__": 48
+    },
     "animation": {
       "__id__": 51
     },
@@ -2063,12 +2067,11 @@
       "__uuid__": "7afd5913-e4ae-4908-909d-441067014ade",
       "__expectedType__": "cc.AnimationClip"
     },
-    "bloodSplash": null,
     "_id": "c1EkIP+sxMXYXcBqjSh418"
   },
   {
     "__type__": "cc.Node",
-    "_name": "BloodSplashManager",
+    "_name": "EffectsManager",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -2123,7 +2126,10 @@
       "__uuid__": "dc72e30b-760e-4c23-86c7-d8ba9acfe112",
       "__expectedType__": "cc.Prefab"
     },
-    "poolSize": 10,
+    "dieLights": {
+      "__uuid__": "08d26605-c498-4948-b117-ce0d80826404",
+      "__expectedType__": "cc.Prefab"
+    },
     "_id": "c8DMyXHxlFTLqmz9axrqQ+"
   },
   {

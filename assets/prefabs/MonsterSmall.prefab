@@ -251,6 +251,9 @@
     "speed": 120,
     "fullHealth": 30,
     "health": 30,
+    "skin": {
+      "__id__": 2
+    },
     "animation": {
       "__id__": 12
     },
@@ -258,9 +261,9 @@
       "__uuid__": "3b3da08e-1444-4b05-b5df-9662abe3db78",
       "__expectedType__": "cc.AnimationClip"
     },
-    "bloodSplash": {
-      "__uuid__": "dc72e30b-760e-4c23-86c7-d8ba9acfe112",
-      "__expectedType__": "cc.Prefab"
+    "dieClip": {
+      "__uuid__": "3ce038c9-2d27-490e-b9c8-e2798d5f8920",
+      "__expectedType__": "cc.AnimationClip"
     },
     "_id": ""
   },
@@ -283,6 +286,10 @@
     "_clips": [
       {
         "__uuid__": "3b3da08e-1444-4b05-b5df-9662abe3db78",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "3ce038c9-2d27-490e-b9c8-e2798d5f8920",
         "__expectedType__": "cc.AnimationClip"
       }
     ],
