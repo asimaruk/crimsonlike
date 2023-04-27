@@ -1,5 +1,8 @@
 [x] Spites for player and enemy
 [x] Character animations
-[ ] Kill effects and animations
+[x] Kill effects and animations
 [ ] Terrain
+[ ] Bullets and 'blood'
 [ ] Score counter
+[ ] Android build
+[ ] UI for score and health
