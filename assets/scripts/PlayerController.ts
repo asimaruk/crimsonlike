@@ -227,6 +227,9 @@ export class PlayerController extends Component {
             this.node.position.x + step.x,
             this.node.position.y + step.y
         )
+        if (direction.x != 0) {
+            this.agent.skin.setScale(Math.sign(direction.x), 1, 1);
+        }
         this.camera.setPosition(
             Math.min(Math.max(this.cameraMinX, this.node.position.x), this.cameraMaxX),
             Math.min(Math.max(this.cameraMinY, this.node.position.y), this.cameraMaxY)
