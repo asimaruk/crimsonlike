@@ -15,12 +15,17 @@
       {
         "index": 2,
         "name": "Enemy"
+      },
+      {
+        "index": 3,
+        "name": "PlayerProjectiles"
       }
     ],
     "collisionMatrix": {
       "0": 1,
       "1": 4,
-      "2": 2
+      "2": 10,
+      "3": 4
     }
   },
   "custom_joint_texture_layouts": [],

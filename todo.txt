@@ -2,7 +2,7 @@
 [x] Character animations
 [x] Kill effects and animations
 [x] Terrain
-[ ] Bullets
+[x] Bullets
 [ ] 'Blood'
 [ ] Sounds
 [ ] Score counter

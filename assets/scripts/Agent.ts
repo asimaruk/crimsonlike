@@ -12,10 +12,12 @@ import {
     AnimationClip,
     Node,
     Sprite,
-    Color
+    Color,
+    Contact2DType
 } from 'cc';
 import { EffectsManager } from './effects/EffectsManager';
 import { BoxCollider2D } from 'cc';
+import { Projectile } from './guns/Projectile';
 const { ccclass, property } = _decorator;
 
 @ccclass('Agent')
@@ -62,8 +64,17 @@ export class Agent extends Component {
     onLoad() {
         this.effectsManager = director.getScene().getComponentInChildren(EffectsManager);
         this.colliders = this.getComponents(Collider2D);
+        this.colliders.forEach((collider) => {
+            collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+        });
         this.skinSpite = this.skin.getComponent(Sprite);
         this.reset();
+    }
+    
+    protected onDestroy(): void {
+        this.colliders.forEach((collider) => {
+            collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+        });
     }
 
     takeDamage(damage: number) {
@@ -154,6 +165,14 @@ export class Agent extends Component {
         this.animation.stop();
         this.skin.setScale(1, 1, 1);
         this.skinSpite.color = Color.WHITE.clone();
+    }
+
+    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D) {
+        let projectile = otherCollider.getComponent(Projectile);
+        if (projectile) {
+            this.takeBullet(selfCollider, projectile.damage);
+            projectile.hit();
+        }
     }
 }
 

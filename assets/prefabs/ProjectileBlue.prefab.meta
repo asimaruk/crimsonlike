@@ -2,12 +2,12 @@
   "ver": "1.1.43",
   "importer": "prefab",
   "imported": true,
-  "uuid": "e0cdaee7-eb42-4817-b7bd-28252ce280f8",
+  "uuid": "32cfca64-d072-4cfc-bb9e-a00400790bb9",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "GunFire"
+    "syncNodeName": "ProjectileBlue"
   }
 }
