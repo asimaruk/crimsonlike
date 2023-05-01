@@ -29,8 +29,16 @@ export class GameManager extends Component {
     uiManager: UIManager;
 
     private playerController: PlayerController;
-    private isGameStarted = false;
-    private isGameRunning = false;
+    private _isGameStarted = false;
+    private _isGameRunning = false;
+
+    get isGameRunning(): boolean {
+        return this._isGameRunning;
+    }
+
+    get isGameStarted(): boolean {
+        return this._isGameStarted;
+    }
 
     onLoad() {
         PhysicsSystem2D.instance.enable = true;
@@ -39,7 +47,7 @@ export class GameManager extends Component {
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         this.playerController = this.player.getComponent(PlayerController);
         director.getScene().getComponentsInChildren(EnemyAI).forEach((ai: EnemyAI) => {
-            ai.setDestination(this.player)
+            ai.setDestination(this.player);
         });
         director.pause();
     }
@@ -51,7 +59,7 @@ export class GameManager extends Component {
     private onKeyDown(event: EventKeyboard) {
         switch (event.keyCode) {
             case KeyCode.ESCAPE:
-                if (this.isGameStarted && !this.isGameRunning) {
+                if (this._isGameStarted && !this._isGameRunning) {
                     this.startGame();
                 } else {
                     this.pause();
@@ -61,8 +69,8 @@ export class GameManager extends Component {
     }
 
     startGame() {
-        this.isGameStarted = true;
-        this.isGameRunning = true;
+        this._isGameStarted = true;
+        this._isGameRunning = true;
         this.playerController.enabled = true;
         this.uiManager.setMenuUIVisible(false);
         this.uiManager.setGameUIVisible(true);
@@ -70,11 +78,11 @@ export class GameManager extends Component {
     }
 
     pause() {
-        if (this.isGameStarted && this.isGameRunning) {
+        if (this._isGameStarted && this._isGameRunning) {
             this.playerController.enabled = false;
             this.uiManager.setMenuUIVisible(true);
             this.uiManager.setGameUIVisible(false);
-            this.isGameRunning = false;
+            this._isGameRunning = false;
             director.pause();
         }
     }

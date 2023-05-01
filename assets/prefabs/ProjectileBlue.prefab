@@ -132,8 +132,8 @@
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
+      "x": 0.44612871287128714,
+      "y": 0.5287558139534884
     },
     "_id": ""
   },
@@ -247,7 +247,7 @@
       "x": 0,
       "y": 0
     },
-    "_radius": 50,
+    "_radius": 28,
     "_id": ""
   },
   {
@@ -285,7 +285,6 @@
       "__id__": 0
     },
     "fileId": "faFblU7bxD/q88yqS0wqYn",
-    "instance": null,
-    "targetOverrides": null
+    "instance": null
   }
 ]
