@@ -20,15 +20,13 @@ export class DieLights extends Component {
         this.isInitialized = true;
     }
 
-    protected update(dt: number): void {
-        if (this.particles.stopped) {
-            // this.pool.put(this.node);
-        }
-    }
-
     reuse() {
         this.init();
         this.particles.resetSystem();
+        this.scheduleOnce(
+            () => this.pool.put(this.node),
+            this.particles.duration + this.particles.life + this.particles.lifeVar
+        );
         if (arguments.length > 0 && arguments[0][0] instanceof NodePool) {
             this.pool = arguments[0][0];
         }

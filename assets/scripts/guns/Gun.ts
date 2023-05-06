@@ -20,15 +20,11 @@ export class Gun extends Component {
 
         this.fireShot();
         this.isCoolingDown = true;
-        this.scheduleOnce(() => this.coolDown(), this.frequency);
+        this.scheduleOnce(() => this.isCoolingDown = false, this.frequency);
     }
 
-    fireShot() {
+    protected fireShot() {
 
-    }
-
-    private coolDown() {
-        this.isCoolingDown = false;
     }
 }
 

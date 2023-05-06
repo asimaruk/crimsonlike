@@ -65,7 +65,7 @@ export class Pistol extends Gun {
         this.projectileSpawnUITransform = this.projectileSpawn.getComponent(UITransform);
     }
 
-    fireShot() {
+    protected fireShot() {
         this.animation.play();
         this.animation.once(Animation.EventType.FINISHED, () => {
             if (this.projectilePool.size() <= 0) {

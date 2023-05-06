@@ -15,6 +15,7 @@ import {
     Canvas,
     macro,
     Vec3,
+    sys,
 } from 'cc';
 import { Agent } from './Agent';
 import { Gun } from './guns/Gun';
@@ -75,23 +76,28 @@ export class PlayerController extends Component {
         this.gun = this.getComponentInChildren(Gun);
     }
 
-    onEnable() {
-        input.on(Input.EventType.MOUSE_MOVE, this.onMouseMove, this);
-        input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
-        input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
-        input.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
-        input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
-        input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
-        input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
+    protected onEnable(): void {
+        if (sys.hasFeature(sys.Feature.INPUT_TOUCH)) {
+            this.joystick.node.active = true;
+            input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+            input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
+            input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
+        } else {
+            this.joystick.node.active = false;
+            input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
+            input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
+            input.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
+            input.on(Input.EventType.MOUSE_MOVE, this.onMouseMove, this);
+            input.on(Input.EventType.MOUSE_UP, this.onMouseUp, this);
+        }
     }
 
     update(deltaTime: number) {
         let joystickDirection = this.joystick.getDirection();
         if (joystickDirection.x != 0 || joystickDirection.y != 0) {
+            this.agent.walk();
             this.move(joystickDirection, this.agent.speed * deltaTime);
-        }
-
-        if (this.moveDirection.x != 0 || this.moveDirection.y != 0) {
+        } else if (this.moveDirection.x != 0 || this.moveDirection.y != 0) {
             this.agent.walk();
             this.move(this.moveDirection, this.agent.speed * deltaTime);
             this.faceMousePosition(this.uiFacingPosition);
@@ -109,13 +115,21 @@ export class PlayerController extends Component {
     }
 
     private offInput() {
-        input.off(Input.EventType.MOUSE_MOVE, this.onMouseMove, this);
-        input.off(Input.EventType.KEY_DOWN, this.onKeyDown, this);
-        input.off(Input.EventType.KEY_UP, this.onKeyUp, this);
-        input.off(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
+        this.offMouseInput();
+        this.offTouchInput();
+    }
+
+    private offTouchInput() {
         input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
         input.off(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
         input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
+    }
+    private offMouseInput() {
+        input.off(Input.EventType.KEY_DOWN, this.onKeyDown, this);
+        input.off(Input.EventType.KEY_UP, this.onKeyUp, this);
+        input.off(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
+        input.off(Input.EventType.MOUSE_MOVE, this.onMouseMove, this);
+        input.off(Input.EventType.MOUSE_UP, this.onMouseUp, this);
     }
 
     private onTouchStart(event: EventTouch) {
@@ -142,7 +156,6 @@ export class PlayerController extends Component {
         let fireTouch = event.getTouches().find((touch) => {
             return touch.getID() == this.fireTouchId;
         });
-        console
         if (fireTouch) {
             this.unschedule(this.gunFireCallback);
         }
@@ -153,8 +166,13 @@ export class PlayerController extends Component {
         this.faceMousePosition(this.uiFacingPosition);
     }
 
-    private onMouseDown(event: EventMouse) {
+    private onMouseDown() {
         this.gun.fire();
+        this.schedule(this.gunFireCallback, this.gun.frequency, macro.REPEAT_FOREVER, this.gun.frequency);
+    }
+
+    private onMouseUp() {
+        this.unschedule(this.gunFireCallback);
     }
 
     private onKeyDown(event: EventKeyboard) {

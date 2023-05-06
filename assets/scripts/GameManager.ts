@@ -8,8 +8,6 @@ import {
     KeyCode, 
     director,
     PhysicsSystem2D,
-    Collider2D,
-    Contact2DType,
 } from 'cc';
 import { EnemyAI } from './enemy/EnemyAI';
 import { PlayerController } from './PlayerController';
@@ -42,13 +40,14 @@ export class GameManager extends Component {
 
     onLoad() {
         PhysicsSystem2D.instance.enable = true;
-        PhysicsSystem2D.instance.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
-
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         this.playerController = this.player.getComponent(PlayerController);
-        director.getScene().getComponentsInChildren(EnemyAI).forEach((ai: EnemyAI) => {
+        
+        let scene = director.getScene();
+        scene.getComponentsInChildren(EnemyAI).forEach((ai: EnemyAI) => {
             ai.setDestination(this.player);
         });
+
         director.pause();
     }
 
@@ -85,10 +84,6 @@ export class GameManager extends Component {
             this._isGameRunning = false;
             director.pause();
         }
-    }
-
-    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D) {
-        console.log(`Contact ${selfCollider.node.name} with ${otherCollider.node.name}!`);
     }
 }
 
