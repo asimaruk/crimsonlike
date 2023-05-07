@@ -1,22 +1,33 @@
-import { _decorator, Component, NodePool, ParticleSystem2D } from 'cc';
+import { _decorator, director, NodePool } from 'cc';
+import { GameComponent } from '../utils/GameComponent';
+import { PausableParticles } from '../utils/PausableParticles';
 const { ccclass, menu } = _decorator;
 
 @ccclass('DieLights')
 @menu('Effects/DieLights')
-export class DieLights extends Component {
+export class DieLights extends GameComponent {
 
-    private particles: ParticleSystem2D;
+    private particles: PausableParticles;
     private pool: NodePool;
     private isInitialized = false;
 
     protected onLoad() {
+        super.onLoad();
         this.init();
+    }
+
+    protected onPaused() {
+        this.particles.paused = true;
+    }
+
+    protected onResumed() {
+        this.particles.paused = false;
     }
 
     private init() {
         if (this.isInitialized) return;
 
-        this.particles = this.getComponent(ParticleSystem2D);
+        this.particles = this.getComponent(PausableParticles);
         this.isInitialized = true;
     }
 

@@ -89,8 +89,8 @@
     "fileId": "c0SHsnUehBeJMVMIjucDe/"
   },
   {
-    "__type__": "cc.ParticleSystem2D",
-    "_name": "Node<ParticleSystem2D>",
+    "__type__": "2a308xJed9PCL8BVpYnP99n",
+    "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
@@ -147,18 +147,18 @@
     "radialAccelVar": 65.79000091552734,
     "rotationIsDir": false,
     "startRadius": 0,
-    "startRadiusVar": 50,
-    "endRadius": 100,
-    "endRadiusVar": 150,
+    "startRadiusVar": 0,
+    "endRadius": 0,
+    "endRadiusVar": 0,
     "rotatePerS": 0,
     "rotatePerSVar": 0,
-    "playOnLoad": false,
+    "playOnLoad": true,
     "autoRemoveOnFinish": false,
     "_preview": true,
     "preview": true,
-    "_custom": true,
+    "_custom": false,
     "_file": {
-      "__uuid__": "e17b4526-57a2-48d3-acc9-cf09f30aa138",
+      "__uuid__": "a4d71677-ee36-4bb8-a96e-3c60f8a975eb",
       "__expectedType__": "cc.ParticleAsset"
     },
     "_spriteFrame": {
@@ -199,7 +199,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "53KWx7A+BE1YoXd5tsFn9Q"
+    "fileId": "d0ln9sV8BCW7YajZmNEcMA"
   },
   {
     "__type__": "cb90c9GzCZKv6ksIDfQ2kNp",
