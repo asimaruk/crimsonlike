@@ -3,6 +3,7 @@
 [x] Kill effects and animations
 [x] Terrain
 [x] Bullets
+[x] Custom game play/pause for interractive menu
 [ ] 'Blood'
 [ ] Sounds
 [ ] Score counter

@@ -1,6 +1,6 @@
-import { _decorator, director, NodePool } from 'cc';
+import { _decorator, NodePool } from 'cc';
 import { GameComponent } from '../utils/GameComponent';
-import { PausableParticles } from '../utils/PausableParticles';
+import { PausableParticles } from '../effects/PausableParticles';
 const { ccclass, menu } = _decorator;
 
 @ccclass('DieLights')
