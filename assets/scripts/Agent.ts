@@ -1,6 +1,5 @@
 import {
     _decorator,
-    Component,
     CircleCollider2D,
     random,
     v3,
@@ -18,10 +17,11 @@ import {
 import { EffectsManager } from './effects/EffectsManager';
 import { BoxCollider2D } from 'cc';
 import { Projectile } from './guns/Projectile';
+import { GameComponent } from './utils/GameComponent';
 const { ccclass, property } = _decorator;
 
 @ccclass('Agent')
-export class Agent extends Component {
+export class Agent extends GameComponent {
 
     static readonly DIE = 'die';
 
@@ -61,7 +61,8 @@ export class Agent extends Component {
     private colliders: Collider2D[];
     private skinSpite: Sprite;
 
-    onLoad() {
+    protected onLoad() {
+        super.onLoad();
         this.effectsManager = director.getScene().getComponentInChildren(EffectsManager);
         this.colliders = this.getComponents(Collider2D);
         this.colliders.forEach((collider) => {
@@ -71,20 +72,28 @@ export class Agent extends Component {
         this.reset();
     }
     
-    protected onDestroy(): void {
+    protected onDestroy() {
         this.colliders.forEach((collider) => {
             collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
         });
     }
 
-    takeDamage(damage: number) {
+    protected onPaused() {
+        this.animation.pause();
+    }
+
+    protected onResumed() {
+        this.animation.resume();
+    }
+
+    private takeDamage(damage: number) {
         this.currentHealth -= damage;
         if (this.currentHealth <= 0 && this.isAlive) {
             this.die();
         }
     }
 
-    takeBullet(collider: Collider2D, damage: number) {
+    private takeBullet(collider: Collider2D, damage: number) {
         if (this.colliders.indexOf(collider) == -1) return;
 
         this.takeDamage(damage);
@@ -96,7 +105,7 @@ export class Agent extends Component {
         blood.setSiblingIndex(this.node.getSiblingIndex());
     }
 
-    die() {
+    private die() {
         this.isAlive = false;
         this.stopWalk();
         if (this.dieClip) {
@@ -111,18 +120,18 @@ export class Agent extends Component {
         this.node.parent.addChild(dieLights);   
     }
 
-    onDie() {
+    private onDie() {
         this.node.emit(Agent.DIE);
     }
 
-    walk() {
+    public walk() {
         if (this.animation.getState(this.walkClip.name).isPlaying) {
             return;
         }
         this.animation.play(this.walkClip.name);
     }
 
-    stopWalk() {
+    public stopWalk() {
         let walkState = this.animation.getState(this.walkClip.name);
         walkState.setTime(0);
         this.scheduleOnce(() => walkState.stop());
@@ -159,7 +168,7 @@ export class Agent extends Component {
         }
     }
 
-    reset() {
+    public reset() {
         this.isAlive = true;
         this.currentHealth = this.fullHealth;
         this.animation.stop();
@@ -167,7 +176,7 @@ export class Agent extends Component {
         this.skinSpite.color = Color.WHITE.clone();
     }
 
-    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D) {
+    public onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D) {
         let projectile = otherCollider.getComponent(Projectile);
         if (projectile) {
             this.takeBullet(selfCollider, projectile.damage);

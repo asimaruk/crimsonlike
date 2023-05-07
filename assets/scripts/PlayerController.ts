@@ -1,6 +1,5 @@
 import { 
-    _decorator, 
-    Component, 
+    _decorator,
     Node, 
     input, 
     Input, 
@@ -22,11 +21,12 @@ import { Gun } from './guns/Gun';
 import { EventTouch } from 'cc';
 import { UIManager } from './ui/UIManager';
 import { Joystick } from './ui/Joystick';
+import { GameComponent } from './utils/GameComponent';
 const { ccclass, property, requireComponent } = _decorator;
 
 @ccclass('PlayerController')
 @requireComponent(Agent)
-export class PlayerController extends Component {
+export class PlayerController extends GameComponent {
 
     @property({
         type: UITransform
@@ -60,7 +60,8 @@ export class PlayerController extends Component {
     private fireTouchId: number;
     private gunFireCallback = () => this.gun.fire();
 
-    onLoad() {
+    protected onLoad() {
+        super.onLoad();
         this.agent = this.getComponent(Agent);
         let scene = director.getScene();
         // camera in fact is camera carriage with camera and UI, so getting by UIManager
@@ -76,23 +77,9 @@ export class PlayerController extends Component {
         this.gun = this.getComponentInChildren(Gun);
     }
 
-    protected onEnable(): void {
-        if (sys.hasFeature(sys.Feature.INPUT_TOUCH)) {
-            this.joystick.node.active = true;
-            input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
-            input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
-            input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
-        } else {
-            this.joystick.node.active = false;
-            input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
-            input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
-            input.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
-            input.on(Input.EventType.MOUSE_MOVE, this.onMouseMove, this);
-            input.on(Input.EventType.MOUSE_UP, this.onMouseUp, this);
-        }
-    }
+    protected update(deltaTime: number) {
+        if (this.paused) return;
 
-    update(deltaTime: number) {
         let joystickDirection = this.joystick.getDirection();
         if (joystickDirection.x != 0 || joystickDirection.y != 0) {
             this.agent.walk();
@@ -106,12 +93,33 @@ export class PlayerController extends Component {
         }
     }
 
-    onDisable() {
+    protected onResumed() {
+        this.onInput();
+    }
+
+    protected onPaused() {
+        this.offInput();
+        this.unschedule(this.gunFireCallback);
+    }
+
+    protected onDestroy() {
         this.offInput();
     }
 
-    onDestroy() {
-        this.offInput();
+    private onInput() {
+        if (sys.hasFeature(sys.Feature.INPUT_TOUCH)) {
+            this.joystick.node.active = true;
+            input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+            input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
+            input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
+        } else {
+            this.joystick.node.active = false;
+            input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
+            input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
+            input.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
+            input.on(Input.EventType.MOUSE_MOVE, this.onMouseMove, this);
+            input.on(Input.EventType.MOUSE_UP, this.onMouseUp, this);
+        }
     }
 
     private offInput() {

@@ -2,8 +2,7 @@ import {
     _decorator, 
     Prefab, 
     instantiate,
-    v3, 
-    Graphics,
+    v3,
     CCInteger,
     Node,
     NodePool,
@@ -13,7 +12,6 @@ import {
     Vec3,
 } from 'cc';
 import { Gun } from './Gun';
-import { quat } from 'cc';
 import { Projectile } from './Projectile';
 import { Projectiles } from './Projectiles';
 const { ccclass, property, menu } = _decorator;
@@ -44,7 +42,6 @@ export class Pistol extends Gun {
     })
     damage = 20;
 
-    private debugGraphics: Graphics;
     private projectileWorldPosition = v3();
     private projectileNodePosition = v3();
     private projectileDirectionWorldPosition = v3();
@@ -56,13 +53,20 @@ export class Pistol extends Gun {
     private projectileSpawnUITransform: UITransform;
     private vRange = v3();
 
-    onLoad() {
-        this.debugGraphics = this.addComponent(Graphics);
-        this.debugGraphics.onLoad();
+    protected onLoad() {
+        super.onLoad();
         this.animation = this.getComponent(Animation);
         this.projectiles = director.getScene().getComponentInChildren(Projectiles);
         this.projectilesUITransform = this.projectiles.getComponent(UITransform);
         this.projectileSpawnUITransform = this.projectileSpawn.getComponent(UITransform);
+    }
+
+    protected onPaused() {
+        this.animation.pause();
+    }
+
+    protected onResumed() {
+        this.animation.resume();
     }
 
     protected fireShot() {

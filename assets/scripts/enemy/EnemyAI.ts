@@ -1,11 +1,12 @@
-import { _decorator, Component, Node, v3 } from 'cc';
+import { _decorator, Node, v3 } from 'cc';
 import { Agent } from '../Agent';
-const { ccclass, property, requireComponent, menu } = _decorator;
+import { GameComponent } from '../utils/GameComponent';
+const { ccclass, requireComponent, menu } = _decorator;
 
 @ccclass('EnemyAI')
 @requireComponent(Agent)
 @menu('Enemies/EnemyUI')
-export class EnemyAI extends Component {
+export class EnemyAI extends GameComponent {
 
     private destination: Node;
     private destinationWorld = v3();
@@ -13,12 +14,13 @@ export class EnemyAI extends Component {
     private agent: Agent;
     private move = v3();
 
-    onLoad() {
+    protected onLoad() {
+        super.onLoad();
         this.agent = this.getComponent(Agent);
     }
 
-    update(deltaTime: number) {
-        if (this.destination && this.agent.isAlive) {
+    protected update(deltaTime: number) {
+        if (this.destination && this.agent.isAlive && !this.paused) {
             this.move.set(this.destination.getWorldPosition(this.destinationWorld));
             this.move.subtract(this.node.getWorldPosition(this.selfWorld));
             this.move.normalize();
@@ -27,7 +29,7 @@ export class EnemyAI extends Component {
         }
     }
 
-    setDestination(dest: Node) {
+    public setDestination(dest: Node) {
         this.destination = dest;
     }
 }

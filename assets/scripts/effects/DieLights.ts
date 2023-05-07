@@ -1,5 +1,5 @@
-import { _decorator, Component, Node, NodePool, ParticleSystem2D } from 'cc';
-const { ccclass, property, menu } = _decorator;
+import { _decorator, Component, NodePool, ParticleSystem2D } from 'cc';
+const { ccclass, menu } = _decorator;
 
 @ccclass('DieLights')
 @menu('Effects/DieLights')
@@ -9,7 +9,7 @@ export class DieLights extends Component {
     private pool: NodePool;
     private isInitialized = false;
 
-    protected onLoad(): void {
+    protected onLoad() {
         this.init();
     }
 
@@ -20,7 +20,7 @@ export class DieLights extends Component {
         this.isInitialized = true;
     }
 
-    reuse() {
+    public reuse() {
         this.init();
         this.particles.resetSystem();
         this.scheduleOnce(

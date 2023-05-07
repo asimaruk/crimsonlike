@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Prefab, CCInteger, UITransform, instantiate, random, NodePool, director } from 'cc';
+import { _decorator, Node, Prefab, CCInteger, UITransform, instantiate, random, NodePool } from 'cc';
 import { EnemyAI } from './EnemyAI';
 import { Agent } from '../Agent';
 import { GameComponent } from '../utils/GameComponent';
@@ -27,34 +27,27 @@ export class EnemySpawner extends GameComponent {
 
     private groundUITransform: UITransform;
     private enemyPools: NodePool[];
+    private isSpawning: boolean = false;
 
-    onLoad() {
+    protected onLoad() {
         super.onLoad();
         this.groundUITransform = this.ground.getComponent(UITransform);
     }
 
-    start() {
-        this.startSpawning();
-        if (this.paused) {
-            this.onPaused();
+    protected onResumed() {
+        if (!this.isSpawning) {
+            this.startSpawning();
         }
     }
 
-    protected onPaused(): void {
-        director.getScheduler().pauseTarget(this);
-    }
-
-    protected onResumed(): void {
-        director.getScheduler().resumeTarget(this);
-    }
-
-    startSpawning() {
-        this.unschedule(this.spawn);
+    private startSpawning() {
         this.schedule(this.spawn, this.spawnIntervalSec);
+        this.isSpawning = true;
     }
 
-    stopSpawning() {
+    private stopSpawning() {
         this.unschedule(this.spawn);
+        this.isSpawning = false;
     }
 
     private spawn() {

@@ -18,30 +18,30 @@ export class EffectsManager extends Component {
     private readonly bloodSlashPool = new NodePool('BloodSplash');
     private readonly dieLightsPool = new NodePool('DieLights');
 
-    onLoad() {
+    protected onLoad() {
         for (let i = 0; i < EffectsManager.BLOOD_POOL_SIZE; i++) {
             this.bloodSlashPool.put(instantiate(this.bloodPrefab));
         }
-        for (let i = 0; i < EffectsManager.BLOOD_POOL_SIZE; i++) {
+        for (let i = 0; i < EffectsManager.DIE_LIGHTS_POOL_SIZE; i++) {
             this.dieLightsPool.put(instantiate(this.dieLights));
         }
     }
 
-    getBloodSplash(): Node {
+    public getBloodSplash(): Node {
         if (this.bloodSlashPool.size() <= 0) {
             this.bloodSlashPool.put(instantiate(this.bloodPrefab));
         }
         return this.bloodSlashPool.get(this.bloodSlashPool);
     }
 
-    getDieLights(): Node {
+    public getDieLights(): Node {
         if (this.dieLightsPool.size() <= 0) {
             this.dieLightsPool.put(instantiate(this.dieLights));
         }
         return this.dieLightsPool.get(this.dieLightsPool);
     }
 
-    getEffect(name: string): Node | null {
+    public getEffect(name: string): Node | null {
         switch (name) {
             case 'BloodSplash': return this.getBloodSplash();
             case 'DieLights': return this.getDieLights();

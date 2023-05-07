@@ -1,8 +1,9 @@
-import { _decorator, Component, CCFloat } from 'cc';
+import { _decorator, CCFloat } from 'cc';
+import { GameComponent } from '../utils/GameComponent';
 const { ccclass, property } = _decorator;
 
 @ccclass('Gun')
-export class Gun extends Component {
+export class Gun extends GameComponent {
 
     @property({
         type: CCFloat,
@@ -13,7 +14,7 @@ export class Gun extends Component {
 
     private isCoolingDown = false;
 
-    fire() {
+    public fire() {
         if (this.isCoolingDown) {
             return;
         }

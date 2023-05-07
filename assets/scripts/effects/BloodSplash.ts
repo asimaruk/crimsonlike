@@ -1,15 +1,17 @@
-import { _decorator, Component, tween, v3, random, UIOpacity, NodePool } from 'cc';
-const { ccclass, property, requireComponent, menu } = _decorator;
+import { _decorator, tween, v3, random, UIOpacity, NodePool } from 'cc';
+import { GameComponent } from '../utils/GameComponent';
+const { ccclass, requireComponent, menu } = _decorator;
 
 @ccclass('BloodSplash')
 @requireComponent(UIOpacity)
 @menu('Effects/BloodSplash')
-export class BloodSplash extends Component {
+export class BloodSplash extends GameComponent {
 
     private uiOpacity: UIOpacity;
     private pool: NodePool;
 
-    onLoad() {
+    protected onLoad() {
+        super.onLoad();
         this.init();
     }
 
@@ -30,11 +32,15 @@ export class BloodSplash extends Component {
             .start();
     }
 
-    reuse() {
+    public reuse() {
         this.init();
         if (arguments.length > 0 && arguments[0][0] instanceof NodePool) {
             this.pool = arguments[0][0];
         }
+    }
+
+    protected getTweenTargets(): any[] {
+        return [this.node, this.uiOpacity];
     }
 }
 

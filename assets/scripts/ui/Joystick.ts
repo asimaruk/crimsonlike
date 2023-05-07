@@ -1,10 +1,11 @@
-import { Canvas, Vec3, director, v2, v3 } from 'cc';
-import { _decorator, Component, EventTouch, Input, Node, UITransform } from 'cc';
+import { Vec3, director, v2, v3 } from 'cc';
+import { _decorator, EventTouch, Input, Node, UITransform } from 'cc';
 import { UIManager } from './UIManager';
+import { GameComponent } from '../utils/GameComponent';
 const { ccclass, property } = _decorator;
 
 @ccclass('Joystick')
-export class Joystick extends Component {
+export class Joystick extends GameComponent {
 
     @property({
         type: Node
@@ -24,32 +25,42 @@ export class Joystick extends Component {
     private stickWorldCoordinates = v3();
     private canvasUITransform: UITransform;
 
-    onLoad() {
+    protected onLoad() {
+        super.onLoad();
         this.ui = director.getScene().getComponentInChildren(UIManager).node;
         this.uiTransform = this.getComponent(UITransform);
         this.canvasUITransform = this.ui.getComponent(UITransform);
+        this.on();
+    }
+
+    protected onDestroy() {
+        this.off();
+    }
+
+    protected onPaused() {
+        this.off();
+        this.resetStick();
+    }
+
+    protected onResumed() {
+        this.on();
+    }
+
+    private on() {
         this.base.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
         this.base.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
         this.base.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
         this.base.on(Input.EventType.TOUCH_CANCEL, this.onTouchEnd, this);
     }
 
-    start() {
-
-    }
-
-    update(deltaTime: number) {
-        
-    }
-
-    onDestroy() {
+    private off() {
         this.base.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
         this.base.off(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
         this.base.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
         this.base.off(Input.EventType.TOUCH_CANCEL, this.onTouchEnd, this);
     }
 
-    getDirection(): Vec3 {
+    public getDirection(): Vec3 {
         return this.stick.position.clone().normalize();
     }
 
@@ -62,7 +73,7 @@ export class Joystick extends Component {
     }
 
     private onTouchEnd(event: EventTouch) {
-        this.stick.setPosition(0, 0);
+        this.resetStick();
     }
 
     private placeStick(event: EventTouch) {
@@ -74,6 +85,10 @@ export class Joystick extends Component {
         this.canvasUITransform.convertToWorldSpaceAR(this.stickCanvasCoordinates, this.stickWorldCoordinates);
         this.uiTransform.convertToNodeSpaceAR(this.stickWorldCoordinates, this.stickNodeCoordinates);
         this.stick.setPosition(this.stickNodeCoordinates);
+    }
+
+    private resetStick() {
+        this.stick.setPosition(0, 0);
     }
 }
 

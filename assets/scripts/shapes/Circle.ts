@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Graphics, Node } from 'cc';
+import { _decorator, Color, Component, Graphics } from 'cc';
 const { ccclass, property, executeInEditMode, requireComponent, menu } = _decorator;
 
 @ccclass('Circle')
@@ -24,7 +24,7 @@ export class Circle extends Component {
     }
 
     @property
-    get color() {
+    get color(): Color {
         return this._color;
     }
     set color(value: Color) {
@@ -34,7 +34,7 @@ export class Circle extends Component {
 
     private g: Graphics;
 
-    onLoad() {
+    protected onLoad() {
         this.g = this.getComponent(Graphics);
         this.render();
     }

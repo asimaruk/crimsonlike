@@ -1,18 +1,13 @@
 import { 
     _decorator, 
-    Component, 
-    Node, 
+    Component,
     input, 
     Input, 
     EventKeyboard, 
-    KeyCode, 
-    director,
+    KeyCode,
     PhysicsSystem2D,
 } from 'cc';
-import { EnemyAI } from './enemy/EnemyAI';
-import { PlayerController } from './PlayerController';
-import { UIManager } from './ui/UIManager';
-const { ccclass, property } = _decorator;
+const { ccclass } = _decorator;
 
 @ccclass('GameManager')
 export class GameManager extends Component {
@@ -20,37 +15,19 @@ export class GameManager extends Component {
     public static PAUSED = 'paused';
     public static RESUMED = 'resumed';
 
-    @property({
-        type: Node
-    })
-    player: Node;
-    @property({
-        type: UIManager
-    })
-    uiManager: UIManager;
-
-    private playerController: PlayerController;
     private _isPaused = true;
 
     get isPaused(): boolean {
         return this._isPaused;
     }
 
-    onLoad() {
+    protected onLoad() {
         PhysicsSystem2D.instance.enable = true;
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
-        this.playerController = this.player.getComponent(PlayerController);
-        
-        let scene = director.getScene();
-        scene.getComponentsInChildren(EnemyAI).forEach((ai: EnemyAI) => {
-            ai.setDestination(this.player);
-        });
-
-
         this.onPause();
     }
 
-    onDestroy() {
+    protected onDestroy() {
         input.off(Input.EventType.KEY_DOWN, this.onKeyDown, this);
     }
 
@@ -66,17 +43,14 @@ export class GameManager extends Component {
         }
     }
 
-    startGame() {
+    private startGame() {
         if (!this._isPaused) return;
 
         this._isPaused = false;
-        this.playerController.enabled = true;
-        this.uiManager.setMenuUIVisible(false);
-        this.uiManager.setGameUIVisible(true);
         this.node.emit(GameManager.RESUMED);
     }
 
-    pause() {
+    private pause() {
         if (this._isPaused) return;
 
         this.onPause();
@@ -84,9 +58,6 @@ export class GameManager extends Component {
 
     private onPause() {
         this._isPaused = true;
-        this.playerController.enabled = false;
-        this.uiManager.setMenuUIVisible(true);
-        this.uiManager.setGameUIVisible(false);
         this.node.emit(GameManager.PAUSED);
     }
 }

@@ -121,17 +121,6 @@
     "uiManager": {
       "__id__": 69
     },
-    "pausibleGameNodes": [
-      {
-        "__id__": 27
-      },
-      {
-        "__id__": 4
-      },
-      {
-        "__id__": 29
-      }
-    ],
     "_id": "cfHe278JtIHpG6pGU65VG4"
   },
   {
@@ -2383,7 +2372,7 @@
     "_priority": 1073741824,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 552.200557103064,
+    "_orthoHeight": 561.5598885793872,
     "_near": 0,
     "_far": 2000,
     "_color": {
@@ -2927,7 +2916,7 @@
     "node": {
       "__id__": 4
     },
-    "_enabled": false,
+    "_enabled": true,
     "__prefab": null,
     "groundUITransform": {
       "__id__": 25
