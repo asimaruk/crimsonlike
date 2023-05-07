@@ -17,6 +17,9 @@ const { ccclass, property } = _decorator;
 @ccclass('GameManager')
 export class GameManager extends Component {
 
+    public static PAUSED = 'paused';
+    public static RESUMED = 'resumed';
+
     @property({
         type: Node
     })
@@ -27,15 +30,10 @@ export class GameManager extends Component {
     uiManager: UIManager;
 
     private playerController: PlayerController;
-    private _isGameStarted = false;
-    private _isGameRunning = false;
+    private _isPaused = true;
 
-    get isGameRunning(): boolean {
-        return this._isGameRunning;
-    }
-
-    get isGameStarted(): boolean {
-        return this._isGameStarted;
+    get isPaused(): boolean {
+        return this._isPaused;
     }
 
     onLoad() {
@@ -48,7 +46,8 @@ export class GameManager extends Component {
             ai.setDestination(this.player);
         });
 
-        director.pause();
+
+        this.onPause();
     }
 
     onDestroy() {
@@ -58,7 +57,7 @@ export class GameManager extends Component {
     private onKeyDown(event: EventKeyboard) {
         switch (event.keyCode) {
             case KeyCode.ESCAPE:
-                if (this._isGameStarted && !this._isGameRunning) {
+                if (this._isPaused) {
                     this.startGame();
                 } else {
                     this.pause();
@@ -68,22 +67,27 @@ export class GameManager extends Component {
     }
 
     startGame() {
-        this._isGameStarted = true;
-        this._isGameRunning = true;
+        if (!this._isPaused) return;
+
+        this._isPaused = false;
         this.playerController.enabled = true;
         this.uiManager.setMenuUIVisible(false);
         this.uiManager.setGameUIVisible(true);
-        director.resume();
+        this.node.emit(GameManager.RESUMED);
     }
 
     pause() {
-        if (this._isGameStarted && this._isGameRunning) {
-            this.playerController.enabled = false;
-            this.uiManager.setMenuUIVisible(true);
-            this.uiManager.setGameUIVisible(false);
-            this._isGameRunning = false;
-            director.pause();
-        }
+        if (this._isPaused) return;
+
+        this.onPause();
+    }
+
+    private onPause() {
+        this._isPaused = true;
+        this.playerController.enabled = false;
+        this.uiManager.setMenuUIVisible(true);
+        this.uiManager.setGameUIVisible(false);
+        this.node.emit(GameManager.PAUSED);
     }
 }
 

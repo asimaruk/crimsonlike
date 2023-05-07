@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, CCFloat } from 'cc';
+import { _decorator, Component, CCFloat } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Gun')
@@ -24,7 +24,7 @@ export class Gun extends Component {
     }
 
     protected fireShot() {
-
+        
     }
 }
 

@@ -1,11 +1,12 @@
-import { _decorator, Component, Node, Prefab, CCInteger, UITransform, instantiate, random, NodePool } from 'cc';
+import { _decorator, Component, Node, Prefab, CCInteger, UITransform, instantiate, random, NodePool, director } from 'cc';
 import { EnemyAI } from './EnemyAI';
 import { Agent } from '../Agent';
+import { GameComponent } from '../utils/GameComponent';
 const { ccclass, property, menu } = _decorator;
 
 @ccclass('EnemySpawner')
 @menu('Enemies/EnemySpawner')
-export class EnemySpawner extends Component {
+export class EnemySpawner extends GameComponent {
 
     @property({
         type: Node
@@ -28,11 +29,23 @@ export class EnemySpawner extends Component {
     private enemyPools: NodePool[];
 
     onLoad() {
+        super.onLoad();
         this.groundUITransform = this.ground.getComponent(UITransform);
     }
 
     start() {
         this.startSpawning();
+        if (this.paused) {
+            this.onPaused();
+        }
+    }
+
+    protected onPaused(): void {
+        director.getScheduler().pauseTarget(this);
+    }
+
+    protected onResumed(): void {
+        director.getScheduler().resumeTarget(this);
     }
 
     startSpawning() {
