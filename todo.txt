@@ -4,7 +4,7 @@
 [x] Terrain
 [x] Bullets
 [x] Custom game play/pause for interractive menu
-[ ] 'Blood'
+[x] 'Blood'
 [ ] Sounds
 [ ] Score counter
 [ ] Android build

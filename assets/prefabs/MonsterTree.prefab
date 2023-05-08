@@ -167,7 +167,10 @@
     "__prefab": {
       "__id__": 6
     },
-    "_customMaterial": null,
+    "_customMaterial": {
+      "__uuid__": "42de267d-9e8f-4b8e-a91e-113f39a0940c",
+      "__expectedType__": "cc.Material"
+    },
     "_srcBlendFactor": 2,
     "_dstBlendFactor": 4,
     "_color": {
@@ -271,6 +274,10 @@
       "__uuid__": "3ce038c9-2d27-490e-b9c8-e2798d5f8920",
       "__expectedType__": "cc.AnimationClip"
     },
+    "damageClip": {
+      "__uuid__": "8ebfc056-222a-44f2-a6e7-e08cd48bbd26",
+      "__expectedType__": "cc.AnimationClip"
+    },
     "_id": ""
   },
   {
@@ -296,6 +303,10 @@
       },
       {
         "__uuid__": "3ce038c9-2d27-490e-b9c8-e2798d5f8920",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "8ebfc056-222a-44f2-a6e7-e08cd48bbd26",
         "__expectedType__": "cc.AnimationClip"
       }
     ],

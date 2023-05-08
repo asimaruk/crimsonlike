@@ -1,26 +1,27 @@
 import { _decorator, Component, Prefab, Node, NodePool, instantiate } from 'cc';
+import { ReusableParticles } from '../utils/ReusableParticles';
 const { ccclass, property, menu } = _decorator;
 
 @ccclass('EffectsManager')
 @menu('Effects/EffectsManager')
 export class EffectsManager extends Component {
 
-    private static readonly BLOOD_POOL_SIZE = 10;
+    private static readonly FUME_POOL_SIZE = 10;
     private static readonly DIE_LIGHTS_POOL_SIZE = 10;
 
     @property({
         type: Prefab
-    }) bloodPrefab: Prefab;
+    }) fume: Prefab;
     @property({
         type: Prefab
     }) dieLights: Prefab;
 
-    private readonly bloodSlashPool = new NodePool('BloodSplash');
-    private readonly dieLightsPool = new NodePool('DieLights');
+    private readonly fumePool = new NodePool(ReusableParticles.name);
+    private readonly dieLightsPool = new NodePool(ReusableParticles.name);
 
     protected onLoad() {
-        for (let i = 0; i < EffectsManager.BLOOD_POOL_SIZE; i++) {
-            this.bloodSlashPool.put(instantiate(this.bloodPrefab));
+        for (let i = 0; i < EffectsManager.FUME_POOL_SIZE; i++) {
+            this.fumePool.put(instantiate(this.fume));
         }
         for (let i = 0; i < EffectsManager.DIE_LIGHTS_POOL_SIZE; i++) {
             this.dieLightsPool.put(instantiate(this.dieLights));
@@ -28,10 +29,10 @@ export class EffectsManager extends Component {
     }
 
     public getBloodSplash(): Node {
-        if (this.bloodSlashPool.size() <= 0) {
-            this.bloodSlashPool.put(instantiate(this.bloodPrefab));
+        if (this.fumePool.size() <= 0) {
+            this.fumePool.put(instantiate(this.fume));
         }
-        return this.bloodSlashPool.get(this.bloodSlashPool);
+        return this.fumePool.get(this.fumePool);
     }
 
     public getDieLights(): Node {
@@ -39,14 +40,6 @@ export class EffectsManager extends Component {
             this.dieLightsPool.put(instantiate(this.dieLights));
         }
         return this.dieLightsPool.get(this.dieLightsPool);
-    }
-
-    public getEffect(name: string): Node | null {
-        switch (name) {
-            case 'BloodSplash': return this.getBloodSplash();
-            case 'DieLights': return this.getDieLights();
-            default: return null;
-        }
     }
 }
 

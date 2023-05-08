@@ -53,6 +53,11 @@ export class Agent extends GameComponent {
     })
     dieClip: AnimationClip | null;
 
+    @property({
+        type: AnimationClip
+    })
+    damageClip: AnimationClip | null;
+
     isAlive: boolean = true;
     currentHealth: number;
 
@@ -90,6 +95,10 @@ export class Agent extends GameComponent {
         this.currentHealth -= damage;
         if (this.currentHealth <= 0 && this.isAlive) {
             this.die();
+        } else {
+            let damageClipState = this.animation.getState(this.damageClip.name) || this.animation.createState(this.damageClip);
+            damageClipState.setTime(0);
+            damageClipState.play();
         }
     }
 

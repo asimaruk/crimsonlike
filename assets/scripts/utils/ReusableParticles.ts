@@ -1,11 +1,12 @@
 import { _decorator, NodePool } from 'cc';
 import { GameComponent } from '../utils/GameComponent';
 import { PausableParticles } from '../effects/PausableParticles';
-const { ccclass, menu } = _decorator;
+const { ccclass, menu, requireComponent } = _decorator;
 
-@ccclass('DieLights')
-@menu('Effects/DieLights')
-export class DieLights extends GameComponent {
+@ccclass('ReusableParticles')
+@menu('Utils/ReusableParticles')
+@requireComponent(PausableParticles)
+export class ReusableParticles extends GameComponent {
 
     private particles: PausableParticles;
     private pool: NodePool;
