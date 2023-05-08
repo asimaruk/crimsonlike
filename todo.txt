@@ -6,6 +6,7 @@
 [x] Custom game play/pause for interractive menu
 [x] 'Blood'
 [ ] Sounds
+[ ] Player damage and death
 [ ] Score counter
 [ ] Android build
 [ ] UI for score and health
