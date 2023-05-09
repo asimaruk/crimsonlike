@@ -5,7 +5,7 @@ const { ccclass } = _decorator;
 @ccclass('GameComponent')
 export class GameComponent extends Component {
 
-    private gm: GameManager | null = null;
+    private _gm: GameManager | null = null;
     private _paused: boolean | null = null;
 
     private _schedulerTargets: ISchedulable[] = [];
@@ -29,15 +29,19 @@ export class GameComponent extends Component {
         return this._paused;
     }
 
+    protected get gm() {
+        return this._gm;
+    }
+
     protected onLoad() {
-        this.gm = director.getScene().getComponentInChildren(GameManager);
+        this._gm = director.getScene().getComponentInChildren(GameManager);
     }
 
     protected onEnable() {
-        this.gm.node.on(GameManager.PAUSED, this.pause, this);
-        this.gm.node.on(GameManager.RESUMED, this.resume, this);
-        if (this._paused != this.gm.isPaused) {
-            if (this.gm.isPaused) {
+        this._gm.node.on(GameManager.PAUSED, this.pause, this);
+        this._gm.node.on(GameManager.RESUMED, this.resume, this);
+        if (this._paused != this._gm.isPaused) {
+            if (this._gm.isPaused) {
                 this.pause();
             } else {
                 this.resume();
@@ -46,8 +50,8 @@ export class GameComponent extends Component {
     }
 
     protected onDisable() {
-        this.gm.node.off(GameManager.PAUSED, this.pause, this);
-        this.gm.node.off(GameManager.RESUMED, this.resume, this);
+        this._gm.node.off(GameManager.PAUSED, this.pause, this);
+        this._gm.node.off(GameManager.RESUMED, this.resume, this);
     }
 
     private pause() {

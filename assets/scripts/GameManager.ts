@@ -60,5 +60,9 @@ export class GameManager extends Component {
         this._isPaused = true;
         this.node.emit(GameManager.PAUSED);
     }
+
+    public gameOver() {
+        
+    }
 }
 

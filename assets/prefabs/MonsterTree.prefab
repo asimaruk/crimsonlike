@@ -40,16 +40,10 @@
       },
       {
         "__id__": 18
-      },
-      {
-        "__id__": 20
-      },
-      {
-        "__id__": 22
       }
     ],
     "_prefab": {
-      "__id__": 24
+      "__id__": 20
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -247,7 +241,7 @@
     "fileId": "23RR0s4rFDaoblIbGs+xHN"
   },
   {
-    "__type__": "9efc4KsTedKWJUB8gL4EHOz",
+    "__type__": "7a378Hn9cxGkrXa0yV6YRa6",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -263,9 +257,6 @@
     "skin": {
       "__id__": 2
     },
-    "animation": {
-      "__id__": 12
-    },
     "walkClip": {
       "__uuid__": "3b3da08e-1444-4b05-b5df-9662abe3db78",
       "__expectedType__": "cc.AnimationClip"
@@ -278,11 +269,13 @@
       "__uuid__": "8ebfc056-222a-44f2-a6e7-e08cd48bbd26",
       "__expectedType__": "cc.AnimationClip"
     },
+    "damage": 5,
+    "damageRate": 1,
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "cdr7+cy1pLEYv+y6AmxIgk"
+    "fileId": "955REFOv1FU4ZnRswjoLB7"
   },
   {
     "__type__": "cc.Animation",
@@ -363,7 +356,7 @@
     "tag": 0,
     "_group": 4,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 0,
     "_offset": {
@@ -396,7 +389,7 @@
     "tag": 0,
     "_group": 4,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 0,
     "_offset": {
@@ -410,40 +403,6 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "8cpxOCon5FCag4ruZ8fqAb"
-  },
-  {
-    "__type__": "7a378Hn9cxGkrXa0yV6YRa6",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 21
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "955REFOv1FU4ZnRswjoLB7"
-  },
-  {
-    "__type__": "ab57feLc6pCW73KE3xFet5p",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 23
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "e8+cCRyrBEFInQ1d01FSEk"
   },
   {
     "__type__": "cc.PrefabInfo",

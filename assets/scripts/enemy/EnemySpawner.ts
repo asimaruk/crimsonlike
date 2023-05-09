@@ -1,7 +1,7 @@
-import { _decorator, Node, Prefab, CCInteger, UITransform, instantiate, random, NodePool } from 'cc';
-import { EnemyAI } from './EnemyAI';
+import { _decorator, Node, Prefab, CCInteger, UITransform, instantiate, random, NodePool, macro } from 'cc';
 import { Agent } from '../Agent';
 import { GameComponent } from '../utils/GameComponent';
+import { Enemy } from './Enemy';
 const { ccclass, property, menu } = _decorator;
 
 @ccclass('EnemySpawner')
@@ -41,7 +41,7 @@ export class EnemySpawner extends GameComponent {
     }
 
     private startSpawning() {
-        this.schedule(this.spawn, this.spawnIntervalSec);
+        this.schedule(this.spawn, this.spawnIntervalSec, macro.REPEAT_FOREVER, 0);
         this.isSpawning = true;
     }
 
@@ -52,7 +52,7 @@ export class EnemySpawner extends GameComponent {
 
     private spawn() {
         let newEnemy = this.getEnemyFromPool(Math.floor(random() * this.enemyPrefabs.length));
-        newEnemy.getComponent(EnemyAI).setDestination(this.player);
+        newEnemy.getComponent(Enemy).setDestination(this.player);
         let randomSide = random();
         let startX = 0;
         let startY = 0;

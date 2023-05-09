@@ -12,18 +12,15 @@ import {
     Node,
     Sprite,
     Color,
-    Contact2DType
+    Contact2DType,
 } from 'cc';
 import { EffectsManager } from './effects/EffectsManager';
 import { BoxCollider2D } from 'cc';
-import { Projectile } from './guns/Projectile';
 import { GameComponent } from './utils/GameComponent';
 const { ccclass, property } = _decorator;
 
 @ccclass('Agent')
 export class Agent extends GameComponent {
-
-    static readonly DIE = 'die';
 
     @property
     speed: number = 10;
@@ -37,11 +34,6 @@ export class Agent extends GameComponent {
         type: Node
     })
     skin: Node;
-
-    @property({
-        type: Animation
-    })
-    animation: Animation;
 
     @property({
         type: AnimationClip
@@ -58,13 +50,14 @@ export class Agent extends GameComponent {
     })
     damageClip: AnimationClip | null;
 
-    isAlive: boolean = true;
-    currentHealth: number;
+    public isAlive: boolean = true;
+    public currentHealth: number;
 
     private effectsManager: EffectsManager;
     private bloodPosition = v3();
     private colliders: Collider2D[];
     private skinSpite: Sprite;
+    private animation: Animation;
 
     protected onLoad() {
         super.onLoad();
@@ -72,14 +65,21 @@ export class Agent extends GameComponent {
         this.colliders = this.getComponents(Collider2D);
         this.colliders.forEach((collider) => {
             collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+            collider.on(Contact2DType.END_CONTACT, this.onEndContact, this);
         });
         this.skinSpite = this.skin.getComponent(Sprite);
+        this.animation = this.getComponent(Animation);
         this.reset();
+
+        if (this.walkClip) this.animation.addClip(this.walkClip);
+        if (this.dieClip) this.animation.addClip(this.dieClip);
+        if (this.damageClip) this.animation.addClip(this.damageClip);
     }
     
     protected onDestroy() {
         this.colliders.forEach((collider) => {
             collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+            collider.off(Contact2DType.END_CONTACT, this.onEndContact, this);
         });
     }
 
@@ -91,8 +91,8 @@ export class Agent extends GameComponent {
         this.animation.resume();
     }
 
-    private takeDamage(damage: number) {
-        this.currentHealth -= damage;
+    public takeDamage(damage: number) {
+        this.currentHealth = damage >= this.currentHealth ? 0 : this.currentHealth - damage;
         if (this.currentHealth <= 0 && this.isAlive) {
             this.die();
         } else {
@@ -100,9 +100,14 @@ export class Agent extends GameComponent {
             damageClipState.setTime(0);
             damageClipState.play();
         }
+        this.onTakeDamage();
     }
 
-    private takeBullet(collider: Collider2D, damage: number) {
+    protected onTakeDamage() {
+        
+    }
+
+    public takeBullet(collider: Collider2D, damage: number) {
         if (this.colliders.indexOf(collider) == -1) return;
 
         this.takeDamage(damage);
@@ -129,8 +134,8 @@ export class Agent extends GameComponent {
         this.node.parent.addChild(dieLights);   
     }
 
-    private onDie() {
-        this.node.emit(Agent.DIE);
+    protected onDie() {
+        
     }
 
     public walk() {
@@ -186,11 +191,11 @@ export class Agent extends GameComponent {
     }
 
     public onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D) {
-        let projectile = otherCollider.getComponent(Projectile);
-        if (projectile) {
-            this.takeBullet(selfCollider, projectile.damage);
-            projectile.hit();
-        }
+
+    }
+
+    public onEndContact(selfCollider: Collider2D, otherCollider: Collider2D) {
+        
     }
 }
 

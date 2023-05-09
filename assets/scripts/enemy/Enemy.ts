@@ -1,28 +1,45 @@
-import { _decorator, Component, NodePool } from 'cc';
+import { _decorator, CCFloat, CCInteger, Collider2D, macro, Node, NodePool, v3 } from 'cc';
 import { Agent } from '../Agent';
-const { ccclass, menu } = _decorator;
+import { Projectile } from '../guns/Projectile';
+import { Player } from '../player/Player';
+const { ccclass, menu, property } = _decorator;
 
 @ccclass('Enemy')
 @menu('Enemies/Enemy')
-export class Enemy extends Component {
+export class Enemy extends Agent {
+
+    @property({
+        type: CCInteger,
+        min: 0,
+    }) damage = 5;
+
+    @property({
+        type: CCFloat,
+        min: 0,
+    }) damageRate = 1;
 
     private pool: NodePool;
-    private agent: Agent;
+    private scheduledPlayerDamage: (() => void) | null = null;
+    private destination: Node;
+    private destinationWorld = v3();
+    private selfWorld = v3();
+    private move = v3();
 
-    protected onLoad() {
-        this.agent = this.getComponent(Agent);
-        this.node.on(Agent.DIE, () => this.toPool());
+    protected update(deltaTime: number) {
+        if (this.destination && this.isAlive && !this.paused) {
+            this.move.set(this.destination.getWorldPosition(this.destinationWorld));
+            this.move.subtract(this.node.getWorldPosition(this.selfWorld));
+            this.move.normalize();
+            this.move.multiplyScalar(this.speed * deltaTime);
+            this.node.setPosition(this.node.position.add(this.move));
+        }
     }
 
-    protected onDestroy() {
-        this.node.off(Agent.DIE, () => this.toPool());
+    public setDestination(dest: Node) {
+        this.destination = dest;
     }
 
-    private reset() {
-        this.agent.reset()
-    }
-
-    private toPool() {
+    protected onDie() {
         this.node.removeFromParent();
         this.reset();
         this.pool.put(this.node);
@@ -33,6 +50,30 @@ export class Enemy extends Component {
             this.pool = arguments[0][0];
         }
         console.log(`Enemy ${this.node.name} reused from pool`);
+    }
+
+    public onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D) {
+        const projectile = otherCollider.getComponent(Projectile);
+        if (projectile) {
+            this.takeBullet(selfCollider, projectile.damage);
+            projectile.hit();
+        }
+
+        const otherPlayer = otherCollider.getComponent(Player);
+        if (otherPlayer && !this.scheduledPlayerDamage) {
+            otherPlayer.takeDamage(this.damage);
+            this.scheduledPlayerDamage = () => otherPlayer.takeDamage(this.damage);
+            this.schedule(this.scheduledPlayerDamage, this.damageRate, macro.REPEAT_FOREVER, this.damageRate);
+        }
+    }
+
+    public onEndContact(selfCollider: Collider2D, otherCollider: Collider2D) {
+        const selfEnemy = selfCollider.getComponent(Enemy);
+        const otherPlayer = otherCollider.getComponent(Player);
+        if (selfEnemy && otherPlayer && this.scheduledPlayerDamage) {
+            this.unschedule(this.scheduledPlayerDamage);
+            this.scheduledPlayerDamage = null;
+        }
     }
 }
 

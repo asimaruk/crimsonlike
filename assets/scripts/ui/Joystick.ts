@@ -2,9 +2,10 @@ import { Vec3, director, v2, v3 } from 'cc';
 import { _decorator, EventTouch, Input, Node, UITransform } from 'cc';
 import { UIManager } from './UIManager';
 import { GameComponent } from '../utils/GameComponent';
-const { ccclass, property } = _decorator;
+const { ccclass, property, menu } = _decorator;
 
 @ccclass('Joystick')
+@menu('UI/Joystick')
 export class Joystick extends GameComponent {
 
     @property({

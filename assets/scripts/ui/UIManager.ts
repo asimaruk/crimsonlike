@@ -1,8 +1,9 @@
 import { _decorator, Component, Node } from 'cc';
 import { GameComponent } from '../utils/GameComponent';
-const { ccclass, property } = _decorator;
+const { ccclass, property, menu } = _decorator;
 
 @ccclass('UIManager')
+@menu('UI/UIManager')
 export class UIManager extends GameComponent {
 
     @property({

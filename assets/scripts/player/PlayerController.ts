@@ -16,16 +16,17 @@ import {
     Vec3,
     sys,
 } from 'cc';
-import { Agent } from './Agent';
-import { Gun } from './guns/Gun';
+import { Gun } from '../guns/Gun';
 import { EventTouch } from 'cc';
-import { UIManager } from './ui/UIManager';
-import { Joystick } from './ui/Joystick';
-import { GameComponent } from './utils/GameComponent';
-const { ccclass, property, requireComponent } = _decorator;
+import { UIManager } from '../ui/UIManager';
+import { Joystick } from '../ui/Joystick';
+import { GameComponent } from '../utils/GameComponent';
+import { Player } from './Player';
+const { ccclass, property, requireComponent, menu } = _decorator;
 
 @ccclass('PlayerController')
-@requireComponent(Agent)
+@requireComponent(Player)
+@menu('Player/PlayerController')
 export class PlayerController extends GameComponent {
 
     @property({
@@ -43,7 +44,7 @@ export class PlayerController extends GameComponent {
     })
     joystick: Joystick;
 
-    private agent: Agent;
+    private player: Player;
     private camera: Node;
     private canvas: Node;
     private canvasUITransform: UITransform;
@@ -62,7 +63,7 @@ export class PlayerController extends GameComponent {
 
     protected onLoad() {
         super.onLoad();
-        this.agent = this.getComponent(Agent);
+        this.player = this.getComponent(Player);
         let scene = director.getScene();
         // camera in fact is camera carriage with camera and UI, so getting by UIManager
         this.camera = scene.getComponentInChildren(UIManager).node;
@@ -82,14 +83,14 @@ export class PlayerController extends GameComponent {
 
         let joystickDirection = this.joystick.getDirection();
         if (joystickDirection.x != 0 || joystickDirection.y != 0) {
-            this.agent.walk();
-            this.move(joystickDirection, this.agent.speed * deltaTime);
+            this.player.walk();
+            this.move(joystickDirection, this.player.speed * deltaTime);
         } else if (this.moveDirection.x != 0 || this.moveDirection.y != 0) {
-            this.agent.walk();
-            this.move(this.moveDirection, this.agent.speed * deltaTime);
+            this.player.walk();
+            this.move(this.moveDirection, this.player.speed * deltaTime);
             this.faceMousePosition(this.uiFacingPosition);
         } else {
-            this.agent.stopWalk();
+            this.player.stopWalk();
         }
     }
 
@@ -254,7 +255,7 @@ export class PlayerController extends GameComponent {
             this.node.position.y + step.y
         )
         if (direction.x != 0) {
-            this.agent.skin.setScale(Math.sign(direction.x), 1, 1);
+            this.player.skin.setScale(Math.sign(direction.x), 1, 1);
         }
         this.camera.setPosition(
             Math.min(Math.max(this.cameraMinX, this.node.position.x), this.cameraMaxX),
