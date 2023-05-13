@@ -51,9 +51,9 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
+      "x": 0.888,
+      "y": 0.888,
+      "z": 0.888
     },
     "_mobility": 0,
     "_layer": 1073741824,
@@ -266,7 +266,7 @@
       "__id__": 13
     },
     "damage": 10,
-    "speed": 300,
+    "speed": 600,
     "skin": {
       "__id__": 5
     },
@@ -285,6 +285,7 @@
       "__id__": 0
     },
     "fileId": "faFblU7bxD/q88yqS0wqYn",
-    "instance": null
+    "instance": null,
+    "targetOverrides": null
   }
 ]

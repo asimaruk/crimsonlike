@@ -1,4 +1,4 @@
-import { _decorator, Node, Prefab, CCInteger, UITransform, instantiate, random, NodePool, macro } from 'cc';
+import { _decorator, Node, Prefab, CCInteger, UITransform, instantiate, random, NodePool, macro, v3 } from 'cc';
 import { Agent } from '../Agent';
 import { GameComponent } from '../utils/GameComponent';
 import { Enemy } from './Enemy';
@@ -7,6 +7,8 @@ const { ccclass, property, menu } = _decorator;
 @ccclass('EnemySpawner')
 @menu('Enemies/EnemySpawner')
 export class EnemySpawner extends GameComponent {
+
+    private static INITIAL_SCSALE = v3(0.8, 0.8, 0.8); 
 
     @property({
         type: Node
@@ -64,6 +66,7 @@ export class EnemySpawner extends GameComponent {
             startY = this.groundUITransform.height * (random() - 0.5);
         }
         newEnemy.setPosition(startX, startY);
+        newEnemy.setScale(EnemySpawner.INITIAL_SCSALE);
         this.node.addChild(newEnemy);
         newEnemy.getComponent(Agent).walk();
     }
