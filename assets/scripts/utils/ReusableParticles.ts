@@ -17,11 +17,11 @@ export class ReusableParticles extends GameComponent {
         this.init();
     }
 
-    protected onPaused() {
+    protected onGamePause() {
         this.particles.paused = true;
     }
 
-    protected onResumed() {
+    protected onGameResume() {
         this.particles.paused = false;
     }
 

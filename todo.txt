@@ -7,7 +7,8 @@
 [x] 'Blood'
 [ ] Sounds
 [x] Player damage
-[ ] Game Over and restart
+[x] Game Over
+[ ] Restart
 [ ] Score counter
 [ ] Android build
 [ ] UI for score and health

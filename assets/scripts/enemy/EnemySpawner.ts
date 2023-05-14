@@ -8,7 +8,7 @@ const { ccclass, property, menu } = _decorator;
 @menu('Enemies/EnemySpawner')
 export class EnemySpawner extends GameComponent {
 
-    private static INITIAL_SCSALE = v3(0.8, 0.8, 0.8); 
+    private static INITIAL_SCALE = v3(0.8, 0.8, 0.8); 
 
     @property({
         type: Node
@@ -29,27 +29,26 @@ export class EnemySpawner extends GameComponent {
 
     private groundUITransform: UITransform;
     private enemyPools: NodePool[];
-    private isSpawning: boolean = false;
 
     protected onLoad() {
         super.onLoad();
         this.groundUITransform = this.ground.getComponent(UITransform);
     }
 
-    protected onResumed() {
-        if (!this.isSpawning) {
-            this.startSpawning();
-        }
+    protected onGameStart() {
+        this.startSpawning();
+    }
+
+    protected onGameOver(): void {
+        this.stopSpawning();
     }
 
     private startSpawning() {
         this.schedule(this.spawn, this.spawnIntervalSec, macro.REPEAT_FOREVER, 0);
-        this.isSpawning = true;
     }
 
     private stopSpawning() {
         this.unschedule(this.spawn);
-        this.isSpawning = false;
     }
 
     private spawn() {
@@ -66,7 +65,7 @@ export class EnemySpawner extends GameComponent {
             startY = this.groundUITransform.height * (random() - 0.5);
         }
         newEnemy.setPosition(startX, startY);
-        newEnemy.setScale(EnemySpawner.INITIAL_SCSALE);
+        newEnemy.setScale(EnemySpawner.INITIAL_SCALE);
         this.node.addChild(newEnemy);
         newEnemy.getComponent(Agent).walk();
     }

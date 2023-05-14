@@ -26,7 +26,7 @@ export class Enemy extends Agent {
     private move = v3();
 
     protected update(deltaTime: number) {
-        if (this.destination && this.isAlive && !this.paused) {
+        if (this.destination && this.isAlive && this.resumed) {
             this.move.set(this.destination.getWorldPosition(this.destinationWorld));
             this.move.subtract(this.node.getWorldPosition(this.selfWorld));
             this.move.normalize();

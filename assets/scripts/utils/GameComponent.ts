@@ -1,12 +1,13 @@
 import { _decorator, Component, director, ISchedulable, TweenSystem } from 'cc';
 import { GameManager } from '../GameManager';
+import { GameState } from './GameState';
 const { ccclass } = _decorator;
 
 @ccclass('GameComponent')
 export class GameComponent extends Component {
 
     private _gm: GameManager | null = null;
-    private _paused: boolean | null = null;
+    private gameState: GameState = GameState.GAME_UNDEFINED;
 
     private _schedulerTargets: ISchedulable[] = [];
     private _tweenTargets: any[] = [];
@@ -25,8 +26,8 @@ export class GameComponent extends Component {
         return this._tweenTargets;
     }
 
-    public get paused() {
-        return this._paused;
+    public get resumed() {
+        return this.gameState == GameState.GAME_RESUMED;
     }
 
     protected get gm() {
@@ -38,49 +39,108 @@ export class GameComponent extends Component {
     }
 
     protected onEnable() {
-        this._gm.node.on(GameManager.PAUSED, this.pause, this);
-        this._gm.node.on(GameManager.RESUMED, this.resume, this);
-        if (this._paused != this._gm.isPaused) {
-            if (this._gm.isPaused) {
-                this.pause();
-            } else {
-                this.resume();
+        this._gm.node.on(GameManager.GAME_LAUNCH, this._onGameLaunch, this);
+        this._gm.node.on(GameManager.GAME_STARTED, this._onGameStart, this);
+        this._gm.node.on(GameManager.GAME_PAUSED, this._onGamePause, this);
+        this._gm.node.on(GameManager.GAME_RESUMED, this._onGameResume, this);
+        this._gm.node.on(GameManager.GAME_RESTARTED, this._onGameRestart, this);
+        this._gm.node.on(GameManager.GAME_OVER, this._onGameOver, this);
+        if (this.gameState != this._gm.gameState) {
+            switch (this._gm.gameState) {
+                case GameState.GAME_LAUNCHED: 
+                    this._onGameLaunch(); 
+                    break;
+                case GameState.GAME_STARTED:
+                    this._onGameStart();
+                    break;
+                case GameState.GAME_PAUSED: 
+                    this._onGamePause(); 
+                    break;
+                case GameState.GAME_RESUMED:
+                    this._onGameResume();
+                    break;
+                case GameState.GAME_RESTARTED:
+                    this._onGameRestart();
+                    break;
+                case GameState.GAME_OVER:
+                    this._onGameOver();
+                    break;
             }
         }
     }
 
     protected onDisable() {
-        this._gm.node.off(GameManager.PAUSED, this.pause, this);
-        this._gm.node.off(GameManager.RESUMED, this.resume, this);
+        this._gm.node.off(GameManager.GAME_LAUNCH, this._onGameLaunch, this);
+        this._gm.node.off(GameManager.GAME_STARTED, this._onGameStart, this);
+        this._gm.node.off(GameManager.GAME_PAUSED, this._onGamePause, this);
+        this._gm.node.off(GameManager.GAME_RESUMED, this._onGameResume, this);
+        this._gm.node.off(GameManager.GAME_RESTARTED, this._onGameRestart, this);
+        this._gm.node.off(GameManager.GAME_OVER, this._onGameOver, this);
     }
 
-    private pause() {
-        this._paused = true;
+    private _onGameLaunch() {
+        this.gameState = GameState.GAME_LAUNCHED;
+        this.onGameLaunch();
+    }
+
+    private _onGameStart() {
+        this.gameState = GameState.GAME_STARTED;
+        this.onGameStart();
+    }
+
+    private _onGamePause() {
+        this.gameState = GameState.GAME_PAUSED;
         this.schedulerTargets.forEach((t) => {
             director.getScheduler().pauseTarget(t);
         });
         this.tweenTargets.forEach((t) => {
             TweenSystem.instance.ActionManager.pauseTarget(t);
         });
-        this.onPaused();
+        this.onGamePause();
     }
 
-    private resume() {
-        this._paused = false;
+    private _onGameResume() {
+        this.gameState = GameState.GAME_RESUMED;
         this.schedulerTargets.forEach((t) => {
             director.getScheduler().resumeTarget(t);
         });
         this.tweenTargets.forEach((t) => {
             TweenSystem.instance.ActionManager.resumeTarget(t);
         });
-        this.onResumed();
+        this.onGameResume();
     }
 
-    protected onPaused() {
+    private _onGameRestart() {
+        this.gameState = GameState.GAME_RESTARTED;
+        this.onGameRestart();
+    }
+
+    private _onGameOver() {
+        this.gameState = GameState.GAME_OVER;
+        this.onGameOver();
+    }
+
+    protected onGameLaunch() {
 
     }
 
-    protected onResumed() {
+    protected onGameStart() {
+
+    }
+
+    protected onGamePause() {
+
+    }
+
+    protected onGameResume() {
+
+    }
+
+    protected onGameRestart() {
+
+    }
+
+    protected onGameOver() {
 
     }
 

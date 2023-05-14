@@ -61,11 +61,11 @@ export class Pistol extends Gun {
         this.projectileSpawnUITransform = this.projectileSpawn.getComponent(UITransform);
     }
 
-    protected onPaused() {
+    protected onGamePause() {
         this.animation.pause();
     }
 
-    protected onResumed() {
+    protected onGameResume() {
         this.animation.resume();
     }
 

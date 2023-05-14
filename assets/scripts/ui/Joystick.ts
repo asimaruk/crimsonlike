@@ -1,5 +1,4 @@
-import { Vec3, director, v2, v3 } from 'cc';
-import { _decorator, EventTouch, Input, Node, UITransform } from 'cc';
+import { _decorator, director, EventTouch, Input, Node, UITransform, v2, v3, Vec3 } from 'cc';
 import { UIManager } from './UIManager';
 import { GameComponent } from '../utils/GameComponent';
 const { ccclass, property, menu } = _decorator;
@@ -38,12 +37,12 @@ export class Joystick extends GameComponent {
         this.off();
     }
 
-    protected onPaused() {
+    protected onGamePause() {
         this.off();
         this.resetStick();
     }
 
-    protected onResumed() {
+    protected onGameResume() {
         this.on();
     }
 

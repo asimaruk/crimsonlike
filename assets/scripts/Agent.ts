@@ -50,7 +50,9 @@ export class Agent extends GameComponent {
     })
     damageClip: AnimationClip | null;
 
-    public isAlive: boolean = true;
+    public get isAlive(): boolean { 
+        return this.currentHealth > 0; 
+    }
     public currentHealth: number;
 
     private effectsManager: EffectsManager;
@@ -83,17 +85,19 @@ export class Agent extends GameComponent {
         });
     }
 
-    protected onPaused() {
+    protected onGamePause() {
         this.animation.pause();
     }
 
-    protected onResumed() {
+    protected onGameResume() {
         this.animation.resume();
     }
 
     public takeDamage(damage: number) {
+        if (!this.isAlive) return;
+
         this.currentHealth = damage >= this.currentHealth ? 0 : this.currentHealth - damage;
-        if (this.currentHealth <= 0 && this.isAlive) {
+        if (!this.isAlive) {
             this.die();
         } else {
             let damageClipState = this.animation.getState(this.damageClip.name) || this.animation.createState(this.damageClip);
@@ -108,7 +112,7 @@ export class Agent extends GameComponent {
     }
 
     public takeBullet(collider: Collider2D, damage: number) {
-        if (this.colliders.indexOf(collider) == -1) return;
+        if (this.colliders.indexOf(collider) == -1 || !this.isAlive) return;
 
         this.takeDamage(damage);
         let blood = this.effectsManager.getBloodSplash();
@@ -120,7 +124,6 @@ export class Agent extends GameComponent {
     }
 
     private die() {
-        this.isAlive = false;
         this.stopWalk();
         if (this.dieClip) {
             this.scheduleOnce(this.onDie, this.dieClip.duration);
@@ -183,7 +186,6 @@ export class Agent extends GameComponent {
     }
 
     public reset() {
-        this.isAlive = true;
         this.currentHealth = this.fullHealth;
         this.animation.stop();
         this.skin.setScale(1, 1, 1);

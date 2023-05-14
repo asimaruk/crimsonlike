@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Node } from 'cc';
 import { GameComponent } from '../utils/GameComponent';
 const { ccclass, property, menu } = _decorator;
 
@@ -30,14 +30,22 @@ export class UIManager extends GameComponent {
         this.gameUI.active = isVisible;
     }
 
-    protected onPaused() {
+    protected onGameLaunch(): void {
         this.setMenuUIVisible(true);
         this.setGameUIVisible(false);
     }
 
-    protected onResumed() {
+    protected onGamePause() {
+        this.setMenuUIVisible(true);
+    }
+
+    protected onGameResume() {
         this.setMenuUIVisible(false);
         this.setGameUIVisible(true);
+    }
+
+    protected onGameOver(): void {
+        this.setMenuUIVisible(true);
     }
 }
 

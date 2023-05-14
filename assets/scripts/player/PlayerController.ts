@@ -79,7 +79,7 @@ export class PlayerController extends GameComponent {
     }
 
     protected update(deltaTime: number) {
-        if (this.paused) return;
+        if (!this.resumed) return;
 
         let joystickDirection = this.joystick.getDirection();
         if (joystickDirection.x != 0 || joystickDirection.y != 0) {
@@ -94,11 +94,16 @@ export class PlayerController extends GameComponent {
         }
     }
 
-    protected onResumed() {
+    protected onGameResume() {
         this.onInput();
     }
 
-    protected onPaused() {
+    protected onGamePause() {
+        this.offInput();
+        this.unschedule(this.gunFireCallback);
+    }
+
+    protected onGameOver(): void {
         this.offInput();
         this.unschedule(this.gunFireCallback);
     }
