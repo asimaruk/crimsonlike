@@ -55,8 +55,8 @@ export class Agent extends GameComponent {
     }
     public currentHealth: number;
 
-    private effectsManager: EffectsManager;
-    private bloodPosition = v3();
+    protected effectsManager: EffectsManager;
+    private fumePosition = v3();
     private colliders: Collider2D[];
     private skinSpite: Sprite;
     private animation: Animation;
@@ -115,30 +115,31 @@ export class Agent extends GameComponent {
         if (this.colliders.indexOf(collider) == -1 || !this.isAlive) return;
 
         this.takeDamage(damage);
-        let blood = this.effectsManager.getBloodSplash();
-        this.getBloodPosition(collider, this.bloodPosition);
-        this.bloodPosition.add(this.node.position);
-        blood.setPosition(this.bloodPosition);
-        this.node.parent.addChild(blood);
-        blood.setSiblingIndex(this.node.getSiblingIndex());
+        let fume = this.effectsManager.getFume();
+        this.getFumePosition(collider, this.fumePosition);
+        this.fumePosition.add(this.node.position);
+        fume.setPosition(this.fumePosition);
+        this.node.parent.addChild(fume);
+        fume.setSiblingIndex(this.node.getSiblingIndex());
     }
 
     private die() {
         this.stopWalk();
+        this.onDie();
         if (this.dieClip) {
-            this.scheduleOnce(this.onDie, this.dieClip.duration);
+            this.scheduleOnce(this.wipeOut, this.dieClip.duration);
             this.animation.play(this.dieClip.name);
         } else {
-            this.scheduleOnce(this.onDie, 0.3);
+            this.scheduleOnce(this.wipeOut, 0.3);
         }
+    }
+
+    protected wipeOut() {
         
-        let dieLights = this.effectsManager.getDieLights();
-        dieLights.setPosition(this.node.position);
-        this.node.parent.addChild(dieLights);   
     }
 
     protected onDie() {
-        
+
     }
 
     public walk() {
@@ -154,7 +155,7 @@ export class Agent extends GameComponent {
         this.scheduleOnce(() => walkState.stop());
     }
 
-    private getBloodPosition(collider: Collider2D, out: Vec3 = null) {
+    private getFumePosition(collider: Collider2D, out: Vec3 = null) {
         let position = out || v3();
         if (collider instanceof CircleCollider2D) {
             position.set(

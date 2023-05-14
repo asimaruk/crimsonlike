@@ -40,6 +40,12 @@ export class Enemy extends Agent {
     }
 
     protected onDie() {
+        let dieLights = this.effectsManager.getDieLights();
+        dieLights.setPosition(this.node.position);
+        this.node.parent.addChild(dieLights);   
+    }
+
+    protected wipeOut() {
         this.node.removeFromParent();
         this.reset();
         this.pool.put(this.node);

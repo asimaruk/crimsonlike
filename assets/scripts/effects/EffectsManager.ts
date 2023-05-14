@@ -28,7 +28,7 @@ export class EffectsManager extends Component {
         }
     }
 
-    public getBloodSplash(): Node {
+    public getFume(): Node {
         if (this.fumePool.size() <= 0) {
             this.fumePool.put(instantiate(this.fume));
         }

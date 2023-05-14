@@ -20,7 +20,7 @@ export class Player extends Agent {
         this.healthUI.setHealth(this.currentHealth);
     }
 
-    protected onDie() {
+    protected wipeOut() {
         this.gm.gameOver();
     }
 }
