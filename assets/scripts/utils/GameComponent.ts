@@ -39,12 +39,12 @@ export class GameComponent extends Component {
     }
 
     protected onEnable() {
-        this._gm.node.on(GameManager.GAME_LAUNCH, this._onGameLaunch, this);
-        this._gm.node.on(GameManager.GAME_STARTED, this._onGameStart, this);
-        this._gm.node.on(GameManager.GAME_PAUSED, this._onGamePause, this);
-        this._gm.node.on(GameManager.GAME_RESUMED, this._onGameResume, this);
-        this._gm.node.on(GameManager.GAME_RESTARTED, this._onGameRestart, this);
-        this._gm.node.on(GameManager.GAME_OVER, this._onGameOver, this);
+        this._gm.node.on(GameState.GAME_LAUNCHED, this._onGameLaunch, this);
+        this._gm.node.on(GameState.GAME_STARTED, this._onGameStart, this);
+        this._gm.node.on(GameState.GAME_PAUSED, this._onGamePause, this);
+        this._gm.node.on(GameState.GAME_RESUMED, this._onGameResume, this);
+        this._gm.node.on(GameState.GAME_RESTARTED, this._onGameRestart, this);
+        this._gm.node.on(GameState.GAME_OVER, this._onGameOver, this);
         if (this.gameState != this._gm.gameState) {
             switch (this._gm.gameState) {
                 case GameState.GAME_LAUNCHED: 
@@ -70,12 +70,12 @@ export class GameComponent extends Component {
     }
 
     protected onDisable() {
-        this._gm.node.off(GameManager.GAME_LAUNCH, this._onGameLaunch, this);
-        this._gm.node.off(GameManager.GAME_STARTED, this._onGameStart, this);
-        this._gm.node.off(GameManager.GAME_PAUSED, this._onGamePause, this);
-        this._gm.node.off(GameManager.GAME_RESUMED, this._onGameResume, this);
-        this._gm.node.off(GameManager.GAME_RESTARTED, this._onGameRestart, this);
-        this._gm.node.off(GameManager.GAME_OVER, this._onGameOver, this);
+        this._gm.node.off(GameState.GAME_LAUNCHED, this._onGameLaunch, this);
+        this._gm.node.off(GameState.GAME_STARTED, this._onGameStart, this);
+        this._gm.node.off(GameState.GAME_PAUSED, this._onGamePause, this);
+        this._gm.node.off(GameState.GAME_RESUMED, this._onGameResume, this);
+        this._gm.node.off(GameState.GAME_RESTARTED, this._onGameRestart, this);
+        this._gm.node.off(GameState.GAME_OVER, this._onGameOver, this);
     }
 
     private _onGameLaunch() {
