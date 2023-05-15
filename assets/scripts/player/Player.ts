@@ -23,5 +23,15 @@ export class Player extends Agent {
     protected wipeOut() {
         this.gm.gameOver();
     }
+
+    protected onGameReset() {
+        this.healthUI.setHealth(this.fullHealth);
+        this.currentHealth = this.fullHealth;
+        this.rise();
+    }
+
+    protected onRise() {
+        this.gm.startGame();
+    }
 }
 

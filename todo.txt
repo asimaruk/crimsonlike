@@ -8,7 +8,7 @@
 [ ] Sounds
 [x] Player damage
 [x] Game Over
-[ ] Restart
+[x] Restart
 [ ] Score counter
 [ ] Android build
 [ ] UI for score and health

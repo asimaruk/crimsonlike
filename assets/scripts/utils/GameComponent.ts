@@ -1,9 +1,10 @@
 import { _decorator, Component, director, ISchedulable, TweenSystem } from 'cc';
 import { GameManager } from '../GameManager';
 import { GameState } from './GameState';
-const { ccclass } = _decorator;
+const { ccclass, menu } = _decorator;
 
 @ccclass('GameComponent')
+@menu('Utils/GameComponent')
 export class GameComponent extends Component {
 
     private _gm: GameManager | null = null;
@@ -43,7 +44,7 @@ export class GameComponent extends Component {
         this._gm.node.on(GameState.GAME_STARTED, this._onGameStart, this);
         this._gm.node.on(GameState.GAME_PAUSED, this._onGamePause, this);
         this._gm.node.on(GameState.GAME_RESUMED, this._onGameResume, this);
-        this._gm.node.on(GameState.GAME_RESTARTED, this._onGameRestart, this);
+        this._gm.node.on(GameState.GAME_RESET, this._onGameReset, this);
         this._gm.node.on(GameState.GAME_OVER, this._onGameOver, this);
         if (this.gameState != this._gm.gameState) {
             switch (this._gm.gameState) {
@@ -59,8 +60,8 @@ export class GameComponent extends Component {
                 case GameState.GAME_RESUMED:
                     this._onGameResume();
                     break;
-                case GameState.GAME_RESTARTED:
-                    this._onGameRestart();
+                case GameState.GAME_RESET:
+                    this._onGameReset();
                     break;
                 case GameState.GAME_OVER:
                     this._onGameOver();
@@ -74,7 +75,7 @@ export class GameComponent extends Component {
         this._gm.node.off(GameState.GAME_STARTED, this._onGameStart, this);
         this._gm.node.off(GameState.GAME_PAUSED, this._onGamePause, this);
         this._gm.node.off(GameState.GAME_RESUMED, this._onGameResume, this);
-        this._gm.node.off(GameState.GAME_RESTARTED, this._onGameRestart, this);
+        this._gm.node.off(GameState.GAME_RESET, this._onGameReset, this);
         this._gm.node.off(GameState.GAME_OVER, this._onGameOver, this);
     }
 
@@ -99,20 +100,28 @@ export class GameComponent extends Component {
         this.onGamePause();
     }
 
-    private _onGameResume() {
-        this.gameState = GameState.GAME_RESUMED;
+    private _onGameUnpause() {
         this.schedulerTargets.forEach((t) => {
             director.getScheduler().resumeTarget(t);
         });
         this.tweenTargets.forEach((t) => {
             TweenSystem.instance.ActionManager.resumeTarget(t);
         });
+        this.onGameUnpause();
+    }
+
+    private _onGameResume() {
+        this.gameState = GameState.GAME_RESUMED;
+        this._onGameUnpause();
         this.onGameResume();
     }
 
-    private _onGameRestart() {
-        this.gameState = GameState.GAME_RESTARTED;
-        this.onGameRestart();
+    private _onGameReset() {
+        if (this.gameState == GameState.GAME_PAUSED) {
+            this._onGameUnpause();
+        }
+        this.gameState = GameState.GAME_RESET;
+        this.onGameReset();
     }
 
     private _onGameOver() {
@@ -132,11 +141,15 @@ export class GameComponent extends Component {
 
     }
 
+    protected onGameUnpause() {
+
+    }
+
     protected onGameResume() {
 
     }
 
-    protected onGameRestart() {
+    protected onGameReset() {
 
     }
 

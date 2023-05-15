@@ -123,11 +123,15 @@ export class Agent extends GameComponent {
         fume.setSiblingIndex(this.node.getSiblingIndex());
     }
 
-    private die() {
+    protected die(killed: boolean = true) {
         this.stopWalk();
-        this.onDie();
+        if (killed) {
+            this.onDie();
+        }
         if (this.dieClip) {
             this.scheduleOnce(this.wipeOut, this.dieClip.duration);
+            const state = this.animation.getState(this.dieClip.name);
+            state.wrapMode = AnimationClip.WrapMode.Normal;
             this.animation.play(this.dieClip.name);
         } else {
             this.scheduleOnce(this.wipeOut, 0.3);
@@ -139,6 +143,17 @@ export class Agent extends GameComponent {
     }
 
     protected onDie() {
+
+    }
+
+    protected rise() {
+        const state = this.animation.getState(this.dieClip.name);
+        state.wrapMode = AnimationClip.WrapMode.Reverse;
+        this.animation.play(this.dieClip.name);
+        this.scheduleOnce(this.onRise, this.dieClip.duration);
+    }
+
+    protected onRise() {
 
     }
 

@@ -108,6 +108,11 @@ export class PlayerController extends GameComponent {
         this.unschedule(this.gunFireCallback);
     }
 
+    protected onGameReset() {
+        this.offInput();
+        this.unschedule(this.gunFireCallback);
+    }
+
     protected onDestroy() {
         this.offInput();
     }

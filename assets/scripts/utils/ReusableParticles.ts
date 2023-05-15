@@ -21,7 +21,7 @@ export class ReusableParticles extends GameComponent {
         this.particles.paused = true;
     }
 
-    protected onGameResume() {
+    protected onGameUnpause() {
         this.particles.paused = false;
     }
 

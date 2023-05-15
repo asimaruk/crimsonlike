@@ -17,6 +17,7 @@ export class MenuUI extends GameComponent {
     private static GAME_OVER = 'Game Over';
     private static START = 'Start';
     private static RESUME = 'Resume';
+    private static RESTART = 'Restart';
     
     @property 
     private _state: MenuState = MenuState.LAUNCH
@@ -100,9 +101,13 @@ export class MenuUI extends GameComponent {
                 this.gm.resumeGame();
                 break;
             case MenuState.GAME_OVER:
-                this.gm.restartGame();
+                this.gm.resetGame();
                 break;
         }
+    }
+
+    public onRestartClick() {
+        this.gm.resetGame();
     }
 }
 

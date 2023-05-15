@@ -1,14 +1,14 @@
 [
   {
     "__type__": "cc.AnimationClip",
-    "_name": "player_death",
+    "_name": "player_die",
     "_objFlags": 0,
     "__editorExtras__": {
       "embeddedPlayerGroups": []
     },
     "_native": "",
     "sample": 60,
-    "speed": 0.7,
+    "speed": 0.475,
     "wrapMode": 1,
     "enableTrsBlending": false,
     "_duration": 0.26666666666666666,

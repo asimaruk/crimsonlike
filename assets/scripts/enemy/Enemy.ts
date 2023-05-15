@@ -42,7 +42,8 @@ export class Enemy extends Agent {
     protected onDie() {
         let dieLights = this.effectsManager.getDieLights();
         dieLights.setPosition(this.node.position);
-        this.node.parent.addChild(dieLights);   
+        this.node.parent.addChild(dieLights);
+        this.unschedule(this.scheduledPlayerDamage);   
     }
 
     protected wipeOut() {
@@ -80,6 +81,10 @@ export class Enemy extends Agent {
             this.unschedule(this.scheduledPlayerDamage);
             this.scheduledPlayerDamage = null;
         }
+    }
+
+    protected onGameReset() {
+        this.die(false);
     }
 }
 

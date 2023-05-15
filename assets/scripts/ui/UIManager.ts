@@ -30,7 +30,7 @@ export class UIManager extends GameComponent {
         this.gameUI.active = isVisible;
     }
 
-    protected onGameLaunch(): void {
+    protected onGameLaunch() {
         this.setMenuUIVisible(true);
         this.setGameUIVisible(false);
     }
@@ -39,12 +39,12 @@ export class UIManager extends GameComponent {
         this.setMenuUIVisible(true);
     }
 
-    protected onGameResume() {
+    protected onGameUnpause() {
         this.setMenuUIVisible(false);
         this.setGameUIVisible(true);
     }
 
-    protected onGameOver(): void {
+    protected onGameOver() {
         this.setMenuUIVisible(true);
     }
 }

@@ -39,7 +39,11 @@ export class EnemySpawner extends GameComponent {
         this.startSpawning();
     }
 
-    protected onGameOver(): void {
+    protected onGameOver() {
+        this.stopSpawning();
+    }
+
+    protected onGameReset() {
         this.stopSpawning();
     }
 

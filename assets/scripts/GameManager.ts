@@ -47,8 +47,6 @@ export class GameManager extends Component {
     }
 
     public startGame() {
-        if (this._gameState == GameState.GAME_STARTED) return;
-
         this._gameState = GameState.GAME_RESUMED;
         this.node.emit(GameState.GAME_STARTED);
         this.node.emit(GameState.GAME_RESUMED);
@@ -73,8 +71,9 @@ export class GameManager extends Component {
         this.node.emit(GameState.GAME_OVER);
     }
 
-    public restartGame() {
-        this.node.emit(GameState.GAME_RESTARTED);
+    public resetGame() {
+        this._gameState = GameState.GAME_RESET;
+        this.node.emit(GameState.GAME_RESET);
     }
 }
 

@@ -46,6 +46,16 @@ export class Joystick extends GameComponent {
         this.on();
     }
 
+    protected onGameOver() {
+        this.off();
+        this.resetStick();
+    }
+
+    protected onGameRestart() {
+        this.off();
+        this.resetStick();
+    }
+
     private on() {
         this.base.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
         this.base.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
