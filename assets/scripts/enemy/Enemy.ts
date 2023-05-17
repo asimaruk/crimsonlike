@@ -2,6 +2,7 @@ import { _decorator, CCFloat, CCInteger, Collider2D, macro, Node, NodePool, v3 }
 import { Agent } from '../Agent';
 import { Projectile } from '../guns/Projectile';
 import { Player } from '../player/Player';
+import { EffectsManager } from '../effects/EffectsManager';
 const { ccclass, menu, property } = _decorator;
 
 @ccclass('Enemy')
@@ -40,7 +41,7 @@ export class Enemy extends Agent {
     }
 
     protected onDie() {
-        let dieLights = this.effectsManager.getDieLights();
+        let dieLights = EffectsManager.instance.getDieLights();
         dieLights.setPosition(this.node.position);
         this.node.parent.addChild(dieLights);
         this.unschedule(this.scheduledPlayerDamage);   

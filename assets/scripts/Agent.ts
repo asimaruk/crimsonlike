@@ -3,7 +3,6 @@ import {
     CircleCollider2D,
     random,
     v3,
-    director,
     Animation,
     Collider2D,
     PolygonCollider2D,
@@ -55,14 +54,12 @@ export class Agent extends GameComponent {
     }
     public currentHealth: number;
 
-    protected effectsManager: EffectsManager;
     private fumePosition = v3();
     private colliders: Collider2D[];
     private skinSpite: Sprite;
     private animation: Animation;
 
     protected onLoad() {
-        this.effectsManager = director.getScene().getComponentInChildren(EffectsManager);
         this.colliders = this.getComponents(Collider2D);
         this.colliders.forEach((collider) => {
             collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
@@ -114,7 +111,7 @@ export class Agent extends GameComponent {
         if (this.colliders.indexOf(collider) == -1 || !this.isAlive) return;
 
         this.takeDamage(damage);
-        let fume = this.effectsManager.getFume();
+        let fume = EffectsManager.instance.getFume();
         this.getFumePosition(collider, this.fumePosition);
         this.fumePosition.add(this.node.position);
         fume.setPosition(this.fumePosition);

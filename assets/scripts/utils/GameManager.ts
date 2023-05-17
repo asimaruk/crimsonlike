@@ -10,6 +10,7 @@ import {
     director,
 } from 'cc';
 import { GameState } from './GameState';
+import { EffectsManager } from '../effects/EffectsManager';
 const { ccclass, menu } = _decorator;
 
 @ccclass('GameManager')
@@ -61,7 +62,8 @@ export class GameManager extends Component {
         }
     }
 
-    public startGame() {
+    public async startGame() {
+        await EffectsManager.instance.load();
         this._gameState = GameState.GAME_RESUMED;
         this.node.emit(GameState.GAME_STARTED);
         this.node.emit(GameState.GAME_RESUMED);
