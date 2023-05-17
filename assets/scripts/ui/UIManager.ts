@@ -17,7 +17,6 @@ export class UIManager extends GameComponent {
     gameUI: Node;
 
     protected onLoad() {
-        super.onLoad();
         this.setMenuUIVisible(true);
         this.setGameUIVisible(false);
     }

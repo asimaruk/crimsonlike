@@ -1,5 +1,6 @@
 import { _decorator, Animation, Enum, Label, Node } from 'cc';
 import { GameComponent } from '../utils/GameComponent';
+import { GameManager } from '../utils/GameManager';
 const { ccclass, property, menu } = _decorator;
 
 enum MenuState {
@@ -45,7 +46,6 @@ export class MenuUI extends GameComponent {
     private restartAnimation: Animation;
 
     protected onLoad() {
-        super.onLoad();
         this.titleLabel = this.title.getComponent(Label);
         this.startLabel = this.startBtn.getComponentInChildren(Label);
         this.startAnimation = this.startBtn.getComponent(Animation);
@@ -94,19 +94,19 @@ export class MenuUI extends GameComponent {
     public onStartClick() {
         switch (this._state) {
             case MenuState.LAUNCH:
-                this.gm.startGame();
+                GameManager.instance.startGame();
                 break;
             case MenuState.PAUSE:
-                this.gm.resumeGame();
+                GameManager.instance.resumeGame();
                 break;
             case MenuState.GAME_OVER:
-                this.gm.resetGame();
+                GameManager.instance.resetGame();
                 break;
         }
     }
 
     public onRestartClick() {
-        this.gm.resetGame();
+        GameManager.instance.resetGame();
     }
 }
 

@@ -59,7 +59,6 @@ export class Pistol extends Gun {
     private vRange = v3();
 
     protected onLoad() {
-        super.onLoad();
         this.animation = this.getComponent(Animation);
         this.projectiles = director.getScene().getComponentInChildren(Projectiles);
         this.projectilesUITransform = this.projectiles.getComponent(UITransform);

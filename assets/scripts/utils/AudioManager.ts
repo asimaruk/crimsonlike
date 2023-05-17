@@ -9,7 +9,11 @@ export class AudioManager extends GameComponent {
     private static _instance: AudioManager | null = null;
     public static get instance(): AudioManager {
         if (this._instance == null) {
-            this._instance = new AudioManager();
+            const audioManager = new Node();
+            audioManager.name = '__audioManager__';
+            director.getScene().addChild(audioManager);
+            director.addPersistRootNode(audioManager);
+            this._instance = audioManager.addComponent(AudioManager);
         }
         return this._instance;
     }
@@ -20,12 +24,8 @@ export class AudioManager extends GameComponent {
         return this._audioSource;
     }
 
-    constructor() {
-        super();
-        const audioManager = new Node();
-        audioManager.name = '__audioManager__';
-        director.getScene().addChild(audioManager);
-        this._audioSource = audioManager.addComponent(AudioSource);
+    protected onLoad() {
+        this._audioSource = this.addComponent(AudioSource);
     }
 
     protected onGamePause() {

@@ -1,6 +1,7 @@
 import { _decorator } from 'cc';
 import { Agent } from '../Agent';
 import { HealthUI } from '../ui/HealthUI';
+import { GameManager } from '../utils/GameManager';
 const { ccclass, menu, property } = _decorator;
 
 @ccclass('Player')
@@ -21,7 +22,7 @@ export class Player extends Agent {
     }
 
     protected wipeOut() {
-        this.gm.gameOver();
+        GameManager.instance.gameOver();
     }
 
     protected onGameReset() {
@@ -31,7 +32,7 @@ export class Player extends Agent {
     }
 
     protected onRise() {
-        this.gm.startGame();
+        GameManager.instance.startGame();
     }
 }
 

@@ -26,7 +26,6 @@ export class Joystick extends GameComponent {
     private canvasUITransform: UITransform;
 
     protected onLoad() {
-        super.onLoad();
         this.ui = director.getScene().getComponentInChildren(UIManager).node;
         this.uiTransform = this.getComponent(UITransform);
         this.canvasUITransform = this.ui.getComponent(UITransform);

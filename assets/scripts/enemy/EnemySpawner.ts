@@ -31,7 +31,6 @@ export class EnemySpawner extends GameComponent {
     private enemyPools: NodePool[];
 
     protected onLoad() {
-        super.onLoad();
         this.groundUITransform = this.ground.getComponent(UITransform);
     }
 

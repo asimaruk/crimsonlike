@@ -8,14 +8,14 @@ const { ccclass, menu, requireComponent } = _decorator;
 @requireComponent(PausableParticles)
 export class ReusableParticles extends GameComponent {
 
-    private particles: PausableParticles;
-    private pool: NodePool;
-    private isInitialized = false;
-
-    protected onLoad() {
-        super.onLoad();
-        this.init();
+    private _particles: PausableParticles;
+    private get particles(): PausableParticles {
+        if (!this._particles) {
+            this._particles = this.getComponent(PausableParticles);
+        }
+        return this._particles;
     }
+    private pool: NodePool;
 
     protected onGamePause() {
         this.particles.paused = true;
@@ -25,15 +25,7 @@ export class ReusableParticles extends GameComponent {
         this.particles.paused = false;
     }
 
-    private init() {
-        if (this.isInitialized) return;
-
-        this.particles = this.getComponent(PausableParticles);
-        this.isInitialized = true;
-    }
-
     public reuse() {
-        this.init();
         this.particles.resetSystem();
         this.scheduleOnce(
             () => this.pool.put(this.node),

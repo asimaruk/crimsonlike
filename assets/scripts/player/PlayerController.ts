@@ -62,7 +62,6 @@ export class PlayerController extends GameComponent {
     private gunFireCallback = () => this.gun.fire();
 
     protected onLoad() {
-        super.onLoad();
         this.player = this.getComponent(Player);
         let scene = director.getScene();
         // camera in fact is camera carriage with camera and UI, so getting by UIManager

@@ -6,12 +6,27 @@ import {
     EventKeyboard, 
     KeyCode,
     PhysicsSystem2D,
+    Node,
+    director,
 } from 'cc';
-import { GameState } from './utils/GameState';
-const { ccclass } = _decorator;
+import { GameState } from './GameState';
+const { ccclass, menu } = _decorator;
 
 @ccclass('GameManager')
+@menu('Utils/GameManager')
 export class GameManager extends Component {
+
+    private static _instance: GameManager | null = null;
+    public static get instance() {
+        if (this._instance == null) {
+            const gameManager = new Node();
+            gameManager.name = '__gameManager__';
+            director.getScene().addChild(gameManager);
+            director.addPersistRootNode(gameManager);
+            this._instance = gameManager.addComponent(GameManager);
+        }
+        return this._instance;
+    }
 
     private _gameState: GameState = GameState.GAME_UNDEFINED;
 

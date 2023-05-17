@@ -62,7 +62,6 @@ export class Agent extends GameComponent {
     private animation: Animation;
 
     protected onLoad() {
-        super.onLoad();
         this.effectsManager = director.getScene().getComponentInChildren(EffectsManager);
         this.colliders = this.getComponents(Collider2D);
         this.colliders.forEach((collider) => {
