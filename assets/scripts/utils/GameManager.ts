@@ -30,6 +30,7 @@ export class GameManager extends Component {
     }
 
     private _gameState: GameState = GameState.GAME_UNDEFINED;
+    private managersLoading: Promise<void>;
 
     get gameState(): GameState {
         return this._gameState;
@@ -40,6 +41,7 @@ export class GameManager extends Component {
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         this._gameState = GameState.GAME_LAUNCHED;
         this.node.emit(GameState.GAME_LAUNCHED);
+        this.managersLoading = EffectsManager.instance.load();
     }
 
     protected onDestroy() {
@@ -63,7 +65,7 @@ export class GameManager extends Component {
     }
 
     public async startGame() {
-        await EffectsManager.instance.load();
+        await this.managersLoading;
         this._gameState = GameState.GAME_RESUMED;
         this.node.emit(GameState.GAME_STARTED);
         this.node.emit(GameState.GAME_RESUMED);
