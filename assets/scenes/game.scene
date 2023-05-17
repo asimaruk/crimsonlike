@@ -969,6 +969,26 @@
     "ground": {
       "__id__": 3
     },
+    "defaultDamageSounds": [
+      {
+        "__uuid__": "2c06d9d5-f26e-44ad-8944-492544570f54",
+        "__expectedType__": "cc.AudioClip"
+      },
+      {
+        "__uuid__": "074057de-95be-4019-aa59-46bca3f58c31",
+        "__expectedType__": "cc.AudioClip"
+      }
+    ],
+    "defaultDeathSounds": [
+      {
+        "__uuid__": "6905efa0-60b0-4943-ac6e-a8d2f944c1ea",
+        "__expectedType__": "cc.AudioClip"
+      },
+      {
+        "__uuid__": "25d4bcbe-63da-40f8-9a61-90f04c1590ae",
+        "__expectedType__": "cc.AudioClip"
+      }
+    ],
     "_id": "d45SE/zHFJF5kyQrZBCqf3"
   },
   {
@@ -2699,6 +2719,10 @@
     "_enabled": true,
     "__prefab": null,
     "_state": 0,
+    "clickAudioClip": {
+      "__uuid__": "03ac95ac-a663-4ba2-83cd-ce3ba1cf959e",
+      "__expectedType__": "cc.AudioClip"
+    },
     "title": {
       "__id__": 56
     },
@@ -3600,6 +3624,26 @@
       "__uuid__": "8ebfc056-222a-44f2-a6e7-e08cd48bbd26",
       "__expectedType__": "cc.AnimationClip"
     },
+    "damageAudioClips": [
+      {
+        "__uuid__": "7e1d5750-3ad8-43b3-8cbf-3aa5a4ca4121",
+        "__expectedType__": "cc.AudioClip"
+      },
+      {
+        "__uuid__": "0a95ab6e-8efb-4dbd-9952-1621648d447c",
+        "__expectedType__": "cc.AudioClip"
+      },
+      {
+        "__uuid__": "f915a94e-1c43-4238-a4d3-a06f64996836",
+        "__expectedType__": "cc.AudioClip"
+      }
+    ],
+    "deathAudioClips": [
+      {
+        "__uuid__": "6e62cd17-3226-4ec2-af22-7f7a84e93aec",
+        "__expectedType__": "cc.AudioClip"
+      }
+    ],
     "healthUI": {
       "__id__": 99
     },

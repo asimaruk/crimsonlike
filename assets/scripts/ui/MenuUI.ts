@@ -1,6 +1,7 @@
-import { _decorator, Animation, Enum, Label, Node } from 'cc';
+import { _decorator, Animation, AudioClip, Enum, Label, Node } from 'cc';
 import { GameComponent } from '../utils/GameComponent';
 import { GameManager } from '../utils/GameManager';
+import { AudioManager } from '../utils/AudioManager';
 const { ccclass, property, menu } = _decorator;
 
 enum MenuState {
@@ -30,6 +31,9 @@ export class MenuUI extends GameComponent {
     set state(value: MenuState) {
         this.updateState(value);
     }
+    @property({
+        type: AudioClip
+    }) clickAudioClip: AudioClip;
     @property({
         type: Node
     }) title: Node;
@@ -103,10 +107,12 @@ export class MenuUI extends GameComponent {
                 GameManager.instance.resetGame();
                 break;
         }
+        AudioManager.instance.playOneShot(this.clickAudioClip, 0.5);
     }
 
     public onRestartClick() {
         GameManager.instance.resetGame();
+        AudioManager.instance.playOneShot(this.clickAudioClip, 0.5);
     }
 }
 

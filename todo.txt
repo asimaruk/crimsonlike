@@ -5,7 +5,7 @@
 [x] Bullets
 [x] Custom game play/pause for interractive menu
 [x] 'Blood'
-[ ] Sounds
+[x] Sounds
 [x] Player damage
 [x] Game Over
 [x] Restart
