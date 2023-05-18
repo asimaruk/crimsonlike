@@ -12,12 +12,10 @@ import {
     Sprite,
     Color,
     Contact2DType,
-    AudioClip,
 } from 'cc';
 import { EffectsManager } from './effects/EffectsManager';
 import { BoxCollider2D } from 'cc';
 import { GameComponent } from './utils/GameComponent';
-import { AudioManager } from './utils/AudioManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('Agent')
@@ -45,14 +43,6 @@ export class Agent extends GameComponent {
     @property({
         type: AnimationClip
     }) damageClip: AnimationClip | null;
-
-    @property({
-        type: [AudioClip]
-    }) damageAudioClips: AudioClip[] = [];
-
-    @property({
-        type: [AudioClip]
-    }) deathAudioClips: AudioClip[] = [];
 
     public get isAlive(): boolean { 
         return this.currentHealth > 0; 
@@ -99,15 +89,11 @@ export class Agent extends GameComponent {
 
         this.currentHealth = damage >= this.currentHealth ? 0 : this.currentHealth - damage;
         if (!this.isAlive) {
-            this.die();
+        this.die();
         } else {
             let damageClipState = this.animation.getState(this.damageClip.name) || this.animation.createState(this.damageClip);
             damageClipState.setTime(0);
             damageClipState.play();
-        }
-        if (this.damageAudioClips.length > 0) {
-            let damageAudioClip = this.damageAudioClips[Math.round(random() * (this.damageAudioClips.length - 1))];
-            AudioManager.instance.playOneShot(damageAudioClip);
         }
         this.onTakeDamage();
     }
@@ -132,10 +118,6 @@ export class Agent extends GameComponent {
         this.stopWalk();
         if (killed) {
             this.onDie();
-            if (this.deathAudioClips.length > 0) {
-                let deathAudioClip = this.deathAudioClips[Math.round(random() * (this.deathAudioClips.length - 1))];
-                AudioManager.instance.playOneShot(deathAudioClip);
-            }
         }
         if (this.dieClip) {
             this.scheduleOnce(this.wipeOut, this.dieClip.duration);

@@ -11,6 +11,7 @@ import {
 } from 'cc';
 import { GameState } from './GameState';
 import { EffectsManager } from '../effects/EffectsManager';
+import { AudioManager } from './AudioManager';
 const { ccclass, menu } = _decorator;
 
 @ccclass('GameManager')
@@ -41,7 +42,10 @@ export class GameManager extends Component {
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         this._gameState = GameState.GAME_LAUNCHED;
         this.node.emit(GameState.GAME_LAUNCHED);
-        this.managersLoading = EffectsManager.instance.load();
+        this.managersLoading = Promise.all([
+            EffectsManager.instance.load(),
+            AudioManager.instance.loaded
+        ]).then(() => {});
     }
 
     protected onDestroy() {
@@ -76,6 +80,7 @@ export class GameManager extends Component {
 
         this._gameState = GameState.GAME_RESUMED;
         this.node.emit(GameState.GAME_RESUMED);
+        AudioManager.instance.resume();
     }
 
     public gamePause() {
@@ -83,6 +88,7 @@ export class GameManager extends Component {
 
         this._gameState = GameState.GAME_PAUSED;
         this.node.emit(GameState.GAME_PAUSED);
+        AudioManager.instance.pause();
     }
 
     public gameOver() {
@@ -93,6 +99,7 @@ export class GameManager extends Component {
     public resetGame() {
         this._gameState = GameState.GAME_RESET;
         this.node.emit(GameState.GAME_RESET);
+        AudioManager.instance.resume();
     }
 }
 

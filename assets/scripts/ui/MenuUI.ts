@@ -1,8 +1,8 @@
-import { _decorator, Animation, AudioClip, Enum, Label, Node } from 'cc';
+import { _decorator, Animation, Enum, Label, Node } from 'cc';
 import { GameComponent } from '../utils/GameComponent';
 import { GameManager } from '../utils/GameManager';
 import { AudioManager } from '../utils/AudioManager';
-const { ccclass, property, menu } = _decorator;
+const { ccclass, property, menu, executeInEditMode } = _decorator;
 
 enum MenuState {
     LAUNCH,
@@ -12,6 +12,7 @@ enum MenuState {
 
 @ccclass('MenuUI')
 @menu('UI/MenuUI')
+@executeInEditMode(true)
 export class MenuUI extends GameComponent {
 
     private static TITLE = 'Swampland';
@@ -31,9 +32,6 @@ export class MenuUI extends GameComponent {
     set state(value: MenuState) {
         this.updateState(value);
     }
-    @property({
-        type: AudioClip
-    }) clickAudioClip: AudioClip;
     @property({
         type: Node
     }) title: Node;
@@ -107,12 +105,12 @@ export class MenuUI extends GameComponent {
                 GameManager.instance.resetGame();
                 break;
         }
-        AudioManager.instance.playOneShot(this.clickAudioClip, 0.5);
+        AudioManager.instance.playOneShot(AudioManager.Sounds.UI_CLICK, 1);
     }
 
     public onRestartClick() {
         GameManager.instance.resetGame();
-        AudioManager.instance.playOneShot(this.clickAudioClip, 0.5);
+        AudioManager.instance.playOneShot(AudioManager.Sounds.UI_CLICK, 1);
     }
 }
 

@@ -3,6 +3,7 @@ import { Agent } from '../Agent';
 import { Projectile } from '../guns/Projectile';
 import { Player } from '../player/Player';
 import { EffectsManager } from '../effects/EffectsManager';
+import { AudioManager } from '../utils/AudioManager';
 const { ccclass, menu, property } = _decorator;
 
 @ccclass('Enemy')
@@ -25,6 +26,8 @@ export class Enemy extends Agent {
     private destinationWorld = v3();
     private selfWorld = v3();
     private move = v3();
+    private damageSounds = [AudioManager.Sounds.BULLET_HIT_1, AudioManager.Sounds.BULLET_HIT_2];
+    private deathSounds = [AudioManager.Sounds.ENEMY_DEATH_1, AudioManager.Sounds.ENEMY_DEATH_2];
 
     protected update(deltaTime: number) {
         if (this.destination && this.isAlive && this.resumed) {
@@ -40,11 +43,18 @@ export class Enemy extends Agent {
         this.destination = dest;
     }
 
+    protected onTakeDamage() {
+        if (this.isAlive) {
+            AudioManager.instance.playOneShot(this.damageSounds[Math.floor(Math.random() * this.damageSounds.length)]);
+        }
+    }
+
     protected onDie() {
         let dieLights = EffectsManager.instance.getDieLights();
         dieLights.setPosition(this.node.position);
         this.node.parent.addChild(dieLights);
-        this.unschedule(this.scheduledPlayerDamage);   
+        this.unschedule(this.scheduledPlayerDamage);
+        AudioManager.instance.playOneShot(this.deathSounds[Math.floor(Math.random() * this.deathSounds.length)]);   
     }
 
     protected wipeOut() {

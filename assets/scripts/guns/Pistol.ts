@@ -10,7 +10,6 @@ import {
     director,
     UITransform,
     Vec3,
-    AudioClip,
 } from 'cc';
 import { Gun } from './Gun';
 import { Projectile } from './Projectile';
@@ -43,9 +42,6 @@ export class Pistol extends Gun {
         min: 0
     })
     damage = 20;
-    @property({
-        type: AudioClip
-    }) shotSoundClip: AudioClip;
 
     private projectileWorldPosition = v3();
     private projectileNodePosition = v3();
@@ -87,9 +83,7 @@ export class Pistol extends Gun {
             this.projectilesUITransform.convertToNodeSpaceAR(this.projectileDirectionWorldPosition, this.projectileDirectionNodePosition);
             this.projectiles.node.addChild(projectile.node);
             projectile.fly(this.projectileNodePosition, this.projectileDirectionNodePosition, this.range);
-            if (this.shotSoundClip) {
-                AudioManager.instance.playOneShot(this.shotSoundClip);
-            }
+            AudioManager.instance.playOneShot(AudioManager.Sounds.PISTOL_SHOT);
         });
     }
 }

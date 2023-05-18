@@ -1,10 +1,20 @@
-import { _decorator, AudioClip, AudioSource, director, Node, resources } from 'cc';
-import { GameComponent } from './GameComponent';
-const { ccclass, menu } = _decorator;
+import { _decorator, AudioClip, AudioSource, director, Enum, Node, resources } from 'cc';
 
-@ccclass('AudioManager')
-@menu('Utils/AudioManager')
-export class AudioManager extends GameComponent {
+export class AudioManager {
+
+    static readonly Sounds = Enum({
+        PISTOL_SHOT: 'Arrow Flying Past 1',
+        BULLET_HIT_1: 'Bloody punches 6',
+        BULLET_HIT_2: 'Bloody punches 7',
+        MELEE_HIT_1: 'Body Head (Headshot) 3',
+        MELEE_HIT_2: 'Body Head (Headshot) 4',
+        MELEE_HIT_3: 'Body Head (Headshot) 5',
+        ENEMY_DEATH_1: 'Debuff 1',
+        ENEMY_DEATH_2: 'Debuff 20',
+        PLAYER_DEATH: 'Impact Classic_01',
+        UI_CLICK: 'Pop sounds 1',
+        PLAYER_RISE: 'Buff 10',
+    });
 
     private static _instance: AudioManager | null = null;
     public static get instance(): AudioManager {
@@ -13,26 +23,46 @@ export class AudioManager extends GameComponent {
             audioManager.name = '__audioManager__';
             director.getScene().addChild(audioManager);
             director.addPersistRootNode(audioManager);
-            this._instance = audioManager.addComponent(AudioManager);
+            this._instance = new AudioManager()
+            this._instance._audioSource = audioManager.addComponent(AudioSource);
         }
         return this._instance;
     }
 
-    private _audioSource: AudioSource
+    private _audioSource: AudioSource;
+    private audioClips: { [key: string]: AudioClip } = {};
+    public readonly loaded: Promise<void>;
+
+    constructor() {
+        this.loaded = Promise.all([
+            Object.keys(AudioManager.Sounds).map((key) => {
+                return this.loadAudioClip(AudioManager.Sounds[key]);
+            })
+        ]).then(() => { })
+    }
+
+    private loadAudioClip(name: string): Promise<AudioClip> {
+        return new Promise((resolve, reject) => {
+            resources.load(`audio/${name}`, AudioClip, (err, prefab) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    this.audioClips[name] = prefab;
+                    resolve(prefab);
+                }
+            });
+        });
+    }
 
     public get audioSource() {
         return this._audioSource;
     }
 
-    protected onLoad() {
-        this._audioSource = this.addComponent(AudioSource);
-    }
-
-    protected onGamePause() {
+    public pause() {
         this._audioSource.pause();
     }
 
-    protected onGameUnpause() {
+    public resume() {
         if (this._audioSource.state === AudioSource.AudioState.PAUSED) {
             this._audioSource.play();
         }
@@ -49,8 +79,9 @@ export class AudioManager extends GameComponent {
     playOneShot(sound: AudioClip | string, volume: number = 1.0) {
         if (sound instanceof AudioClip) {
             this._audioSource.playOneShot(sound, volume);
-        }
-        else {
+        } else if (this.audioClips[sound]) {
+            this._audioSource.playOneShot(this.audioClips[sound], volume);
+        } else {
             resources.load(sound, (err, clip: AudioClip) => {
                 if (err) {
                     console.log(err);
@@ -75,8 +106,9 @@ export class AudioManager extends GameComponent {
             this._audioSource.clip = sound;
             this._audioSource.play();
             this.audioSource.volume = volume;
-        }
-        else {
+        } else if (this.audioClips[sound]) {
+            this._audioSource.playOneShot(this.audioClips[sound], volume);
+        } else {
             resources.load(sound, (err, clip: AudioClip) => {
                 if (err) {
                     console.log(err);
