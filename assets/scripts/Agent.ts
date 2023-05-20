@@ -95,10 +95,10 @@ export class Agent extends GameComponent {
             damageClipState.setTime(0);
             damageClipState.play();
         }
-        this.onTakeDamage();
+        this.onTakeDamage(damage);
     }
 
-    protected onTakeDamage() {
+    protected onTakeDamage(damage: number) {
         
     }
 

@@ -9,6 +9,6 @@
 [x] Player damage
 [x] Game Over
 [x] Restart
-[ ] Score counter
+[x] Score counter
 [ ] Android build
 [ ] UI for score and health

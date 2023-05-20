@@ -1,6 +1,5 @@
 import { _decorator } from 'cc';
 import { Agent } from '../Agent';
-import { HealthUI } from '../ui/HealthUI';
 import { GameManager } from '../utils/GameManager';
 import { AudioManager } from '../utils/AudioManager';
 const { ccclass, menu, property } = _decorator;
@@ -10,8 +9,10 @@ const { ccclass, menu, property } = _decorator;
 export class Player extends Agent {
 
     @property({
-        type: HealthUI
-    }) healthUI: HealthUI;
+        override: true,
+        formerlySerializedAs: 'health',
+        readonly: true,
+    }) fullHealth: number = GameManager.PLAYER_FULL_HEALTH;
 
     private damageSounds = [
         AudioManager.Sounds.MELEE_HIT_1, 
@@ -19,17 +20,12 @@ export class Player extends Agent {
         AudioManager.Sounds.MELEE_HIT_3
     ];
 
-    protected onLoad() {
-        super.onLoad();
-        this.healthUI.setHealth(this.fullHealth);
-    }
-
     public onStep() {
         AudioManager.instance.playOneShot(AudioManager.Sounds.UI_CLICK, 0.1);
     }
 
-    public onTakeDamage() {
-        this.healthUI.setHealth(this.currentHealth);
+    public onTakeDamage(damage: number) {
+        GameManager.instance.decPlayerHealth(damage);
         if (this.isAlive) {
             AudioManager.instance.playOneShot(this.damageSounds[Math.floor(Math.random() * this.damageSounds.length)]);
         }
@@ -44,7 +40,6 @@ export class Player extends Agent {
     }
 
     protected onGameReset() {
-        this.healthUI.setHealth(this.fullHealth);
         this.currentHealth = this.fullHealth;
         this.rise();
     }

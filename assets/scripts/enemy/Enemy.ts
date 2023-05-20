@@ -4,6 +4,7 @@ import { Projectile } from '../guns/Projectile';
 import { Player } from '../player/Player';
 import { EffectsManager } from '../effects/EffectsManager';
 import { AudioManager } from '../utils/AudioManager';
+import { GameManager } from '../utils/GameManager';
 const { ccclass, menu, property } = _decorator;
 
 @ccclass('Enemy')
@@ -43,7 +44,7 @@ export class Enemy extends Agent {
         this.destination = dest;
     }
 
-    protected onTakeDamage() {
+    protected onTakeDamage(damage: number) {
         if (this.isAlive) {
             AudioManager.instance.playOneShot(this.damageSounds[Math.floor(Math.random() * this.damageSounds.length)]);
         }
@@ -54,7 +55,8 @@ export class Enemy extends Agent {
         dieLights.setPosition(this.node.position);
         this.node.parent.addChild(dieLights);
         this.unschedule(this.scheduledPlayerDamage);
-        AudioManager.instance.playOneShot(this.deathSounds[Math.floor(Math.random() * this.deathSounds.length)]);   
+        AudioManager.instance.playOneShot(this.deathSounds[Math.floor(Math.random() * this.deathSounds.length)]);
+        GameManager.instance.incScore(this.fullHealth);
     }
 
     protected wipeOut() {
