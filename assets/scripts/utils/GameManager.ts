@@ -12,10 +12,8 @@ import {
 import { GameState } from './GameState';
 import { EffectsManager } from '../effects/EffectsManager';
 import { AudioManager } from './AudioManager';
-const { ccclass, menu } = _decorator;
+import { EDITOR } from 'cc/env';
 
-@ccclass('GameManager')
-@menu('Utils/GameManager')
 export class GameManager extends Component {
 
     private static _instance: GameManager | null = null;
@@ -23,8 +21,10 @@ export class GameManager extends Component {
         if (this._instance == null) {
             const gameManager = new Node();
             gameManager.name = '__gameManager__';
-            director.getScene().addChild(gameManager);
-            director.addPersistRootNode(gameManager);
+            if (!EDITOR) {
+                director.getScene().addChild(gameManager);
+                director.addPersistRootNode(gameManager);
+            }
             this._instance = gameManager.addComponent(GameManager);
         }
         return this._instance;
@@ -50,6 +50,7 @@ export class GameManager extends Component {
 
     protected onDestroy() {
         input.off(Input.EventType.KEY_DOWN, this.onKeyDown, this);
+        this.node.removeFromParent();
     }
 
     private onKeyDown(event: EventKeyboard) {

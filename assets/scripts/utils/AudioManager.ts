@@ -1,4 +1,5 @@
 import { _decorator, AudioClip, AudioSource, director, Enum, Node, resources } from 'cc';
+import { EDITOR } from 'cc/env';
 
 export class AudioManager {
 
@@ -21,9 +22,11 @@ export class AudioManager {
         if (this._instance == null) {
             const audioManager = new Node();
             audioManager.name = '__audioManager__';
-            director.getScene().addChild(audioManager);
-            director.addPersistRootNode(audioManager);
-            this._instance = new AudioManager()
+            if (!EDITOR) {
+                director.getScene().addChild(audioManager);
+                director.addPersistRootNode(audioManager);
+            }
+            this._instance = new AudioManager();
             this._instance._audioSource = audioManager.addComponent(AudioSource);
         }
         return this._instance;
