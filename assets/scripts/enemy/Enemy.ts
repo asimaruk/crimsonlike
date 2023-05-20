@@ -1,4 +1,4 @@
-import { _decorator, CCFloat, CCInteger, Collider2D, macro, Node, NodePool, v3 } from 'cc';
+import { _decorator, Animation, CCFloat, CCInteger, Collider2D, Label, macro, Node, NodePool, v3 } from 'cc';
 import { Agent } from '../Agent';
 import { Projectile } from '../guns/Projectile';
 import { Player } from '../player/Player';
@@ -51,9 +51,12 @@ export class Enemy extends Agent {
     }
 
     protected onDie() {
-        let dieLights = EffectsManager.instance.getDieLights();
+        const dieLights = EffectsManager.instance.getDieLights();
+        const scoreReward = EffectsManager.instance.getScoreReward(this.fullHealth);
         dieLights.setPosition(this.node.position);
+        scoreReward.setPosition(this.node.position);
         this.node.parent.addChild(dieLights);
+        this.node.parent.addChild(scoreReward);
         this.unschedule(this.scheduledPlayerDamage);
         AudioManager.instance.playOneShot(this.deathSounds[Math.floor(Math.random() * this.deathSounds.length)]);
         GameManager.instance.incScore(this.fullHealth);
