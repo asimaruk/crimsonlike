@@ -5,7 +5,9 @@
 library/
 temp/
 local/
-build/
+/build/web-desktop
+/build/android/*
+!/build/android/proj
 profiles/
 native
 #//////////////////////////

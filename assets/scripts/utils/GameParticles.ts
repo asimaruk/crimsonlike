@@ -3,10 +3,10 @@ import { GameComponent } from '../utils/GameComponent';
 import { PausableParticles } from '../effects/PausableParticles';
 const { ccclass, menu, requireComponent } = _decorator;
 
-@ccclass('ReusableParticles')
-@menu('Utils/ReusableParticles')
+@ccclass('GameParticles')
+@menu('Utils/GameParticles')
 @requireComponent(PausableParticles)
-export class ReusableParticles extends GameComponent {
+export class GameParticles extends GameComponent {
 
     private _particles: PausableParticles;
     private get particles(): PausableParticles {

@@ -1,5 +1,4 @@
 import { _decorator, Prefab, Node, NodePool, instantiate, resources, Label, Animation } from 'cc';
-import { ReusableParticles } from '../utils/ReusableParticles';
 
 export class EffectsManager {
 
@@ -19,8 +18,8 @@ export class EffectsManager {
     private static readonly SCORE_REWARD_POOL_SIZE = 10;
 
     private readonly prefabs: { [key: string]: Prefab } = {}
-    private readonly fumePool = new NodePool(ReusableParticles.name);
-    private readonly dieLightsPool = new NodePool(ReusableParticles.name);
+    private readonly fumePool = new NodePool('GameParticles');
+    private readonly dieLightsPool = new NodePool('GameParticles');
     private readonly scoreRewardPool = new NodePool();
     private loaded: Promise<void>;
 

@@ -10,5 +10,5 @@
 [x] Game Over
 [x] Restart
 [x] Score counter
-[ ] Android build
+[x] Android build
 [ ] UI for score and health
