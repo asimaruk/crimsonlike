@@ -1,7 +1,0 @@
-com.cocos.service
-string done
-string go
-string next
-string search
-string send
-string tip_disable_safe_input_type
