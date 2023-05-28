@@ -1,6 +1,7 @@
 import { Label, Node, _decorator } from 'cc';
 import { GameComponent } from '../utils/GameComponent';
 import { GameManager } from '../utils/GameManager';
+import { Popping } from './Popping';
 const { ccclass, property, menu } = _decorator;
 
 @ccclass('GameUI')
@@ -11,15 +12,24 @@ export class GameUI extends GameComponent {
         type: Node
     }) heart: Node;
     @property({
-        type: Label
-    }) counter: Label;
+        type: Label,
+        formerlySerializedAs: 'counter'
+    }) health: Label;
     @property({
         type: Label
     }) score: Label;
 
+    private heartPoppong: Popping;
+    private healthPopping: Popping;
+    private scorePopping: Popping;
+
     protected onLoad() {
         GameManager.instance.on(GameManager.PLAYER_HEALTH_CHANGED, this.setHealth, this);
         GameManager.instance.on(GameManager.SCORE_CHANGED, this.setScore, this);
+
+        this.healthPopping = this.health.getComponent(Popping);
+        this.heartPoppong = this.heart.getComponent(Popping);
+        this.scorePopping = this.score.getComponent(Popping);
     }
 
     protected onDestroy(): void {
@@ -33,11 +43,14 @@ export class GameUI extends GameComponent {
     }
 
     public setHealth(health: number) {
-        this.counter.string = health.toString();
+        this.health.string = health.toString();
+        this.heartPoppong.pop();
+        this.healthPopping.pop();
     }
 
     public setScore(score: number) {
         this.score.string = score.toString();
+        this.scorePopping.pop();
     }
 }
 
