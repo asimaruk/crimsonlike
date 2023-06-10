@@ -12,3 +12,6 @@
 [x] Score counter
 [x] Android build
 [x] UI for score and health
+[ ] Records table and posting
+[ ] Art update
+[ ] Game design
