@@ -4,5 +4,22 @@
   "version": "3.6.2",
   "creator": {
     "version": "3.7.2"
-  }
+  },
+  "scripts": {
+    "build-modules": "nx run-many -t build",
+    "clean-modules": "nx run-many -t clean",
+    "clean-build": "npm run clean-modules && rimraf node_modules && npm install --save-dev && npm run build-modules && npm install --save"
+  },
+  "devDependencies": {
+    "nx": "16.3.2",
+    "records-repository-api": "^1.0.0",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "records-repository": "^1.0.0"
+  },
+  "workspaces": [
+    "modules/**"
+  ]
 }

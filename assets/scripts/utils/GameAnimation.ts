@@ -7,18 +7,18 @@ const { ccclass, requireComponent, menu } = _decorator;
 @menu('Utils/GameAnimation')
 export class GameAnimation extends GameComponent {
 
-    private animation: Animation;
+    private animation: Animation | null;
     
     protected onLoad() {
         this.animation = this.getComponent(Animation);
     }
 
     protected onGamePause() {
-        this.animation.pause();
+        this.animation?.pause();
     }
 
     protected onGameUnpause() {
-        this.animation.resume();
+        this.animation?.resume();
     }
 }
 

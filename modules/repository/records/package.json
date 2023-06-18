@@ -1,0 +1,21 @@
+{
+  "name": "records-repository",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist"
+  },
+  "devDependencies": {
+    "records-data-api": "*",
+    "records-repository-api": "*"
+  },
+  "dependencies": {
+    "records-data": "*"
+  }
+}
