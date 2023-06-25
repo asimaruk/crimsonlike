@@ -13,8 +13,7 @@ import { GameState } from './GameState';
 import { EffectsManager } from '../effects/EffectsManager';
 import { AudioManager } from './AudioManager';
 import { EDITOR } from 'cc/env';
-import recordsrepo from 'records-repository';
-import { RecordsRepository } from 'records-repository-api';
+import { ApiManager } from './ApiManager';
 
 export class GameManager extends Component {
 
@@ -52,8 +51,6 @@ export class GameManager extends Component {
     public get playerHealth() {
         return this._playerHealth;
     }
-
-    private recordsRepository: RecordsRepository = recordsrepo.createRecordsRepository();
 
     protected onLoad() {
         PhysicsSystem2D.instance.enable = true;
@@ -113,6 +110,8 @@ export class GameManager extends Component {
     public gameOver() {
         this._gameState = GameState.GAME_OVER;
         this.node.emit(GameState.GAME_OVER);
+        const records = ApiManager.instance.refreshRecords();
+        console.log(`Records: ${records}`);
     }
 
     public resetGame() {

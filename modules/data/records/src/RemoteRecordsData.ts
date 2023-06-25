@@ -24,13 +24,17 @@ export class RemoteRecordsData implements RecordsData {
     }
 
     private sendRequest<T>(url: string, data?: any): Promise<T> {
-        let xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
+        const method = data ? 'POST' : 'GET';
         const result = new Promise<T>((resolve, reject) => {
             this.currentRequest = xhr;
             xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status < 400)) {
+                if (xhr.readyState != 4) {
+                    return;
+                }
+                if (xhr.status >= 200 && xhr.status < 400) {
                     const response = xhr.responseText;
-                    console.log(response);
+                    console.log(`<-- ${method} ${xhr.responseURL} ${response}`);
                     try {
                         const responseObject = JSON.parse(response);
                         resolve(responseObject as T);
@@ -38,19 +42,22 @@ export class RemoteRecordsData implements RecordsData {
                         reject(e);
                     }
                 } else {
-                    reject(`status: ${xhr.status}`);
+                    reject(`status: ${xhr.status}, ${xhr.statusText}`);
                 }
             };
         });
         this.queue = this.queue.then(async () => {
-            xhr.open("GET", url, true);
             if (data) {
+                xhr.open('POST', url);
                 xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.send(JSON.stringify(data));
+                const strData = JSON.stringify(data);
+                xhr.send(strData);
+                console.log(`--> POST ${url} ${strData}`);
             } else {
+                xhr.open('GET', url);
                 xhr.send();
+                console.log(`--> GET ${url}`);
             }
-            console.log(`GET ${url}`);
             await result;
         });
         return result;
