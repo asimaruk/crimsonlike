@@ -6,7 +6,7 @@
     "version": "3.7.2"
   },
   "scripts": {
-    "build-modules": "nx run-many -t build",
+    "build-modules": "nx run-many -t build && npm install --save",
     "clean-modules": "nx run-many -t clean",
     "clean-build": "npm run clean-modules && rimraf node_modules && npm install --save-dev && npm run build-modules && npm install --save"
   },

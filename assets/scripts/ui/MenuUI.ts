@@ -136,14 +136,14 @@ export class MenuUI extends GameComponent {
         AudioManager.instance.playOneShot(AudioManager.Sounds.UI_CLICK, 1);
     }
 
-    public onRecordsClick() {
+    public async onRecordsClick() {
         this._stateStack.push(MenuState.RECORDS);
         this.updateState(MenuState.RECORDS);
-        // ApiManager.instance.refreshRecords().then((records: RecordsRepository.Record[]) => {
-        //     console.log(`Records: ${records}`);
-        // }).catch((e) => {
-        //     console.log(`Records request error: ${e}`);
-        // });
+        ApiManager.instance.refreshRecords().then((records: RecordsRepository.Record[]) => {
+            console.log(`Records: ${records}`);
+        }).catch((e) => {
+            console.log(`Records request error: ${e}`);
+        });
     }
 
     public onBack() {

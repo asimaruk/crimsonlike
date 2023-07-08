@@ -21,6 +21,7 @@ export class RemoteRecordsData implements RecordsData {
 
     reset() {
         this.currentRequest?.abort();
+        this.queue = Promise.resolve();
     }
 
     private sendRequest<T>(url: string, data?: any): Promise<T> {
@@ -46,19 +47,18 @@ export class RemoteRecordsData implements RecordsData {
                 }
             };
         });
-        this.queue = this.queue.then(async () => {
+        this.queue = this.queue.then(() => {
             if (data) {
+                const strData = JSON.stringify(data);
+                console.log(`--> POST ${url} ${strData}`);
                 xhr.open('POST', url);
                 xhr.setRequestHeader('Content-Type', 'application/json');
-                const strData = JSON.stringify(data);
                 xhr.send(strData);
-                console.log(`--> POST ${url} ${strData}`);
             } else {
+                console.log(`--> GET ${url}`);
                 xhr.open('GET', url);
                 xhr.send();
-                console.log(`--> GET ${url}`);
             }
-            await result;
         });
         return result;
     }
