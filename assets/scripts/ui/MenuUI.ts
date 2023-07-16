@@ -4,6 +4,7 @@ import { GameManager } from '../utils/GameManager';
 import { AudioManager } from '../utils/AudioManager';
 import { ApiManager } from '../utils/ApiManager';
 import { RecordsRepository } from 'records-repository-api';
+import { RecordsMenuUI } from './RecordsMenuUI';
 const { ccclass, property, menu, executeInEditMode } = _decorator;
 
 enum MenuState {
@@ -40,8 +41,8 @@ export class MenuUI extends GameComponent {
         type: Node
     }) mainUI;
     @property({
-        type: Node
-    }) recordsUI;
+        type: RecordsMenuUI
+    }) recordsUI: RecordsMenuUI;
     @property({
         type: Node
     }) title: Node;
@@ -84,7 +85,7 @@ export class MenuUI extends GameComponent {
         switch (state) {
             case MenuState.LAUNCH:
                 this.mainUI.active = true;
-                this.recordsUI.active = false;
+                this.recordsUI.node.active = false;
                 this.titleLabel.string = MenuUI.TITLE;
                 this.startLabel.string = MenuUI.START;
                 this.startBtn.active = true;
@@ -93,7 +94,7 @@ export class MenuUI extends GameComponent {
                 break;
             case MenuState.PAUSE:
                 this.mainUI.active = true;
-                this.recordsUI.active = false;
+                this.recordsUI.node.active = false;
                 this.titleLabel.string = MenuUI.PAUSE;
                 this.startLabel.string = MenuUI.RESUME;
                 this.startBtn.active = true;
@@ -103,7 +104,7 @@ export class MenuUI extends GameComponent {
                 break;
             case MenuState.GAME_OVER:
                 this.mainUI.active = true;
-                this.recordsUI.active = false;
+                this.recordsUI.node.active = false;
                 this.titleLabel.string = MenuUI.GAME_OVER;
                 this.startBtn.active = false;
                 this.restartBtn.active = true;
@@ -111,7 +112,7 @@ export class MenuUI extends GameComponent {
                 break;
             case MenuState.RECORDS:
                 this.mainUI.active = false;
-                this.recordsUI.active = true;
+                this.recordsUI.node.active = true;
                 break;
         }
     }
@@ -136,13 +137,16 @@ export class MenuUI extends GameComponent {
         AudioManager.instance.playOneShot(AudioManager.Sounds.UI_CLICK, 1);
     }
 
-    public async onRecordsClick() {
+    public onRecordsClick() {
         this._stateStack.push(MenuState.RECORDS);
         this.updateState(MenuState.RECORDS);
+        this.recordsUI.showLoading();
         ApiManager.instance.refreshRecords().then((records: RecordsRepository.Record[]) => {
             console.log(`Records: ${records}`);
+            this.recordsUI.showResult(records);
         }).catch((e) => {
             console.log(`Records request error: ${e}`);
+            this.recordsUI.showError("Loading records error");
         });
     }
 
