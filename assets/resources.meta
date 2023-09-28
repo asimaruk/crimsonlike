@@ -1,5 +1,5 @@
 {
-  "ver": "1.1.0",
+  "ver": "1.2.0",
   "importer": "directory",
   "imported": true,
   "uuid": "4ca445c2-66d6-4775-bfb7-b4cfc7e86c00",
@@ -9,7 +9,6 @@
     "isBundle": true,
     "bundleName": "resources",
     "priority": 8,
-    "compressionType": {},
-    "isRemoteBundle": {}
+    "bundleConfigID": "auto_b5oIg4R2FBvJyhjpR2gjfq"
   }
 }
