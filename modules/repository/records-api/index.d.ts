@@ -11,7 +11,7 @@ declare namespace RecordsRepository {
         score: number
     };
 
-    export type NewRecord = Record & {
+    export type NewRecord = Omit<Record, 'name'> & {
         position: number
     };
 }

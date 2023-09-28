@@ -1,14 +1,17 @@
 import { Component, Node, director } from "cc";
 import { EDITOR } from "cc/env";
 import { RecordsRepository } from "records-repository-api";
+import { UsersRepository } from 'users-repository-api';
 import recordsrepo from 'records-repository';
+import usersrepo from 'users-repository';
 
 export class ApiManager extends Component {
 
     public static RECORDS = 'records';
     public static NEW_RECORD = 'new_record';
+    public static CURRENT_USER = 'user';
     private static _instance: ApiManager | null = null;
-    
+
     static get instance(): ApiManager {
         if (this._instance == null) {
             const node = new Node();
@@ -23,6 +26,7 @@ export class ApiManager extends Component {
     }
 
     private recordsRepository: RecordsRepository = recordsrepo.createRecordsRepository();
+    private usersRepository: UsersRepository = usersrepo.createUsersRepository();
 
     records(): RecordsRepository.Record[] {
         return this.recordsRepository.records;
@@ -38,6 +42,20 @@ export class ApiManager extends Component {
         const newRecord = await this.recordsRepository.postRecord(record);
         this.node.emit(ApiManager.NEW_RECORD, newRecord);
         return newRecord;
+    }
+
+    currentUser(): UsersRepository.User | null {
+        return this.usersRepository.currentUser;
+    }
+
+    async login(): Promise<UsersRepository.User> {
+        const user = await this.usersRepository.login();
+        this.node.emit(ApiManager.CURRENT_USER, user);
+        return user;
+    }
+
+    logout() {
+        this.usersRepository.logout();
     }
 
     on(event: string, callback: Function) {

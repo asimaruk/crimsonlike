@@ -19,7 +19,7 @@ export class DefaultRecordsRepository implements RecordsRepository {
             return {
                 uid: d.uid,
                 name: d.name,
-                score: d.score
+                score: d.score,
             }
         });
         this._records = records;
@@ -29,14 +29,12 @@ export class DefaultRecordsRepository implements RecordsRepository {
     async postRecord(record: RecordsRepository.Record): Promise<RecordsRepository.NewRecord> {
         const newRec = await this.recordsData.postRecord({
             uid: record.uid,
-            name: record.name,
-            score: record.score
+            score: record.score,
         });
         return {
             uid: newRec.uid,
-            name: newRec.name,
             score: newRec.score,
-            position: newRec.position
+            position: newRec.position,
         };
     }
 

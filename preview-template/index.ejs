@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <link rel="icon" href="./favicon.ico" />
+        <meta charset="utf-8" />
+        <title><%=title%></title>
+        <meta
+            name="viewport"
+            content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true"
+        />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="full-screen" content="yes" />
+        <meta name="screen-orientation" content="portrait" />
+        <meta name="x5-fullscreen" content="true" />
+        <meta name="360-fullscreen" content="true" />
+        <meta name="renderer" content="webkit" />
+        <meta name="force-rendering" content="webkit" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+        <link rel="stylesheet" type="text/css" href="./index.css" />
+    </head>
+    <body style="overflow: hidden;">
+        <%- include(cocosToolBar, {config: config}) %>
+        <div id="content" class="content" style="overflow: hidden;">
+            <div class="contentWrap">
+                <div id="GameDiv" class="wrapper">
+                    <div id="Cocos3dGameContainer">
+                        <canvas id="GameCanvas" tabindex="-1" style="background-color: '';"></canvas>
+                    </div>
+                    <div id="splash">
+                        <div class="progress-bar stripes"><span></span></div>
+                    </div>
+                    <div id="bulletin">
+                        <div id="sceneIsEmpty" class="inner"><%=tip_sceneIsEmpty%></div>
+                    </div>
+                    <div class="error" id="error">
+                        <div class="title">Error <i>(Please open the console to see detailed errors)</i></div>
+                        <div class="error-main"></div>
+                        <div class="error-stack"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include(cocosTemplate, {}) %>
+
+        <!-- Start of google autorization scripts -->
+        <script>
+            function handleGoogleCredentialResponse() {
+                console.log(arguments);
+                if (arguments.length > 0 && arguments[0].credential) {
+                    window.AuthManager.instance.resolveAuthorize(arguments[0].credential);
+                } else {
+                    window.AuthManager.instance.rejectAuthorize('Google auth error');
+                }
+            };
+            function onGoogleClientLoaded() {
+                google.accounts.id.initialize({
+                    client_id: '934248987577-283n8es6m9cj7bjcf5cndb5nftclpr09.apps.googleusercontent.com',
+                    callback: handleGoogleCredentialResponse,
+                    cancel_on_tap_outside: false,
+                });
+                google.accounts.id.prompt();
+            };
+            function googleAuthorize() {
+                google.accounts.id.prompt();
+            };
+        </script>
+        <script src="https://accounts.google.com/gsi/client" async onload="onGoogleClientLoaded()"></script>
+        <!-- End of google autorization scripts -->
+    </body>
+</html>

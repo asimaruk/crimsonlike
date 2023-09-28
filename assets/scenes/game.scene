@@ -1804,7 +1804,7 @@
         "__id__": 56
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 83
@@ -1898,7 +1898,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 764.46,
+      "width": 763.74,
       "height": 226.8
     },
     "_anchorPoint": {
@@ -1927,7 +1927,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "Swampland",
+    "_string": "Game Over",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 180,
@@ -2018,7 +2018,7 @@
         "__id__": 58
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 61
@@ -2301,7 +2301,7 @@
         "__id__": 66
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 69
@@ -2317,7 +2317,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -144.53,
+      "y": -37.809999999999995,
       "z": 0
     },
     "_lrot": {
@@ -2952,7 +2952,7 @@
         "__id__": 218
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 226
@@ -7954,7 +7954,7 @@
     "_enabled": true,
     "__prefab": null,
     "_stateStack": [
-      3
+      2
     ],
     "mainUI": {
       "__id__": 52

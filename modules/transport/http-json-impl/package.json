@@ -1,19 +1,17 @@
 {
-  "name": "records-data",
+  "name": "transport-http-json-impl",
   "version": "1.0.0",
   "description": "",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "scripts": {
     "build": "tsc",
     "clean": "rimraf dist"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "auth-data-api": "*",
-    "records-data-api": "*",
     "transport-http-api": "*"
   }
 }

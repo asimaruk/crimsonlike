@@ -13,5 +13,6 @@
 [x] Android build
 [x] UI for score and health
 [ ] Records table and posting
+[ ] Cocos Creator 3.8
 [ ] Art update
 [ ] Game design

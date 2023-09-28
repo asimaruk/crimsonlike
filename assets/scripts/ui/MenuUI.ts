@@ -5,6 +5,7 @@ import { AudioManager } from '../utils/AudioManager';
 import { ApiManager } from '../utils/ApiManager';
 import { RecordsRepository } from 'records-repository-api';
 import { RecordsMenuUI } from './RecordsMenuUI';
+import { AuthManager } from '../utils/AuthManager';
 const { ccclass, property, menu, executeInEditMode } = _decorator;
 
 enum MenuState {
@@ -24,12 +25,12 @@ export class MenuUI extends GameComponent {
     private static GAME_OVER = 'Game Over';
     private static START = 'Start';
     private static RESUME = 'Resume';
-    
-    @property 
+
+    @property
     private _stateStack: MenuState[] = [MenuState.LAUNCH];
     @property({
         type: Enum(MenuState)
-    }) 
+    })
     get state(): MenuState {
         return this._stateStack[this._stateStack.length - 1];
     }
@@ -57,7 +58,6 @@ export class MenuUI extends GameComponent {
     private startLabel: Label;
     private startAnimation: Animation;
     private restartAnimation: Animation;
-    private savedMainState: MenuState | null = null;
 
     protected onLoad() {
         this.titleLabel = this.title.getComponent(Label);
@@ -141,7 +141,9 @@ export class MenuUI extends GameComponent {
         this._stateStack.push(MenuState.RECORDS);
         this.updateState(MenuState.RECORDS);
         this.recordsUI.showLoading();
-        ApiManager.instance.refreshRecords().then((records: RecordsRepository.Record[]) => {
+        AuthManager.instance.authorize().then(() => {
+            return ApiManager.instance.refreshRecords();
+        }).then((records: RecordsRepository.Record[]) => {
             console.log(`Records: ${records}`);
             this.recordsUI.showResult(records);
         }).catch((e) => {

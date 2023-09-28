@@ -1,0 +1,9 @@
+{
+  "name": "users-repository-api",
+  "version": "1.0.0",
+  "description": "",
+  "types": "index.d.ts",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

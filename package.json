@@ -11,13 +11,17 @@
     "clean-build": "npm run clean-modules && rimraf node_modules && npm install --save-dev && npm run build-modules && npm install --save"
   },
   "devDependencies": {
+    "auth-data-api": "*",
     "nx": "16.3.2",
-    "records-repository-api": "^1.0.0",
+    "records-repository-api": "*",
     "rimraf": "^5.0.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "users-repository-api": "*"
   },
   "dependencies": {
-    "records-repository": "^1.0.0"
+    "auth-data": "*",
+    "records-repository": "*",
+    "users-repository": "*"
   },
   "workspaces": [
     "modules/**"
