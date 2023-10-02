@@ -1,24 +1,27 @@
-import { 
-    _decorator, 
+import {
+    _decorator,
     Component,
-    input, 
-    Input, 
-    EventKeyboard, 
+    input,
+    Input,
+    EventKeyboard,
     KeyCode,
     PhysicsSystem2D,
     Node,
     director,
+    sys,
 } from 'cc';
 import { GameState } from './GameState';
 import { EffectsManager } from '../effects/EffectsManager';
 import { AudioManager } from './AudioManager';
 import { EDITOR } from 'cc/env';
+import { AuthManager } from './AuthManager';
 
 export class GameManager extends Component {
 
     public static readonly SCORE_CHANGED = 'score_changed';
     public static readonly PLAYER_HEALTH_CHANGED = 'player_health_changed';
     public static readonly PLAYER_FULL_HEALTH = 100;
+    public static readonly LOCAL_RECORDS_LIST = 'local_records_list';
 
     private static _instance: GameManager | null = null;
     public static get instance() {
@@ -49,6 +52,24 @@ export class GameManager extends Component {
 
     public get playerHealth() {
         return this._playerHealth;
+    }
+
+    public get maxScore(): number {
+        const recordsItem = sys.localStorage.getItem(GameManager.LOCAL_RECORDS_LIST);
+        if (!recordsItem) {
+            return 0;
+        }
+
+        const records = JSON.parse(recordsItem);
+        const currentToken = AuthManager.instance.token;
+        if (records instanceof Array) {
+            const recordIndex = records.findIndex(e => currentToken ? e.token == currentToken : !e.token);
+            if (recordIndex >= 0) {
+                return records[recordIndex].score;
+            }
+        }
+
+        return 0;
     }
 
     protected onLoad() {
@@ -107,8 +128,38 @@ export class GameManager extends Component {
     }
 
     public gameOver() {
+        this.saveScore();
         this._gameState = GameState.GAME_OVER;
         this.node.emit(GameState.GAME_OVER);
+    }
+
+    private saveScore() {
+        const recordsItem = sys.localStorage.getItem(GameManager.LOCAL_RECORDS_LIST);
+        if (recordsItem) {
+            const records = JSON.parse(recordsItem);
+            if (records instanceof Array) {
+                const currentToken = AuthManager.instance.token;
+                const recordIndex = records.findIndex(e => currentToken ? e.token == currentToken : !e.token);
+                if (recordIndex == -1) {
+                    sys.localStorage.setItem(GameManager.LOCAL_RECORDS_LIST, JSON.stringify(
+                        records.concat({
+                            token: AuthManager.instance.token,
+                            score: this._score,
+                        })
+                    ));
+                } else if (records[recordIndex].score < this._score) {
+                    records[recordIndex].score = this._score;
+                    sys.localStorage.setItem(GameManager.LOCAL_RECORDS_LIST, JSON.stringify(records));
+                }
+            }
+        } else {
+            sys.localStorage.setItem(GameManager.LOCAL_RECORDS_LIST, JSON.stringify([
+                {
+                    token: AuthManager.instance.token,
+                    score: this._score,
+                }
+            ]));
+        }
     }
 
     public resetGame() {

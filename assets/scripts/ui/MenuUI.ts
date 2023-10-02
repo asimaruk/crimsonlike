@@ -53,6 +53,12 @@ export class MenuUI extends GameComponent {
     @property({
         type: Node
     }) restartBtn: Node;
+    @property({
+        type: Node
+    }) yourScore: Node;
+    @property({
+        type: Label
+    }) scoreLabel: Label;
 
     private titleLabel: Label;
     private startLabel: Label;
@@ -73,6 +79,7 @@ export class MenuUI extends GameComponent {
 
     protected onGameOver() {
         this._stateStack = [MenuState.GAME_OVER];
+        this.scoreLabel.string = GameManager.instance.maxScore.toString();
         this.updateState(MenuState.GAME_OVER);
     }
 
@@ -90,11 +97,13 @@ export class MenuUI extends GameComponent {
                 this.startLabel.string = MenuUI.START;
                 this.startBtn.active = true;
                 this.restartBtn.active = false;
+                this.yourScore.active = false;
                 this.startAnimation.play();
                 break;
             case MenuState.PAUSE:
                 this.mainUI.active = true;
                 this.recordsUI.node.active = false;
+                this.yourScore.active = false;
                 this.titleLabel.string = MenuUI.PAUSE;
                 this.startLabel.string = MenuUI.RESUME;
                 this.startBtn.active = true;
@@ -105,6 +114,7 @@ export class MenuUI extends GameComponent {
             case MenuState.GAME_OVER:
                 this.mainUI.active = true;
                 this.recordsUI.node.active = false;
+                this.yourScore.active = true;
                 this.titleLabel.string = MenuUI.GAME_OVER;
                 this.startBtn.active = false;
                 this.restartBtn.active = true;

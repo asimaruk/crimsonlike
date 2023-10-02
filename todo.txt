@@ -14,5 +14,6 @@
 [x] UI for score and health
 [x] Records table and posting
 [x] Cocos Creator 3.8
+[x] Local record storage
 [ ] Art update
 [ ] Game design

@@ -40,14 +40,14 @@ export class GameComponent extends Component {
         gm.node.on(GameState.GAME_OVER, this._onGameOver, this);
         if (this.gameState != gm.gameState) {
             switch (gm.gameState) {
-                case GameState.GAME_LAUNCHED: 
-                    this._onGameLaunch(); 
+                case GameState.GAME_LAUNCHED:
+                    this._onGameLaunch();
                     break;
                 case GameState.GAME_STARTED:
                     this._onGameStart();
                     break;
-                case GameState.GAME_PAUSED: 
-                    this._onGamePause(); 
+                case GameState.GAME_PAUSED:
+                    this._onGamePause();
                     break;
                 case GameState.GAME_RESUMED:
                     this._onGameResume();
