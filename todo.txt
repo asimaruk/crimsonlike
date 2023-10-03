@@ -12,8 +12,9 @@
 [x] Score counter
 [x] Android build
 [x] UI for score and health
-[x] Records table and posting
+[x] Records table
 [x] Cocos Creator 3.8
 [x] Local record storage
+[ ] Record posting
 [ ] Art update
 [ ] Game design
