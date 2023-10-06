@@ -27,4 +27,12 @@ export class DefaultUsersRepository implements UsersRepository {
     logout(): void {
         this._currentUser = null;
     }
+
+    async updateUser(id: string, properties: Partial<Omit<UsersRepository.User, 'id'>>) {
+        if (!this._currentUser) {
+            return;
+        }
+        await this.usersData.updateUser(id, properties);
+        Object.assign(this._currentUser, properties);
+    }
 }

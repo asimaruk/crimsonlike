@@ -1,10 +1,12 @@
-import { _decorator, Component, Label, Layout, Node, tween, Tween } from 'cc';
+import { _decorator, Label, Layout, Node, tween, Tween } from 'cc';
 import { RecordItemUI } from './RecordItemUI';
 import { RecordsRepository } from 'records-repository-api';
-const { ccclass, property } = _decorator;
+import { GameComponent } from '../utils/GameComponent';
+const { ccclass, property, menu } = _decorator;
 
 @ccclass('RecordsMenuUI')
-export class RecordsMenuUI extends Component {
+@menu('UI/RecordsMenu')
+export class RecordsMenuUI extends GameComponent {
 
     @property({
         type: Node

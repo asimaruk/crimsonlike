@@ -20,4 +20,15 @@ export class RemoteUsersData implements UsersData {
         return this.currentUser;
     }
 
+    updateUser(id: string, properties: Partial<Omit<UsersData.User, 'id'>>): Promise<void> {
+        const token = this.authData.get();
+        if (token == null) {
+            throw new Error('Can\'t login, auth data is null');
+        }
+        return this.transport.post<void>('updateUser', {
+            ...token,
+            id,
+            ...properties,
+        });
+    }
 }

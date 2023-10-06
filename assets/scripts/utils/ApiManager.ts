@@ -54,15 +54,21 @@ export class ApiManager extends Component {
         return user;
     }
 
+    async updateUser(id: string, properties: Partial<Omit<UsersRepository.User, 'id'>>) {
+        await this.usersRepository.updateUser(id, properties);
+        this.node.emit(ApiManager.CURRENT_USER, this.usersRepository.currentUser);
+    }
+
     logout() {
         this.usersRepository.logout();
+        this.node.emit(ApiManager.CURRENT_USER, null);
     }
 
-    on(event: string, callback: Function) {
-        this.node.on(event, callback);
+    on(event: string, callback: Function, target?: unknown) {
+        this.node.on(event, callback, target);
     }
 
-    off(event: string, callback: Function) {
-        this.node.off(event, callback);
+    off(event: string, callback: Function, target?: unknown) {
+        this.node.off(event, callback, target);
     }
 }

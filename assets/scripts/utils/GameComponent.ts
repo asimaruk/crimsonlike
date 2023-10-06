@@ -1,6 +1,7 @@
 import { _decorator, Component, director, ISchedulable, TweenSystem } from 'cc';
 import { GameManager } from '../utils/GameManager';
 import { GameState } from './GameState';
+import { ApiManager } from './ApiManager';
 const { ccclass, menu } = _decorator;
 
 @ccclass('GameComponent')
@@ -8,9 +9,12 @@ const { ccclass, menu } = _decorator;
 export class GameComponent extends Component {
 
     private gameState: GameState = GameState.GAME_UNDEFINED;
-
     private _schedulerTargets: ISchedulable[] = [];
     private _tweenTargets: any[] = [];
+
+    protected get gm(): GameManager {
+        return GameManager.instance;
+    }
 
     private get schedulerTargets(): ISchedulable[] {
         if (this._schedulerTargets.length == 0) {
@@ -31,15 +35,14 @@ export class GameComponent extends Component {
     }
 
     protected onEnable() {
-        const gm = GameManager.instance;
-        gm.node.on(GameState.GAME_LAUNCHED, this._onGameLaunch, this);
-        gm.node.on(GameState.GAME_STARTED, this._onGameStart, this);
-        gm.node.on(GameState.GAME_PAUSED, this._onGamePause, this);
-        gm.node.on(GameState.GAME_RESUMED, this._onGameResume, this);
-        gm.node.on(GameState.GAME_RESET, this._onGameReset, this);
-        gm.node.on(GameState.GAME_OVER, this._onGameOver, this);
-        if (this.gameState != gm.gameState) {
-            switch (gm.gameState) {
+        this.gm.node.on(GameState.GAME_LAUNCHED, this._onGameLaunch, this);
+        this.gm.node.on(GameState.GAME_STARTED, this._onGameStart, this);
+        this.gm.node.on(GameState.GAME_PAUSED, this._onGamePause, this);
+        this.gm.node.on(GameState.GAME_RESUMED, this._onGameResume, this);
+        this.gm.node.on(GameState.GAME_RESET, this._onGameReset, this);
+        this.gm.node.on(GameState.GAME_OVER, this._onGameOver, this);
+        if (this.gameState != this.gm.gameState) {
+            switch (this.gm.gameState) {
                 case GameState.GAME_LAUNCHED:
                     this._onGameLaunch();
                     break;
@@ -63,13 +66,12 @@ export class GameComponent extends Component {
     }
 
     protected onDisable() {
-        const gm = GameManager.instance;
-        gm.node.off(GameState.GAME_LAUNCHED, this._onGameLaunch, this);
-        gm.node.off(GameState.GAME_STARTED, this._onGameStart, this);
-        gm.node.off(GameState.GAME_PAUSED, this._onGamePause, this);
-        gm.node.off(GameState.GAME_RESUMED, this._onGameResume, this);
-        gm.node.off(GameState.GAME_RESET, this._onGameReset, this);
-        gm.node.off(GameState.GAME_OVER, this._onGameOver, this);
+        this.gm.node.off(GameState.GAME_LAUNCHED, this._onGameLaunch, this);
+        this.gm.node.off(GameState.GAME_STARTED, this._onGameStart, this);
+        this.gm.node.off(GameState.GAME_PAUSED, this._onGamePause, this);
+        this.gm.node.off(GameState.GAME_RESUMED, this._onGameResume, this);
+        this.gm.node.off(GameState.GAME_RESET, this._onGameReset, this);
+        this.gm.node.off(GameState.GAME_OVER, this._onGameOver, this);
     }
 
     private _onGameLaunch() {

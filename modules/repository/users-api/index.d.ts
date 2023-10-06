@@ -3,6 +3,7 @@ export interface UsersRepository {
 
     login(): Promise<UsersRepository.User>;
     logout(): void;
+    updateUser(id: string, properties: Partial<Omit<UsersRepository.User, 'id'>>): void;
 }
 
 declare namespace UsersRepository {

@@ -13,8 +13,8 @@ export class AuthManager {
 
     private _token: string | null;
     private _error: string | null;
-    private authResolve: ((string) => void) | null = null;
-    private authReject: ((string) => void) | null = null;
+    private authResolve: ((arg0: string) => void) | null = null;
+    private authReject: ((arg0: string) => void) | null = null;
     private authPromise: Promise<string> | null = null;
 
     public get token(): string | null {
@@ -34,7 +34,7 @@ export class AuthManager {
             return this.authPromise;
         }
 
-        const promise = new Promise((resolve: (string) => void, reject) => {
+        const promise = new Promise((resolve: (arg0: string) => void, reject) => {
             this.authResolve = resolve;
             this.authReject = reject;
         });
@@ -48,6 +48,7 @@ export class AuthManager {
     }
 
     resolveAuthorize(token: string) {
+        console.log(token);
         this._token = token;
         auth.getAuthData()?.set({
             type: 'gg',
@@ -58,6 +59,7 @@ export class AuthManager {
     }
 
     rejectAuthorize(error: string) {
+        console.error(error);
         this._error = error;
         this.authReject?.(error);
         this.authPromise = null;
