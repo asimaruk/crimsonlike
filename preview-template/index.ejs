@@ -60,7 +60,13 @@
                 });
             };
             function googleAuthorize() {
-                google.accounts.id.prompt();
+                google.accounts.id.prompt((notification) => {
+                    // Force show google authorization despite cooldown
+                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                        document.cookie =  `g_state=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+                        google.accounts.id.prompt()
+                    }
+                });
             };
         </script>
         <script src="https://accounts.google.com/gsi/client" async onload="onGoogleClientLoaded()"></script>

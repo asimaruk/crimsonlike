@@ -98,12 +98,10 @@ export class ProfileMenuUI extends GameComponent {
     private onCurrentUser(user: UsersRepository.User | null) {
         if (user) {
             this.loginLogout.getComponentInChildren(Label)!.string = ProfileMenuUI.LOGOUT;
-            this.nameEdit.enabled = true;
             this.saveEdit.interactable = true;
             this.saveEdit.getComponentInChildren(Label)!.color = this.enabledColor;
         } else {
             this.loginLogout.getComponentInChildren(Label)!.string = ProfileMenuUI.LOGIN;
-            this.nameEdit.enabled = false;
             this.saveEdit.interactable = false;
             this.saveEdit.getComponentInChildren(Label)!.color = this.disabledColor;
         }

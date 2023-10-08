@@ -7,7 +7,7 @@ declare namespace Auth {
     export type Type = 'gg';
 
     export type TokenData = {
-        type: Type,
-        token: string
+        authType: Type,
+        authToken: string
     };
 }

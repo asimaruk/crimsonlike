@@ -18,10 +18,12 @@ export class DefaultUsersRepository implements UsersRepository {
             return this._currentUser;
         }
         const userData = await this.usersData.login();
-        return {
+        const user = {
             id: userData.id,
             name: userData.name
         };
+        this._currentUser = user;
+        return user;
     }
 
     logout(): void {

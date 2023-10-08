@@ -51,8 +51,8 @@ export class AuthManager {
         console.log(token);
         this._token = token;
         auth.getAuthData()?.set({
-            type: 'gg',
-            token: token,
+            authType: 'gg',
+            authToken: token,
         });
         this.authResolve?.(token);
         this.authPromise = null;

@@ -16,7 +16,7 @@ export class RemoteUsersData implements UsersData {
         if (token == null) {
             throw new Error('Can\'t login, auth data is null');
         }
-        this.currentUser = await this.transport.get<UsersData.User>('login');
+        this.currentUser = await this.transport.post<UsersData.User>('login', token);
         return this.currentUser;
     }
 
