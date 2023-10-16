@@ -53,7 +53,6 @@ export class RecordsMenuUI extends GameComponent {
             recItem.playerName.string = records[i]?.name;
             recItem.score.string = records[i]?.score?.toString();
         });
-        this.recordsLayout.constraintNum = Math.ceil(records.length / 5);
     }
 }
 
