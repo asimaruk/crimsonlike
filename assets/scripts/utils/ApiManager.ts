@@ -38,13 +38,16 @@ export class ApiManager extends Component {
         return records;
     }
 
-    async newRecord(record: RecordsRepository.Record): Promise<RecordsRepository.NewRecord> {
-        const newRecord = await this.recordsRepository.postRecord(record);
-        this.node.emit(ApiManager.NEW_RECORD, newRecord);
-        return newRecord;
+    async newRecord(newRecord: RecordsRepository.NewRecord): Promise<RecordsRepository.SingleRecord> {
+        const record = await this.recordsRepository.postRecord(newRecord);
+        if (this.currentUser()?.id == record.uid) {
+            this.usersRepository.updateCurrentUser({ score: record.score });
+        }
+        this.node.emit(ApiManager.NEW_RECORD, record);
+        return record;
     }
 
-    currentUser(): UsersRepository.User | null {
+    currentUser(): UsersRepository.CurrentUser | null {
         return this.usersRepository.currentUser;
     }
 
@@ -62,6 +65,10 @@ export class ApiManager extends Component {
     logout() {
         this.usersRepository.logout();
         this.node.emit(ApiManager.CURRENT_USER, null);
+    }
+
+    isLoggedIn(): boolean {
+        return this.usersRepository.currentUser != null;
     }
 
     on(event: string, callback: Function, target?: unknown) {

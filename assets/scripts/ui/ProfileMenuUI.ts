@@ -65,8 +65,6 @@ export class ProfileMenuUI extends GameComponent {
         }
     }
 
-
-
     private save() {
         this.nameEdit.enabled = false;
         if (this.nameEditSprite) {
@@ -95,7 +93,7 @@ export class ProfileMenuUI extends GameComponent {
         }
     }
 
-    private onCurrentUser(user: UsersRepository.User | null) {
+    private onCurrentUser(user: UsersRepository.CurrentUser | null) {
         if (user) {
             this.loginLogout.getComponentInChildren(Label)!.string = ProfileMenuUI.LOGOUT;
             this.saveEdit.interactable = true;
@@ -106,7 +104,7 @@ export class ProfileMenuUI extends GameComponent {
             this.saveEdit.getComponentInChildren(Label)!.color = this.disabledColor;
         }
         this.nameEdit.string = user?.name ?? ProfileMenuUI.ANONYMOUS;
-        this.maxScore.string = this.gm.maxScore.toString();
+        this.maxScore.string = (user?.score ?? this.gm.maxScore).toString();
         this.loginLogout.interactable = true;
         this.loginLogout.getComponentInChildren(Label)!.color = this.enabledColor;
     }

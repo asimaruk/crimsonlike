@@ -8,5 +8,6 @@ declare namespace UsersData {
     export type User = {
         id: string,
         name: string,
+        score: number,
     };
 }

@@ -3,9 +3,9 @@ import { UsersRepository } from 'users-repository-api';
 
 export class DefaultUsersRepository implements UsersRepository {
 
-    private _currentUser: UsersRepository.User | null = null;
+    private _currentUser: UsersRepository.CurrentUser | null = null;
 
-    get currentUser(): UsersRepository.User | null {
+    get currentUser(): UsersRepository.CurrentUser | null {
         return this._currentUser;
     }
 
@@ -13,14 +13,15 @@ export class DefaultUsersRepository implements UsersRepository {
         private usersData: UsersData
     ) {}
 
-    async login(): Promise<UsersRepository.User> {
+    async login(): Promise<UsersRepository.CurrentUser> {
         if (this._currentUser != null) {
             return this._currentUser;
         }
         const userData = await this.usersData.login();
         const user = {
             id: userData.id,
-            name: userData.name
+            name: userData.name,
+            score: userData.score,
         };
         this._currentUser = user;
         return user;
@@ -35,6 +36,14 @@ export class DefaultUsersRepository implements UsersRepository {
             return;
         }
         await this.usersData.updateUser(id, properties);
+        Object.assign(this._currentUser, properties);
+    }
+
+    updateCurrentUser(properties: Partial<Omit<UsersRepository.CurrentUser, 'id'>>): void {
+        if (this._currentUser == null) {
+            return;
+        }
+
         Object.assign(this._currentUser, properties);
     }
 }

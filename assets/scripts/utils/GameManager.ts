@@ -14,11 +14,13 @@ import { GameState } from './GameState';
 import { EffectsManager } from '../effects/EffectsManager';
 import { AudioManager } from './AudioManager';
 import { EDITOR } from 'cc/env';
-import { AuthManager } from './AuthManager';
+import { ApiManager } from './ApiManager';
+import { UsersRepository } from 'users-repository-api';
 
 export class GameManager extends Component {
 
     public static readonly SCORE_CHANGED = 'score_changed';
+    public static readonly MAX_SCORE_CHANGED = 'max_score_changed';
     public static readonly PLAYER_HEALTH_CHANGED = 'player_health_changed';
     public static readonly PLAYER_FULL_HEALTH = 100;
     public static readonly LOCAL_RECORDS_LIST = 'local_records_list';
@@ -55,21 +57,26 @@ export class GameManager extends Component {
     }
 
     public get maxScore(): number {
-        const recordsItem = sys.localStorage.getItem(GameManager.LOCAL_RECORDS_LIST);
-        if (!recordsItem) {
-            return 0;
-        }
+        const records = this.localRecords;
+        const currentUser = ApiManager.instance.currentUser();
+        return records.find(e => currentUser ? e.uid == currentUser.id : !e.uid)?.score ?? 0;
+    }
 
-        const records = JSON.parse(recordsItem);
-        const currentToken = AuthManager.instance.token;
+    private get localRecords(): Array<{ uid?: string | null, score: number }> {
+        const item = sys.localStorage.getItem(GameManager.LOCAL_RECORDS_LIST);
+        if (!item) {
+            return [];
+        }
+        const records = JSON.parse(item);
         if (records instanceof Array) {
-            const recordIndex = records.findIndex(e => currentToken ? e.token == currentToken : !e.token);
-            if (recordIndex >= 0) {
-                return records[recordIndex].score;
-            }
+            return records.filter((r) => 'score' in r);
         }
 
-        return 0;
+        return [];
+    }
+
+    private set localRecords(records: Array<{ uid?: string | null, score: number }>) {
+        sys.localStorage.setItem(GameManager.LOCAL_RECORDS_LIST, JSON.stringify(records));
     }
 
     protected onLoad() {
@@ -81,10 +88,12 @@ export class GameManager extends Component {
             EffectsManager.instance.load(),
             AudioManager.instance.loaded
         ]).then(() => {});
+        ApiManager.instance.on(ApiManager.CURRENT_USER, this.onCurrentUser, this);
     }
 
     protected onDestroy() {
         input.off(Input.EventType.KEY_DOWN, this.onKeyDown, this);
+        ApiManager.instance.off(ApiManager.CURRENT_USER, this.onCurrentUser, this);
         this.node.removeFromParent();
     }
 
@@ -134,31 +143,28 @@ export class GameManager extends Component {
     }
 
     private saveScore() {
-        const recordsItem = sys.localStorage.getItem(GameManager.LOCAL_RECORDS_LIST);
-        if (recordsItem) {
-            const records = JSON.parse(recordsItem);
-            if (records instanceof Array) {
-                const currentToken = AuthManager.instance.token;
-                const recordIndex = records.findIndex(e => currentToken ? e.token == currentToken : !e.token);
-                if (recordIndex == -1) {
-                    sys.localStorage.setItem(GameManager.LOCAL_RECORDS_LIST, JSON.stringify(
-                        records.concat({
-                            token: AuthManager.instance.token,
-                            score: this._score,
-                        })
-                    ));
-                } else if (records[recordIndex].score < this._score) {
-                    records[recordIndex].score = this._score;
-                    sys.localStorage.setItem(GameManager.LOCAL_RECORDS_LIST, JSON.stringify(records));
-                }
-            }
-        } else {
-            sys.localStorage.setItem(GameManager.LOCAL_RECORDS_LIST, JSON.stringify([
-                {
-                    token: AuthManager.instance.token,
+        const api = ApiManager.instance;
+        const currentUser = api.currentUser();
+        const records = this.localRecords;
+
+        const recordIndex = records.findIndex(e => currentUser ? e.uid == currentUser.id : !e.uid);
+        if (recordIndex == -1) {
+            sys.localStorage.setItem(GameManager.LOCAL_RECORDS_LIST, JSON.stringify(
+                records.concat({
+                    uid: currentUser?.id,
                     score: this._score,
-                }
-            ]));
+                })
+            ));
+        } else if (records[recordIndex].score < this._score) {
+            records[recordIndex].score = this._score;
+            sys.localStorage.setItem(GameManager.LOCAL_RECORDS_LIST, JSON.stringify(records));
+        }
+
+        if (api.isLoggedIn() && this._score > api.currentUser()!.score) {
+            api.newRecord({
+                uid: currentUser!.id,
+                score: this._score,
+            });
         }
     }
 
@@ -197,6 +203,31 @@ export class GameManager extends Component {
     public incPlayerHealth(value: number) {
         this._playerHealth += value;
         this.node.emit(GameManager.PLAYER_HEALTH_CHANGED, this._playerHealth);
+    }
+
+    private onCurrentUser(currentUser: UsersRepository.CurrentUser | null) {
+        if (currentUser == null) {
+            return;
+        }
+
+        const records = this.localRecords;
+        if (records.length == 0) {
+            return;
+        }
+
+        const userLocalScore = records.find((r) => r.uid == currentUser.id)?.score;
+        const anonLocalScore = records.find((r) => !r.uid)?.score;
+        if (userLocalScore && userLocalScore > currentUser.score) {
+            ApiManager.instance.newRecord({
+                uid: currentUser.id,
+                score: userLocalScore,
+            });
+        } else if (anonLocalScore && anonLocalScore > currentUser.score) {
+            ApiManager.instance.newRecord({
+                uid: currentUser.id,
+                score: anonLocalScore,
+            });
+        }
     }
 }
 

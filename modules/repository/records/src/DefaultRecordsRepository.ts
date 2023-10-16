@@ -26,7 +26,7 @@ export class DefaultRecordsRepository implements RecordsRepository {
         return records;
     }
 
-    async postRecord(record: RecordsRepository.Record): Promise<RecordsRepository.NewRecord> {
+    async postRecord(record: RecordsRepository.NewRecord): Promise<RecordsRepository.SingleRecord> {
         const newRec = await this.recordsData.postRecord({
             uid: record.uid,
             score: record.score,
