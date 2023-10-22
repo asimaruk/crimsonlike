@@ -44,8 +44,8 @@ export class Agent extends GameComponent {
         type: AnimationClip
     }) damageClip: AnimationClip | null;
 
-    public get isAlive(): boolean { 
-        return this.currentHealth > 0; 
+    public get isAlive(): boolean {
+        return this.currentHealth > 0;
     }
     public currentHealth: number;
 
@@ -68,7 +68,7 @@ export class Agent extends GameComponent {
         if (this.dieClip) this.animation.addClip(this.dieClip);
         if (this.damageClip) this.animation.addClip(this.damageClip);
     }
-    
+
     protected onDestroy() {
         this.colliders.forEach((collider) => {
             collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
@@ -99,7 +99,7 @@ export class Agent extends GameComponent {
     }
 
     protected onTakeDamage(damage: number) {
-        
+
     }
 
     public takeBullet(collider: Collider2D, damage: number) {
@@ -130,7 +130,7 @@ export class Agent extends GameComponent {
     }
 
     protected wipeOut() {
-        
+
     }
 
     protected onDie() {
@@ -204,7 +204,7 @@ export class Agent extends GameComponent {
     }
 
     public onEndContact(selfCollider: Collider2D, otherCollider: Collider2D) {
-        
+
     }
 }
 
